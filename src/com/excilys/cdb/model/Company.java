@@ -7,14 +7,14 @@ package com.excilys.cdb.model;
 
 public class Company {
 
-	int id;
+	Long id;
 	String name;
 
 	/**
-	 * @param id   any int Value
+	 * @param id   any Long Value
 	 * @param name any String Value
 	 */
-	public Company(int id, String name) {
+	public Company(Long id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -31,14 +31,14 @@ public class Company {
 	/**
 	 * @return any id Value
 	 */
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
 	/**
-	 * @param id any int value
+	 * @param id any Long value
 	 */
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
