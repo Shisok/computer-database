@@ -11,4 +11,6 @@ public interface ComputerDAO {
 
 	Computer search(Long id) throws DAOException;
 
+	java.util.List<Computer> searchAll() throws DAOException;
+
 }

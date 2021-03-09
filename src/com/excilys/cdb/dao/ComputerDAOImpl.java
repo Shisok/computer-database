@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.excilys.cdb.model.Computer;
 
@@ -17,18 +19,27 @@ public class ComputerDAOImpl implements ComputerDAO {
 		this.daoFactory = daoFactory;
 	}
 
-	private static final String SQL_INSERT = "INSERT INTO Computer ( name, introduced, discontinued, company_id) VALUES ( ?, ?, ?, ?))";
-	private static final String SQL_UPDATE = "UPDATE Computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?)";
-	private static final String SQL_DELETE = "DELETE FROM Computer WHERE id=?)";
-	private static final String SQL_SELECT = "SELECT * FROM computer WHERE id = ?";
+	private static final String SQL_INSERT = "INSERT INTO computer ( name, introduced, discontinued, company_id) VALUES ( ?, ?, ?, ?);";
+	private static final String SQL_UPDATE = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?;";
+	private static final String SQL_DELETE = "DELETE FROM computer WHERE id=?;";
+	private static final String SQL_SELECT = "SELECT * FROM computer WHERE id = ?;";
+	private static final String SQL_ALL_COMPUTER = "SELECT id,name,introduced,discontinued,company_id From computer;";
 
 	private static Computer map(ResultSet resultSet) throws SQLException {
 		Computer computer = new Computer();
 		computer.setId(resultSet.getLong("id"));
 		computer.setName(resultSet.getString("name"));
-		computer.setIntroduced(resultSet.getDate("introduced").toLocalDate());
-		computer.setDiscontinued(resultSet.getDate("discontinued").toLocalDate());
-		computer.setCompany_id(resultSet.getLong("company_id"));
+		if (resultSet.getDate("introduced") != null) {
+			computer.setIntroduced(resultSet.getDate("introduced").toLocalDate());
+		}
+		if (resultSet.getDate("discontinued") != null) {
+			computer.setDiscontinued(resultSet.getDate("discontinued").toLocalDate());
+		}
+		if (resultSet.getObject("company_id") == null) {
+			computer.setCompany_id(null);
+		} else {
+			computer.setCompany_id(resultSet.getLong("company_id"));
+		}
 		return computer;
 	}
 
@@ -43,6 +54,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 			connexion = daoFactory.getConnection();
 			preparedStatement = initialisationRequetePreparee(connexion, SQL_INSERT, true, computer.getName(),
 					computer.getIntroduced(), computer.getDiscontinued(), computer.getCompany_id());
+			// System.out.println(preparedStatement.toString());
 			int statut = preparedStatement.executeUpdate();
 			/* Analyse du statut retourné par la requête d'insertion */
 			if (statut == 0) {
@@ -68,7 +80,6 @@ public class ComputerDAOImpl implements ComputerDAO {
 		// TODO Auto-generated method stub
 		Connection connexion = null;
 		PreparedStatement preparedStatement = null;
-		ResultSet valeursAutoGenerees = null;
 
 		try {
 			/* Récupération d'une connexion depuis la Factory */
@@ -95,12 +106,12 @@ public class ComputerDAOImpl implements ComputerDAO {
 		// TODO Auto-generated method stub
 		Connection connexion = null;
 		PreparedStatement preparedStatement = null;
-		ResultSet valeursAutoGenerees = null;
 
 		try {
 			/* Récupération d'une connexion depuis la Factory */
 			connexion = daoFactory.getConnection();
 			preparedStatement = initialisationRequetePreparee(connexion, SQL_DELETE, false, computer.getId());
+			System.out.println(preparedStatement.toString());
 			int statut = preparedStatement.executeUpdate();
 			/* Analyse du statut retourné par la requête d'insertion */
 			if (statut == 0) {
@@ -128,6 +139,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 			preparedStatement = initialisationRequetePreparee(connexion, SQL_SELECT, false, id);
 			resultSet = preparedStatement.executeQuery();
 			/* Parcours de la ligne de données de l'éventuel ResulSet retourné */
+
 			if (resultSet.next()) {
 				computer = map(resultSet);
 			}
@@ -138,6 +150,38 @@ public class ComputerDAOImpl implements ComputerDAO {
 		}
 
 		return computer;
+	}
+
+	@Override
+	public List<Computer> searchAll() throws DAOException {
+		List<Computer> computers = new ArrayList<>();
+		Connection connexion = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		Computer computer = null;
+		try {
+			/* Récupération d'une connexion depuis la Factory */
+			connexion = daoFactory.getConnection();
+			preparedStatement = initialisationRequetePreparee(connexion, SQL_ALL_COMPUTER, false);
+			resultSet = preparedStatement.executeQuery();
+			/* Parcours de la ligne de données de l'éventuel ResulSet retourné */
+			int id = 0;
+			int idPage = 0;
+			while (resultSet.next()) {
+//				if (id == 10) {
+//					idPage++;
+//					System.out.println("------- page " + idPage + "-------");
+//				}
+				computer = map(resultSet);
+				computers.add(computer);
+			}
+		} catch (SQLException e) {
+			throw new DAOException(e);
+		} finally {
+			fermeturesSilencieuses(resultSet, preparedStatement, connexion);
+		}
+
+		return computers;
 	}
 
 }

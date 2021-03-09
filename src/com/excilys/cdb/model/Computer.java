@@ -33,34 +33,6 @@ public class Computer {
 		this.company_id = computerBuilder.company_id;
 	}
 
-//	public Computer(Long id, String name) {
-//		super();
-//		this.id = id;
-//		this.name = name;
-//	}
-//
-//	public Computer(Long id, String name, Date introduced, Long company_id) {
-//		super();
-//		this.id = id;
-//		this.name = name;
-//		this.introduced = introduced;
-//		this.company_id = company_id;
-//	}
-//
-//	public Computer(Long id, String name, Long company_id) {
-//		super();
-//		this.id = id;
-//		this.name = name;
-//		this.company_id = company_id;
-//	}
-//
-//	public Computer(Long id, String name, Date introduced) {
-//		super();
-//		this.id = id;
-//		this.name = name;
-//		this.introduced = introduced;
-//	}
-
 	/**
 	 * Default Constructor
 	 */
@@ -151,4 +123,48 @@ public class Computer {
 	public void setCompany_id(Long company_id) {
 		this.company_id = company_id;
 	}
+
+	@Override
+	public String toString() {
+		return "Computer [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued
+				+ ", company_id=" + company_id + "]";
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Computer other = (Computer) obj;
+		if (company_id == null) {
+			if (other.company_id != null)
+				return false;
+		} else if (!company_id.equals(other.company_id))
+			return false;
+		if (discontinued == null) {
+			if (other.discontinued != null)
+				return false;
+		} else if (!discontinued.equals(other.discontinued))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (introduced == null) {
+			if (other.introduced != null)
+				return false;
+		} else if (!introduced.equals(other.introduced))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
+	}
+
 }

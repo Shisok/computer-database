@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.excilys.cdb.model.Company;
 
@@ -30,57 +32,24 @@ public class CompanyDAOImpl implements CompanyDAO {
 		return company;
 	}
 
-	private static final String SQL_INSERT = "INSERT INTO Company (id, name) VALUES (?, ?))";
+	private static final String SQL_ALL_COMPANY = "SELECT * FROM company";
 
 	@Override
-	public void creer(Company company) throws DAOException {
-		Connection connexion = null;
-		PreparedStatement preparedStatement = null;
-		ResultSet valeursAutoGenerees = null;
-
-		try {
-			/* Récupération d'une connexion depuis la Factory */
-			connexion = daoFactory.getConnection();
-			preparedStatement = initialisationRequetePreparee(connexion, SQL_INSERT, true, company.getId(),
-					company.getName());
-			int statut = preparedStatement.executeUpdate();
-			/* Analyse du statut retourné par la requête d'insertion */
-			if (statut == 0) {
-				throw new DAOException("Échec de la création de l'utilisateur, aucune ligne ajoutée dans la table.");
-			}
-			/* Récupération de l'id auto-généré par la requête d'insertion */
-			valeursAutoGenerees = preparedStatement.getGeneratedKeys();
-			if (valeursAutoGenerees.next()) {
-				/* Puis initialisation de la propriété id du bean Company avec sa valeur */
-				company.setId(valeursAutoGenerees.getLong(1));
-			} else {
-				throw new DAOException("Échec de la création de l'utilisateur en base, aucun ID auto-généré retourné.");
-			}
-		} catch (SQLException e) {
-			throw new DAOException(e);
-		} finally {
-			fermeturesSilencieuses(valeursAutoGenerees, preparedStatement, connexion);
-		}
-
-	}
-
-	private static final String SQL_SELECT_PAR_NAME = "SELECT id, name FROM company WHERE name = ?";
-
-	@Override
-	public Company trouver(String name) throws DAOException {
+	public List<Company> searchAll() throws DAOException {
+		List<Company> companies = new ArrayList<>();
 		Connection connexion = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		Company company = null;
-
 		try {
 			/* Récupération d'une connexion depuis la Factory */
 			connexion = daoFactory.getConnection();
-			preparedStatement = initialisationRequetePreparee(connexion, SQL_SELECT_PAR_NAME, false, name);
+			preparedStatement = initialisationRequetePreparee(connexion, SQL_ALL_COMPANY, false);
 			resultSet = preparedStatement.executeQuery();
 			/* Parcours de la ligne de données de l'éventuel ResulSet retourné */
-			if (resultSet.next()) {
+			while (resultSet.next()) {
 				company = map(resultSet);
+				companies.add(company);
 			}
 		} catch (SQLException e) {
 			throw new DAOException(e);
@@ -88,8 +57,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 			fermeturesSilencieuses(resultSet, preparedStatement, connexion);
 		}
 
-		return company;
-
+		return companies;
 	}
 
 }

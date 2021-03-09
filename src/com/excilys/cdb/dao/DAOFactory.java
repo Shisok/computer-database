@@ -79,14 +79,14 @@ public class DAOFactory {
 	}
 
 	/*
-	 * Méthodes de récupération de l'implémentation des différents DAO (un seul pour
-	 * le moment)
+	 * Méthodes de récupération de l'implémentation des différents DAO
 	 */
-//	public UtilisateurDao getUtilisateurDao() {
-//		return new UtilisateurDaoImpl(this);
-//	}
 
 	public CompanyDAO getCompanyDao() {
 		return new CompanyDAOImpl(this);
+	}
+
+	public ComputerDAO getComputerDao() {
+		return new ComputerDAOImpl(this);
 	}
 }
