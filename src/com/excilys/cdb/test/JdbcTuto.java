@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class test {
+public class JdbcTuto {
 	public static void main(String[] args) {
 		/* Chargement du driver JDBC pour MySQL */
 		try {
@@ -30,7 +30,7 @@ public class test {
 		} catch (SQLException e) {
 			/* Gérer les éventuelles erreurs ici */
 		} finally {
-			if (connexion != null)
+			if (connexion != null) {
 				try {
 					System.out.println("test");
 					// interface servant a executer des requetes
@@ -74,6 +74,7 @@ public class test {
 						}
 					}
 				}
+			}
 		}
 	}
 }

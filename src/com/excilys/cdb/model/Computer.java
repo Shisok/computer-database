@@ -7,22 +7,22 @@ public class Computer {
 	private String name;
 	private LocalDate introduced;
 	private LocalDate discontinued;
-	private Long company_id;
+	private Long companyId;
 
 	/**
 	 * @param id           any Long value
 	 * @param name         any String value
 	 * @param introduced   any Date Value
 	 * @param discontinued any Date Value
-	 * @param company_id   Long Value of the company
+	 * @param companyId   Long Value of the company
 	 */
-	public Computer(Long id, String name, LocalDate introduced, LocalDate discontinued, Long company_id) {
+	public Computer(Long id, String name, LocalDate introduced, LocalDate discontinued, Long companyId) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.introduced = introduced;
 		this.discontinued = discontinued;
-		this.company_id = company_id;
+		this.companyId = companyId;
 	}
 
 	private Computer(ComputerBuilder computerBuilder) {
@@ -30,11 +30,11 @@ public class Computer {
 		this.name = computerBuilder.name;
 		this.introduced = computerBuilder.introduced;
 		this.discontinued = computerBuilder.discontinued;
-		this.company_id = computerBuilder.company_id;
+		this.companyId = computerBuilder.company_id;
 	}
 
 	/**
-	 * Default Constructor
+	 * Default Constructor.
 	 */
 	public Computer() {
 		super();
@@ -66,8 +66,8 @@ public class Computer {
 			return this;
 		}
 
-		public ComputerBuilder company_id(Long company_id) {
-			this.company_id = company_id;
+		public ComputerBuilder companyId(Long companyId) {
+			this.company_id = companyId;
 			return this;
 		}
 
@@ -116,54 +116,79 @@ public class Computer {
 		this.discontinued = discontinued;
 	}
 
-	public Long getCompany_id() {
-		return company_id;
+	public Long getCompanyId() {
+		return companyId;
 	}
 
-	public void setCompany_id(Long company_id) {
-		this.company_id = company_id;
+	public void setCompanyId(Long companyId) {
+		this.companyId = companyId;
 	}
 
 	@Override
 	public String toString() {
 		return "Computer [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued
-				+ ", company_id=" + company_id + "]";
+				+ ", company_id=" + companyId + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((companyId == null) ? 0 : companyId.hashCode());
+		result = prime * result + ((discontinued == null) ? 0 : discontinued.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((introduced == null) ? 0 : introduced.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		Computer other = (Computer) obj;
-		if (company_id == null) {
-			if (other.company_id != null)
+		if (companyId == null) {
+			if (other.companyId != null) {
 				return false;
-		} else if (!company_id.equals(other.company_id))
+			}
+		} else if (!companyId.equals(other.companyId)) {
 			return false;
+		}
 		if (discontinued == null) {
-			if (other.discontinued != null)
+			if (other.discontinued != null) {
 				return false;
-		} else if (!discontinued.equals(other.discontinued))
+			}
+		} else if (!discontinued.equals(other.discontinued)) {
 			return false;
+		}
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
-		} else if (!id.equals(other.id))
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
+		}
 		if (introduced == null) {
-			if (other.introduced != null)
+			if (other.introduced != null) {
 				return false;
-		} else if (!introduced.equals(other.introduced))
+			}
+		} else if (!introduced.equals(other.introduced)) {
 			return false;
+		}
 		if (name == null) {
-			if (other.name != null)
+			if (other.name != null) {
 				return false;
-		} else if (!name.equals(other.name))
+			}
+		} else if (!name.equals(other.name)) {
 			return false;
+		}
 		return true;
 	}
 

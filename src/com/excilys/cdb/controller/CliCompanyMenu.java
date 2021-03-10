@@ -12,7 +12,7 @@ public class CliCompanyMenu {
 	private static final int OPTION_EXIT = 3;
 
 	/**
-	 * Default Constructor
+	 * Default Constructor.
 	 */
 	public CliCompanyMenu() {
 		super();

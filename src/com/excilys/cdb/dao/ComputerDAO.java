@@ -1,5 +1,7 @@
 package com.excilys.cdb.dao;
 
+import java.util.List;
+
 import com.excilys.cdb.model.Computer;
 
 public interface ComputerDAO {
@@ -13,4 +15,5 @@ public interface ComputerDAO {
 
 	java.util.List<Computer> searchAll() throws DAOException;
 
+	List<Computer> searchAllPagination(int page) throws DAOException;
 }

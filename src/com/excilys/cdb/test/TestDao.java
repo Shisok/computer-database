@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 import com.excilys.cdb.model.Computer;
 
-public class testDao {
+public class TestDao {
 	public static void main(String[] args) {
 		// DAOFactory daoFactory = DAOFactory.getInstance();
 		// CompanyDAOImpl companyDAOImpl = new CompanyDAOImpl(daoFactory);

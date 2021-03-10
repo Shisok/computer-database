@@ -21,7 +21,7 @@ public class Company {
 	}
 
 	/**
-	 * default Constructor
+	 * default Constructor.
 	 */
 	public Company() {
 		super();

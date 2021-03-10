@@ -24,6 +24,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	private static final String SQL_DELETE = "DELETE FROM computer WHERE id=?;";
 	private static final String SQL_SELECT = "SELECT * FROM computer WHERE id = ?;";
 	private static final String SQL_ALL_COMPUTER = "SELECT id,name,introduced,discontinued,company_id From computer;";
+	private static final String SQL_ALL_COMPUTER_PAGINATION = "SELECT id,name,introduced,discontinued,company_id From computer LIMIT ?,?;";
 
 	private static Computer map(ResultSet resultSet) throws SQLException {
 		Computer computer = new Computer();
@@ -36,9 +37,9 @@ public class ComputerDAOImpl implements ComputerDAO {
 			computer.setDiscontinued(resultSet.getDate("discontinued").toLocalDate());
 		}
 		if (resultSet.getObject("company_id") == null) {
-			computer.setCompany_id(null);
+			computer.setCompanyId(null);
 		} else {
-			computer.setCompany_id(resultSet.getLong("company_id"));
+			computer.setCompanyId(resultSet.getLong("company_id"));
 		}
 		return computer;
 	}
@@ -53,8 +54,9 @@ public class ComputerDAOImpl implements ComputerDAO {
 			/* Récupération d'une connexion depuis la Factory */
 			connexion = daoFactory.getConnection();
 			preparedStatement = initialisationRequetePreparee(connexion, SQL_INSERT, true, computer.getName(),
-					computer.getIntroduced(), computer.getDiscontinued(), computer.getCompany_id());
+					computer.getIntroduced(), computer.getDiscontinued(), computer.getCompanyId());
 			// System.out.println(preparedStatement.toString());
+
 			int statut = preparedStatement.executeUpdate();
 			/* Analyse du statut retourné par la requête d'insertion */
 			if (statut == 0) {
@@ -85,7 +87,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 			/* Récupération d'une connexion depuis la Factory */
 			connexion = daoFactory.getConnection();
 			preparedStatement = initialisationRequetePreparee(connexion, SQL_UPDATE, false, computer.getName(),
-					computer.getIntroduced(), computer.getDiscontinued(), computer.getCompany_id(), computer.getId());
+					computer.getIntroduced(), computer.getDiscontinued(), computer.getCompanyId(), computer.getId());
 			int statut = preparedStatement.executeUpdate();
 			/* Analyse du statut retourné par la requête d'insertion */
 			if (statut == 0) {
@@ -111,7 +113,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 			/* Récupération d'une connexion depuis la Factory */
 			connexion = daoFactory.getConnection();
 			preparedStatement = initialisationRequetePreparee(connexion, SQL_DELETE, false, computer.getId());
-			System.out.println(preparedStatement.toString());
+
 			int statut = preparedStatement.executeUpdate();
 			/* Analyse du statut retourné par la requête d'insertion */
 			if (statut == 0) {
@@ -164,14 +166,39 @@ public class ComputerDAOImpl implements ComputerDAO {
 			connexion = daoFactory.getConnection();
 			preparedStatement = initialisationRequetePreparee(connexion, SQL_ALL_COMPUTER, false);
 			resultSet = preparedStatement.executeQuery();
-			/* Parcours de la ligne de données de l'éventuel ResulSet retourné */
-			int id = 0;
-			int idPage = 0;
+
 			while (resultSet.next()) {
-//				if (id == 10) {
-//					idPage++;
-//					System.out.println("------- page " + idPage + "-------");
-//				}
+
+				computer = map(resultSet);
+				computers.add(computer);
+			}
+		} catch (SQLException e) {
+			throw new DAOException(e);
+		} finally {
+			fermeturesSilencieuses(resultSet, preparedStatement, connexion);
+		}
+
+		return computers;
+	}
+
+	@Override
+	public List<Computer> searchAllPagination(int page) throws DAOException {
+		List<Computer> computers = new ArrayList<>();
+		Connection connexion = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		Computer computer = null;
+		int offset = page * 10;
+		try {
+
+			/* Récupération d'une connexion depuis la Factory */
+			connexion = daoFactory.getConnection();
+			preparedStatement = initialisationRequetePreparee(connexion, SQL_ALL_COMPUTER_PAGINATION, false, offset,
+					10);
+			resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+
 				computer = map(resultSet);
 				computers.add(computer);
 			}
