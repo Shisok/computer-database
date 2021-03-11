@@ -16,6 +16,9 @@ public class CompanyDAOImpl implements CompanyDAO {
 
 	private DAOFactory daoFactory;
 
+	private static final String SQL_ALL_COMPANY = "SELECT * FROM company";
+	private static final String SQL_ALL_COMPANY_PAGINATION = "SELECT id,name From company ORDER BY id LIMIT ?,? ;";
+
 	public CompanyDAOImpl(DAOFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
@@ -31,8 +34,6 @@ public class CompanyDAOImpl implements CompanyDAO {
 		company.setName(resultSet.getString("name"));
 		return company;
 	}
-
-	private static final String SQL_ALL_COMPANY = "SELECT * FROM company";
 
 	@Override
 	public List<Company> searchAll() throws DAOException {
@@ -58,6 +59,35 @@ public class CompanyDAOImpl implements CompanyDAO {
 		}
 
 		return companies;
+	}
+
+	@Override
+	public List<Company> searchAllPagination(int page) throws DAOException {
+		List<Company> companys = new ArrayList<>();
+		Connection connexion = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		Company company = null;
+		int offset = page * 10;
+		try {
+
+			/* Récupération d'une connexion depuis la Factory */
+			connexion = daoFactory.getConnection();
+			preparedStatement = initialisationRequetePreparee(connexion, SQL_ALL_COMPANY_PAGINATION, false, offset, 10);
+			resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+
+				company = map(resultSet);
+				companys.add(company);
+			}
+		} catch (SQLException e) {
+			throw new DAOException(e);
+		} finally {
+			fermeturesSilencieuses(resultSet, preparedStatement, connexion);
+		}
+
+		return companys;
 	}
 
 }

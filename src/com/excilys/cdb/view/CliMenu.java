@@ -26,13 +26,11 @@ public class CliMenu {
 		lineSeparator();
 		enterChoice();
 		int choix = 0;
-
 		try {
-
 			choix = Integer.parseInt(USER_INPUT.nextLine());
 		} catch (NumberFormatException e) {
 			System.out.println("You didn't enter a numerical value");
-			mainMenu();
+			choix = mainMenu();
 		}
 
 		return choix;
@@ -51,21 +49,18 @@ public class CliMenu {
 		System.out.println("Company Menu:");
 		lineSeparator();
 		System.out.println("1.Search All Companies");
-		System.out.println("2.Back to Main Menu");
-		System.out.println("3.Quit");
+		System.out.println("2.Search All Companies With Pagination");
+		System.out.println("3.Back to Main Menu");
+		System.out.println("4.Quit");
 		lineSeparator();
 		enterChoice();
 
 		int choix = 0;
-		// Scanner keyboard = null;
 		try {
-			// keyboard = new Scanner(System.in);
-//			choix = USER_INPUT.nextInt();
-//		} catch (InputMismatchException e) {
 			choix = Integer.parseInt(USER_INPUT.nextLine());
 		} catch (NumberFormatException e) {
 			System.out.println("You didn't enter a numerical value");
-			companyMenu();
+			choix = companyMenu();
 		}
 
 		return choix;
@@ -91,7 +86,7 @@ public class CliMenu {
 			choix = Integer.parseInt(USER_INPUT.nextLine());
 		} catch (NumberFormatException e) {
 			System.out.println("You didn't enter a numerical value");
-			computerMenu();
+			choix = computerMenu();
 		}
 
 		return choix;
@@ -106,7 +101,7 @@ public class CliMenu {
 			choix = Long.parseLong(USER_INPUT.nextLine());
 		} catch (NumberFormatException e) {
 			System.out.println("You didn't enter a numerical value");
-			searchOneComputer();
+			choix = searchOneComputer();
 		}
 
 		return choix;
@@ -139,8 +134,12 @@ public class CliMenu {
 
 			if (!inputArray[2].equals("null")) {
 				discontinued = LocalDate.parse(inputArray[2]);
-				if (introduced.isAfter(discontinued) || introduced.equals(discontinued)) {
-					throw new InputException("Discontinued is before introduced");
+				if (!inputArray[1].equals("null")) {
+					if (introduced.isAfter(discontinued) || introduced.equals(discontinued)) {
+						throw new InputException("Discontinued is before introduced");
+					}
+				} else {
+					throw new InputException("Discontinued cannot be registered without introduced");
 				}
 			}
 
@@ -199,9 +198,14 @@ public class CliMenu {
 
 			if (!inputArray[3].equals("null")) {
 				discontinued = LocalDate.parse(inputArray[3]);
-				if (introduced.isAfter(discontinued) || introduced.equals(discontinued)) {
-					throw new InputException("Discontinued is before introduced");
+				if (!inputArray[2].equals("null")) {
+					if (introduced.isAfter(discontinued) || introduced.equals(discontinued)) {
+						throw new InputException("Discontinued is before introduced");
+					}
+				} else {
+					throw new InputException("Discontinued cannot be registered without introduced");
 				}
+
 			}
 
 			if (!inputArray[4].equals("null")) {
@@ -268,7 +272,7 @@ public class CliMenu {
 			}
 		} catch (NumberFormatException e) {
 			System.out.println("You didn't enter a numerical value");
-			companyMenu();
+			choix = computerMenu();
 		}
 
 		return validate;
@@ -289,10 +293,11 @@ public class CliMenu {
 
 		int choix = 0;
 		try {
+
 			choix = Integer.parseInt(USER_INPUT.nextLine());
 		} catch (NumberFormatException e) {
 			System.out.println("You didn't enter a numerical value");
-			paginationrMenu();
+			choix = paginationrMenu();
 		}
 
 		return choix;

@@ -1,12 +1,12 @@
 package com.excilys.cdb;
 
-import static com.excilys.cdb.controller.CliMainMenu.mainMenu;
+import com.excilys.cdb.controller.CliMainMenu;
 
 public class Cdb {
 
 	public static void main(String[] args) {
-
-		mainMenu();
+		CliMainMenu cliMainMenu = new CliMainMenu();
+		cliMainMenu.mainMenu();
 
 	}
 

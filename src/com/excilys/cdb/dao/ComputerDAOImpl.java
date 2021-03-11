@@ -24,7 +24,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	private static final String SQL_DELETE = "DELETE FROM computer WHERE id=?;";
 	private static final String SQL_SELECT = "SELECT * FROM computer WHERE id = ?;";
 	private static final String SQL_ALL_COMPUTER = "SELECT id,name,introduced,discontinued,company_id From computer;";
-	private static final String SQL_ALL_COMPUTER_PAGINATION = "SELECT id,name,introduced,discontinued,company_id From computer LIMIT ?,?;";
+	private static final String SQL_ALL_COMPUTER_PAGINATION = "SELECT id,name,introduced,discontinued,company_id From computer ORDER BY id LIMIT ?,?;";
 
 	private static Computer map(ResultSet resultSet) throws SQLException {
 		Computer computer = new Computer();

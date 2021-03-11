@@ -17,20 +17,17 @@ public class CliComputerMenu {
 	private static final int OPTION_BACK_TO_MAIN = 7;
 	private static final int OPTION_EXIT = 8;
 
-	private static final int OPTION_BACK = 1;
-	private static final int OPTION_NEXT = 2;
-	private static final int OPTION_PAGE = 3;
-	private static final int OPTION_BACK_TO_COMPUTER_MENU = 4;
-	private static final int OPTION_EXIT_PAGINATION = 5;
+	private Page page;
 
 	/**
 	 * Default Constructor.
 	 */
 	public CliComputerMenu() {
 		super();
+		this.page = new Page();
 	}
 
-	public static void computerMenu() {
+	public void computerMenu() {
 		int choix = 0;
 		computerLoop: while (choix != OPTION_EXIT) {
 			choix = showMainMenu();
@@ -40,10 +37,8 @@ public class CliComputerMenu {
 				searchAllComputer();
 				break;
 			case OPTION_SEARCH_ALL_PAGINATION:
-				Page.searchAllComputerPagination();
-
+				page.searchAllComputerPagination();
 				break;
-
 			case OPTION_SEARCH_BY_ID:
 				searchByIdComputer();
 				break;
@@ -96,13 +91,16 @@ public class CliComputerMenu {
 	}
 
 	private static void createComputer() {
-
-		DAOFactory daoFactory = DAOFactory.getInstance();
-		ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl(daoFactory);
-		Computer compToCreate = CliMenu.createOneComputer();
-		if (CliMenu.validateCreation(compToCreate)) {
-			computerDAOImpl.create(compToCreate);
-			System.out.println(compToCreate.toString() + " created");
+		try {
+			DAOFactory daoFactory = DAOFactory.getInstance();
+			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl(daoFactory);
+			Computer compToCreate = CliMenu.createOneComputer();
+			if (CliMenu.validateCreation(compToCreate)) {
+				computerDAOImpl.create(compToCreate);
+				System.out.println(compToCreate.toString() + " created");
+			}
+		} catch (com.excilys.cdb.dao.DAOException e) {
+			System.out.println("Date cannot be bellow 1970-01-01 Or company doesn't exist");
 		}
 	}
 
@@ -147,62 +145,5 @@ public class CliComputerMenu {
 		return CliMenu.computerMenu();
 
 	}
-
-//	public static int showComputerPaginationMenu() {
-//		return CliMenu.paginationComputerMenu();
-//	}
-//
-//	private static void searchAllComputerPagination() {
-//
-//		DAOFactory daoFactory = DAOFactory.getInstance();
-//		ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl(daoFactory);
-//		int page = 0;
-//		int pageInitial = 0;
-//		do {
-//			if (computerDAOImpl.searchAllPagination(page).isEmpty()) {
-//				page = pageInitial;
-//			}
-//			for (Computer comp : computerDAOImpl.searchAllPagination(page)) {
-//				System.out.println(comp.toString());
-//			}
-//			pageInitial = page;
-//			page = paginationComputer(page);
-//
-//		} while (page != -1);
-//	}
-//
-//	public static int paginationComputer(int page) {
-//		int choix = 0;
-//		try {
-//			while (choix != OPTION_EXIT_PAGINATION) {
-//				choix = showComputerPaginationMenu();
-//				switch (choix) {
-//
-//				case OPTION_BACK:
-//					if (page != 0) {
-//						return page -= 1;
-//					} else {
-//						throw new InputException("Impossible d'aller en arrière car page 0");
-//					}
-//				case OPTION_NEXT:
-//					return page += 1;
-//				case OPTION_PAGE:
-//					return CliMenu.choixPage();
-//				case OPTION_BACK_TO_COMPUTER_MENU:
-//					return -1;
-//				case OPTION_EXIT_PAGINATION:
-//					System.exit(0);
-//					break;
-//				default:
-//					System.out.println("Sorry, please enter valid Option");
-//					paginationComputer(page);
-//				}
-//			}
-//		} catch (InputException e) {
-//			System.out.println(e.getMessage());
-//			paginationComputer(page);
-//		}
-//		return choix;
-//	}
 
 }

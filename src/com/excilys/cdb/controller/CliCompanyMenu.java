@@ -8,17 +8,21 @@ import com.excilys.cdb.view.CliMenu;
 public class CliCompanyMenu {
 
 	private static final int OPTION_SEARCH_ALL = 1;
-	private static final int OPTION_BACK = 2;
-	private static final int OPTION_EXIT = 3;
+	private static final int OPTION_SEARCH_ALL_PAGINATION = 2;
+	private static final int OPTION_BACK = 3;
+	private static final int OPTION_EXIT = 4;
+
+	private Page page;
 
 	/**
 	 * Default Constructor.
 	 */
 	public CliCompanyMenu() {
 		super();
+		this.page = new Page();
 	}
 
-	public static void companyMenu() {
+	public void companyMenu() {
 		int choix = 0;
 		companyLoop: while (choix != OPTION_EXIT) {
 			choix = showCompanyMenu();
@@ -26,6 +30,9 @@ public class CliCompanyMenu {
 
 			case OPTION_SEARCH_ALL:
 				searchAllCompany();
+				break;
+			case OPTION_SEARCH_ALL_PAGINATION:
+				page.searchAllCompanyPageUseDAO();
 				break;
 			case OPTION_BACK:
 				break companyLoop;

@@ -1,7 +1,11 @@
 package com.excilys.cdb.controller;
 
+import java.util.List;
+
+import com.excilys.cdb.dao.CompanyDAOImpl;
 import com.excilys.cdb.dao.ComputerDAOImpl;
 import com.excilys.cdb.dao.DAOFactory;
+import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.view.CliMenu;
 import com.excilys.cdb.view.InputException;
@@ -13,96 +17,113 @@ public class Page {
 	private static final int OPTION_BACK_TO_MENU = 4;
 	private static final int OPTION_EXIT_PAGINATION = 5;
 
+	private List<Computer> contentPageComputer;
+	private List<Company> contentPageCompany;
+	private int page;
+	private int pageInitial;
+
 	public Page() {
 		super();
+		this.page = 0;
+		this.pageInitial = 0;
+		this.contentPageComputer = null;
+		this.contentPageCompany = null;
 	}
 
-	public static int showComputerPaginationMenu() {
+	public static int showPageMenuAndAskInput() {
 		return CliMenu.paginationrMenu();
 	}
 
-	public static void searchAllComputerPagination() {
+	public void searchAllComputerPagination() {
 
 		DAOFactory daoFactory = DAOFactory.getInstance();
 		ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl(daoFactory);
-		int page = 0;
-		int pageInitial = 0;
+		page = 0;
+		pageInitial = 0;
 		do {
-			if (computerDAOImpl.searchAllPagination(page).isEmpty()) {
+			contentPageComputer = computerDAOImpl.searchAllPagination(page);
+			if (contentPageComputer.isEmpty()) {
+				System.out.println("Page " + page + " doesn't exist.");
 				page = pageInitial;
 			}
+			contentPageComputer = computerDAOImpl.searchAllPagination(page);
 			System.out.println("Page " + page);
-			for (Computer comp : computerDAOImpl.searchAllPagination(page)) {
+			for (Computer comp : contentPageComputer) {
 				System.out.println(comp.toString());
 			}
 			pageInitial = page;
-			page = paginationComputer(page);
+			page = pageComputerVerifyChoice(page);
 
 		} while (page != -1);
 	}
 
-	public static int paginationComputer(int page) {
+	public int pageComputerVerifyChoice(int page) {
 		int choix = 0;
 		try {
 			while (choix != OPTION_EXIT_PAGINATION) {
-				choix = showComputerPaginationMenu();
+				choix = showPageMenuAndAskInput();
 				switch (choix) {
 
 				case OPTION_BACK:
 					if (page != 0) {
 						return page -= 1;
 					} else {
-						throw new InputException("Impossible d'aller en arrière car page 0");
+						throw new InputException("Impossible to go bellow page 0");
 					}
 				case OPTION_NEXT:
 					return page += 1;
 				case OPTION_PAGE:
 					return CliMenu.choixPage();
 				case OPTION_BACK_TO_MENU:
+					contentPageComputer = null;
 					return -1;
 				case OPTION_EXIT_PAGINATION:
 					System.exit(0);
 					break;
 				default:
 					System.out.println("Sorry, please enter valid Option");
-					paginationComputer(page);
+					pageComputerVerifyChoice(page);
 				}
 			}
 		} catch (InputException e) {
 			System.out.println(e.getMessage());
-			paginationComputer(page);
+			choix = pageComputerVerifyChoice(page);
 		}
 		return choix;
 	}
 
-	// TO DO PAGINATION COMPANY (VIEUX COPIER COLLER)
-	// FAIRE ATTENTION AU METHODE
-	// voir a enlever car repetition de code
-	public static void searchAllCompanyPagination() {
+	public void searchAllCompanyPageUseDAO() {
 
 		DAOFactory daoFactory = DAOFactory.getInstance();
-		ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl(daoFactory);
-		int page = 0;
-		int pageInitial = 0;
+		CompanyDAOImpl companyDAOImpl = new CompanyDAOImpl(daoFactory);
+		page = 0;
+		pageInitial = 0;
 		do {
-			if (computerDAOImpl.searchAllPagination(page).isEmpty()) {
+			contentPageCompany = companyDAOImpl.searchAllPagination(page);
+			if (contentPageCompany.isEmpty()) {
+				System.out.println("Page " + page + " doesn't exist.");
 				page = pageInitial;
 			}
+			contentPageCompany = companyDAOImpl.searchAllPagination(page);
 			System.out.println("Page " + page);
-			for (Computer comp : computerDAOImpl.searchAllPagination(page)) {
-				System.out.println(comp.toString());
-			}
+			showCompanyContent();
 			pageInitial = page;
-			page = paginationCompany(page);
+			page = pageCompanyVerifChoice(page);
 
 		} while (page != -1);
 	}
 
-	public static int paginationCompany(int page) {
+	private void showCompanyContent() {
+		for (Company comp : contentPageCompany) {
+			System.out.println(comp.toString());
+		}
+	}
+
+	public int pageCompanyVerifChoice(int page) {
 		int choix = 0;
 		try {
 			while (choix != OPTION_EXIT_PAGINATION) {
-				choix = showComputerPaginationMenu();
+				choix = showPageMenuAndAskInput();
 				switch (choix) {
 
 				case OPTION_BACK:
@@ -116,18 +137,21 @@ public class Page {
 				case OPTION_PAGE:
 					return CliMenu.choixPage();
 				case OPTION_BACK_TO_MENU:
+					contentPageCompany = null;
 					return -1;
 				case OPTION_EXIT_PAGINATION:
 					System.exit(0);
 					break;
 				default:
-					System.out.println("Sorry, please enter valid Option");
-					paginationComputer(page);
+					throw new InputException("Veuillez entrer une valeur valide");
+				// System.out.println("Sorry, please enter valid Option");
+				// paginationCompany(page);
 				}
 			}
 		} catch (InputException e) {
 			System.out.println(e.getMessage());
-			paginationComputer(page);
+			showCompanyContent();
+			choix = pageCompanyVerifChoice(page);
 		}
 		return choix;
 	}
