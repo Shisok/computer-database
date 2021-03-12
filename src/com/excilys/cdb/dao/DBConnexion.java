@@ -19,7 +19,7 @@ public class DBConnexion {
 	private String username;
 	private String password;
 
-	DBConnexion(String url, String username, String password) {
+	private DBConnexion(String url, String username, String password) {
 		this.url = url;
 		this.username = username;
 		this.password = password;

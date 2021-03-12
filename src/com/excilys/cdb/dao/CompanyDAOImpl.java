@@ -1,55 +1,44 @@
 package com.excilys.cdb.dao;
 
-import static com.excilys.cdb.dao.DAOUtilitaire.fermeturesSilencieuses;
-import static com.excilys.cdb.dao.DAOUtilitaire.initialisationRequetePreparee;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.excilys.cdb.mapper.MapperCompany;
 import com.excilys.cdb.model.Company;
 
 public class CompanyDAOImpl {
 
-	private DBConnexion daoFactory;
+	private DBConnexion dbConnexion;
+	private MapperCompany mapperCompany;
+	private static final int OBJECT_NUMBER_PER_PAGE = 10;
 
 	private static final String SQL_ALL_COMPANY = "SELECT * FROM company";
 	private static final String SQL_ALL_COMPANY_PAGINATION = "SELECT id,name From company ORDER BY id LIMIT ?,? ;";
 
-	public CompanyDAOImpl(DBConnexion daoFactory) {
-		this.daoFactory = daoFactory;
-	}
+	public CompanyDAOImpl(DBConnexion dbConexion) {
+		this.dbConnexion = dbConexion;
+		this.mapperCompany = new MapperCompany();
 
-	private static Company map(ResultSet resultSet) throws SQLException {
-		Company company = new Company();
-		company.setId(resultSet.getLong("id"));
-		company.setName(resultSet.getString("name"));
-		return company;
 	}
 
 	public List<Company> searchAll() {
 		List<Company> companies = new ArrayList<>();
-		Connection connexion = null;
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
-		Company company = null;
-		try {
 
-			connexion = daoFactory.getConnection();
-			preparedStatement = initialisationRequetePreparee(connexion, SQL_ALL_COMPANY, false);
-			resultSet = preparedStatement.executeQuery();
+		try (Connection connexion = dbConnexion.getConnection();
+				Statement statement = connexion.createStatement();
+				ResultSet resultSet = statement.executeQuery(SQL_ALL_COMPANY)) {
 
 			while (resultSet.next()) {
-				company = map(resultSet);
+				Company company = mapperCompany.mapSqlToJava(resultSet);
 				companies.add(company);
 			}
 		} catch (SQLException e) {
-			throw new DAOException(e);
-		} finally {
-			fermeturesSilencieuses(resultSet, preparedStatement, connexion);
+			System.out.println("An error Occured during the research.");
 		}
 
 		return companies;
@@ -57,29 +46,31 @@ public class CompanyDAOImpl {
 
 	public List<Company> searchAllPagination(int page) throws DAOException {
 		List<Company> companys = new ArrayList<>();
-		Connection connexion = null;
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
-		Company company = null;
-		int offset = page * 10;
-		try {
 
-			connexion = daoFactory.getConnection();
-			preparedStatement = initialisationRequetePreparee(connexion, SQL_ALL_COMPANY_PAGINATION, false, offset, 10);
-			resultSet = preparedStatement.executeQuery();
+		int offset = page * OBJECT_NUMBER_PER_PAGE;
+		try (Connection connexion = dbConnexion.getConnection();
+				PreparedStatement preparedStatement = createPrepaStateForPagination(connexion, offset);
+				ResultSet resultSet = preparedStatement.executeQuery();) {
 
 			while (resultSet.next()) {
 
-				company = map(resultSet);
+				Company company = mapperCompany.mapSqlToJava(resultSet);
 				companys.add(company);
 			}
 		} catch (SQLException e) {
-			throw new DAOException(e);
-		} finally {
-			fermeturesSilencieuses(resultSet, preparedStatement, connexion);
+			System.out.println("An error Occured during the research.");
 		}
 
 		return companys;
+	}
+
+	private static PreparedStatement createPrepaStateForPagination(Connection connexion, int offset)
+			throws SQLException {
+		PreparedStatement preparedStatement = connexion.prepareStatement(SQL_ALL_COMPANY_PAGINATION,
+				Statement.RETURN_GENERATED_KEYS);
+		preparedStatement.setInt(1, offset);
+		preparedStatement.setInt(2, OBJECT_NUMBER_PER_PAGE);
+		return preparedStatement;
 	}
 
 }
