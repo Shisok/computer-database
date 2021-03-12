@@ -25,7 +25,7 @@ public class CliCompanyMenu {
 	public void companyMenu() {
 		int choix = 0;
 		companyLoop: while (choix != OPTION_EXIT) {
-			choix = showCompanyMenu();
+			choix = showCompanyMenuAndAskInput();
 			switch (choix) {
 
 			case OPTION_SEARCH_ALL:
@@ -55,18 +55,9 @@ public class CliCompanyMenu {
 		}
 	}
 
-	private static int showCompanyMenu() {
-		return CliMenu.companyMenu();
-//		int choix = 0;
-//		Scanner keyboard = null;
-//		try {
-//			keyboard = new Scanner(System.in);
-//			choix = keyboard.nextInt();
-//		} catch (InputMismatchException e) {
-//			System.out.println("Vous n'avez pas écrit un chiffre");
-//			showCompanyMenu();
-//		}
-//
-//		return choix;
+	private static int showCompanyMenuAndAskInput() {
+		CliMenu.showCompanyMenu();
+		return CliMenu.askCompanyMenuInput();
+
 	}
 }

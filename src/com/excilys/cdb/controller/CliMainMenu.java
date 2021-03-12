@@ -44,20 +44,8 @@ public class CliMainMenu {
 	}
 
 	public static int showMainMenu() {
-
-		return CliMenu.mainMenu();
-//		int choix = 0;
-//		Scanner keyboard = null;
-//		try {
-//			keyboard = new Scanner(System.in);
-//
-//			choix = keyboard.nextInt();
-//		} catch (InputMismatchException e) {
-//			System.out.println("Vous n'avez pas écrit un chiffre");
-//			showMainMenu();
-//		}
-//
-//		return choix;
+		CliMenu.showMainMenu();
+		return CliMenu.askInputMainMenu();
 
 	}
 

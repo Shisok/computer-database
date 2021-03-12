@@ -17,7 +17,7 @@ public class CliMenu {
 		super();
 	}
 
-	public static int mainMenu() {
+	public static void showMainMenu() {
 		lineSeparator();
 		System.out.println("Main Menu:");
 		lineSeparator();
@@ -26,12 +26,17 @@ public class CliMenu {
 		System.out.println("3.Quit");
 		lineSeparator();
 		enterChoice();
+
+	}
+
+	public static int askInputMainMenu() {
 		int choix = 0;
 		try {
 			choix = Integer.parseInt(USER_INPUT.nextLine());
 		} catch (NumberFormatException e) {
 			System.out.println("You didn't enter a numerical value");
-			choix = mainMenu();
+			showMainMenu();
+			choix = askInputMainMenu();
 		}
 
 		return choix;
@@ -45,7 +50,7 @@ public class CliMenu {
 		System.out.print("Enter your choice:");
 	}
 
-	public static int companyMenu() {
+	public static void showCompanyMenu() {
 		lineSeparator();
 		System.out.println("Company Menu:");
 		lineSeparator();
@@ -56,18 +61,22 @@ public class CliMenu {
 		lineSeparator();
 		enterChoice();
 
+	}
+
+	public static int askCompanyMenuInput() {
 		int choix = 0;
 		try {
 			choix = Integer.parseInt(USER_INPUT.nextLine());
 		} catch (NumberFormatException e) {
 			System.out.println("You didn't enter a numerical value");
-			choix = companyMenu();
+			showCompanyMenu();
+			choix = askCompanyMenuInput();
 		}
 
 		return choix;
 	}
 
-	public static int computerMenu() {
+	public static void showComputerMenu() {
 		lineSeparator();
 		System.out.println("Company Menu:");
 		lineSeparator();
@@ -82,36 +91,48 @@ public class CliMenu {
 		lineSeparator();
 		enterChoice();
 
+	}
+
+	public static int computerMenuAskInput() {
 		int choix = 0;
 		try {
 			choix = Integer.parseInt(USER_INPUT.nextLine());
 		} catch (NumberFormatException e) {
 			System.out.println("You didn't enter a numerical value");
-			choix = computerMenu();
+			showComputerMenu();
+			choix = computerMenuAskInput();
 		}
 
 		return choix;
 	}
 
-	public static Long searchOneComputer() {
+	public static void showSearchOneComputer() {
 		lineSeparator();
 		System.out.println("Computer To Search By Id:");
 
+	}
+
+	public static Long searchOneComputerAskInput() {
 		Long choix = 0L;
 		try {
 			choix = Long.parseLong(USER_INPUT.nextLine());
 		} catch (NumberFormatException e) {
 			System.out.println("You didn't enter a numerical value");
-			choix = searchOneComputer();
+			showSearchOneComputer();
+			choix = searchOneComputerAskInput();
 		}
 
 		return choix;
 	}
 
-	public static Optional<Computer> createOneComputer() {
+	public static void showCreateOneComputer() {
 		lineSeparator();
 		System.out.println(
 				"Computer To Create [name, introduced, discontinued, company_id] (Write null if no data And Date in format :YYYY-MM-DD):");
+
+	}
+
+	public static Optional<Computer> createOneComputerAskInput() {
 		String input = null;
 		String name = "";
 		LocalDate introduced = null;
@@ -148,25 +169,33 @@ public class CliMenu {
 					.discontinued(discontinued).companyId(companyId).build());
 		} catch (InputMismatchException e) {
 			System.out.println("You didn't enter a numerical value.");
-			computer = createOneComputer();
+			showCreateOneComputer();
+			computer = createOneComputerAskInput();
 		} catch (DateTimeParseException e) {
 			System.out.println("You didn't the date in the right format.");
-			computer = createOneComputer();
+			showCreateOneComputer();
+			computer = createOneComputerAskInput();
 		} catch (ArrayIndexOutOfBoundsException e) {
 			System.out.println("You didn't enter the right number of argument.");
-			computer = createOneComputer();
+			showCreateOneComputer();
+			computer = createOneComputerAskInput();
 		} catch (InputException e) {
 			System.out.println(e.getMessage());
-			computer = createOneComputer();
+			showCreateOneComputer();
+			computer = createOneComputerAskInput();
 		}
 
 		return computer;
 	}
 
-	public static Computer updateOneComputer() {
+	public static void showUpdateOneComputer() {
 		lineSeparator();
 		System.out.println(
 				"Computer To Update [Id, name, introduced, discontinued, company_id] (Write null if null And Date in format :YYYY-MM-DD) :");
+
+	}
+
+	public static Computer updateOneComputerAskInput() {
 		String input = null;
 		String name = "";
 		LocalDate introduced = null;
@@ -213,25 +242,32 @@ public class CliMenu {
 					.companyId(companyId).build();
 		} catch (InputMismatchException e) {
 			System.out.println("You didn't enter a numerical value.");
-			computer = updateOneComputer();
+			showUpdateOneComputer();
+			computer = updateOneComputerAskInput();
 		} catch (DateTimeParseException e) {
 			System.out.println("You didn't the date in the right format.");
-			computer = updateOneComputer();
+			showUpdateOneComputer();
+			computer = updateOneComputerAskInput();
 		} catch (ArrayIndexOutOfBoundsException e) {
 			System.out.println("You didn't enter the right number of argument.");
-			computer = updateOneComputer();
+			showUpdateOneComputer();
+			computer = updateOneComputerAskInput();
 		} catch (InputException e) {
 			System.out.println(e.getMessage());
-			computer = updateOneComputer();
+			showUpdateOneComputer();
+			computer = updateOneComputerAskInput();
 		}
 
 		return computer;
 	}
 
-	public static long deleteOneComputer() {
+	public static void showDeleteOneComputer() {
 		lineSeparator();
 		System.out.print("Computer to delete id: ");
 
+	}
+
+	public static long deleteOneComputerAskInput() {
 		long id = 0L;
 		try {
 
@@ -239,14 +275,14 @@ public class CliMenu {
 
 		} catch (NumberFormatException e) {
 			System.out.println("You didn't enter a numerical value.");
-			id = deleteOneComputer();
+			id = deleteOneComputerAskInput();
 		}
 
 		return id;
 	}
 
-	public static boolean validateCreation(Optional<Computer> compToCreate) {
-		boolean validate = false;
+	public static void validateCreation(Optional<Computer> compToCreate) {
+
 		lineSeparator();
 		System.out.println("Do you validate the creation of " + compToCreate.toString());
 		lineSeparator();
@@ -255,6 +291,10 @@ public class CliMenu {
 		lineSeparator();
 		enterChoice();
 
+	}
+
+	public static boolean validatoinCreationAskInput(Optional<Computer> compToCreate) {
+		boolean validate = false;
 		int choix = 0;
 		try {
 
@@ -265,18 +305,19 @@ public class CliMenu {
 				validate = false;
 			} else {
 				System.out.println("Revalider votre choix");
-				validate = validateCreation(compToCreate);
+				validateCreation(compToCreate);
+				validate = validatoinCreationAskInput(compToCreate);
 			}
 		} catch (NumberFormatException e) {
 			System.out.println("You didn't enter a numerical value");
-			choix = computerMenu();
+			showComputerMenu();
+			choix = computerMenuAskInput();
 		}
 
 		return validate;
-
 	}
 
-	public static int paginationrMenu() {
+	public static void showPaginationrMenu() {
 		lineSeparator();
 		System.out.println("Computer Pagination");
 		lineSeparator();
@@ -288,17 +329,20 @@ public class CliMenu {
 		lineSeparator();
 		enterChoice();
 
+	}
+
+	public static int paginationMenuAskInput() {
 		int choix = 0;
 		try {
 
 			choix = Integer.parseInt(USER_INPUT.nextLine());
 		} catch (NumberFormatException e) {
 			System.out.println("You didn't enter a numerical value");
-			choix = paginationrMenu();
+			showPaginationrMenu();
+			choix = paginationMenuAskInput();
 		}
 
 		return choix;
-
 	}
 
 	public static int choixPage() {

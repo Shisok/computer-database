@@ -80,12 +80,14 @@ public class CliComputerMenu {
 		try {
 			DBConnexion daoFactory = DBConnexion.getInstance();
 			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl(daoFactory);
-			Long idToSearch = CliMenu.searchOneComputer();
+			CliMenu.showSearchOneComputer();
+			Long idToSearch = CliMenu.searchOneComputerAskInput();
 			Optional<Computer> compSearched = computerDAOImpl.search(idToSearch);
 			System.out.println(compSearched.orElseThrow().toString());
 		} catch (NoSuchElementException e) {
 			System.out.println("L'ordinateur n'existe pas");
-			CliMenu.computerMenu();
+			CliMenu.showComputerMenu();
+			CliMenu.computerMenuAskInput();
 		}
 	}
 
@@ -93,14 +95,14 @@ public class CliComputerMenu {
 		try {
 			DBConnexion daoFactory = DBConnexion.getInstance();
 			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl(daoFactory);
-			Optional<Computer> compToCreate = CliMenu.createOneComputer();
-			if (CliMenu.validateCreation(compToCreate)) {
+			CliMenu.showCreateOneComputer();
+			Optional<Computer> compToCreate = CliMenu.createOneComputerAskInput();
+			CliMenu.validateCreation(compToCreate);
+			if (CliMenu.validatoinCreationAskInput(compToCreate)) {
 				computerDAOImpl.create(compToCreate.orElseThrow());
 				System.out.println(compToCreate.toString() + " created");
 			}
-//		} catch (com.excilys.cdb.dao.DAOException e) {
-//			System.out.println("Date cannot be bellow 1970-01-01 Or company doesn't exist");
-//		} 
+
 		} catch (NoSuchElementException e) {
 			System.out.println("The computer cannot be created");
 		}
@@ -110,14 +112,14 @@ public class CliComputerMenu {
 		try {
 			DBConnexion daoFactory = DBConnexion.getInstance();
 			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl(daoFactory);
-
-			Computer compToUpdate = CliMenu.updateOneComputer();
-
+			CliMenu.showUpdateOneComputer();
+			Computer compToUpdate = CliMenu.updateOneComputerAskInput();
 			computerDAOImpl.update(compToUpdate);
 			System.out.println(compToUpdate.toString() + " updated");
 		} catch (InputException e) {
 			System.out.println(e.getMessage());
-			CliMenu.computerMenu();
+			CliMenu.showComputerMenu();
+			CliMenu.computerMenuAskInput();
 		}
 	}
 
@@ -126,19 +128,21 @@ public class CliComputerMenu {
 
 			DBConnexion daoFactory = DBConnexion.getInstance();
 			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl(daoFactory);
-			Long compToDeleteID = CliMenu.deleteOneComputer();
+			CliMenu.showDeleteOneComputer();
+			Long compToDeleteID = CliMenu.deleteOneComputerAskInput();
 
 			computerDAOImpl.delete(compToDeleteID);
 			System.out.println("Computer " + compToDeleteID + ": deleted");
 		} catch (InputException e) {
 			System.out.println(e.getMessage());
-			CliMenu.computerMenu();
+			CliMenu.showComputerMenu();
+			CliMenu.computerMenuAskInput();
 		}
 	}
 
 	public static int showMainMenu() {
-
-		return CliMenu.computerMenu();
+		CliMenu.showComputerMenu();
+		return CliMenu.computerMenuAskInput();
 
 	}
 

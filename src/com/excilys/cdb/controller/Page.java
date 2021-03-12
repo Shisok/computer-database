@@ -31,7 +31,8 @@ public class Page {
 	}
 
 	public static int showPageMenuAndAskInput() {
-		return CliMenu.paginationrMenu();
+		CliMenu.showPaginationrMenu();
+		return CliMenu.paginationMenuAskInput();
 	}
 
 	public void searchAllComputerPagination() {
@@ -144,8 +145,7 @@ public class Page {
 					break;
 				default:
 					throw new InputException("Veuillez entrer une valeur valide");
-				// System.out.println("Sorry, please enter valid Option");
-				// paginationCompany(page);
+
 				}
 			}
 		} catch (InputException e) {
