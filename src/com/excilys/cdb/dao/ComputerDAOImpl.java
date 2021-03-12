@@ -12,10 +12,10 @@ import java.util.List;
 
 import com.excilys.cdb.model.Computer;
 
-public class ComputerDAOImpl implements ComputerDAO {
-	private DAOFactory daoFactory;
+public class ComputerDAOImpl {
+	private DBConnexion daoFactory;
 
-	public ComputerDAOImpl(DAOFactory daoFactory) {
+	public ComputerDAOImpl(DBConnexion daoFactory) {
 		this.daoFactory = daoFactory;
 	}
 
@@ -44,28 +44,26 @@ public class ComputerDAOImpl implements ComputerDAO {
 		return computer;
 	}
 
-	@Override
 	public void create(Computer computer) throws DAOException {
 		Connection connexion = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet valeursAutoGenerees = null;
 
 		try {
-			/* Récupération d'une connexion depuis la Factory */
+
 			connexion = daoFactory.getConnection();
 			preparedStatement = initialisationRequetePreparee(connexion, SQL_INSERT, true, computer.getName(),
 					computer.getIntroduced(), computer.getDiscontinued(), computer.getCompanyId());
-			// System.out.println(preparedStatement.toString());
 
 			int statut = preparedStatement.executeUpdate();
-			/* Analyse du statut retourné par la requête d'insertion */
+
 			if (statut == 0) {
 				throw new DAOException("Échec de la création de l'ordinateur, aucune ligne ajoutée dans la table.");
 			}
-			/* Récupération de l'id auto-généré par la requête d'insertion */
+
 			valeursAutoGenerees = preparedStatement.getGeneratedKeys();
 			if (valeursAutoGenerees.next()) {
-				/* Puis initialisation de la propriété id du bean Computer avec sa valeur */
+
 				computer.setId(valeursAutoGenerees.getLong(1));
 			} else {
 				throw new DAOException("Échec de la création de l'ordinateur en base, aucun ID auto-généré retourné.");
@@ -77,19 +75,17 @@ public class ComputerDAOImpl implements ComputerDAO {
 		}
 	}
 
-	@Override
 	public void update(Computer computer) throws DAOException {
-		// TODO Auto-generated method stub
+
 		Connection connexion = null;
 		PreparedStatement preparedStatement = null;
 
 		try {
-			/* Récupération d'une connexion depuis la Factory */
+
 			connexion = daoFactory.getConnection();
 			preparedStatement = initialisationRequetePreparee(connexion, SQL_UPDATE, false, computer.getName(),
 					computer.getIntroduced(), computer.getDiscontinued(), computer.getCompanyId(), computer.getId());
 			int statut = preparedStatement.executeUpdate();
-			/* Analyse du statut retourné par la requête d'insertion */
 			if (statut == 0) {
 				throw new DAOException("Échec de la mise à jour de l'ordinateur, aucune ligne ajoutée dans la table.");
 			}
@@ -102,20 +98,18 @@ public class ComputerDAOImpl implements ComputerDAO {
 
 	}
 
-	@Override
 	public void delete(Computer computer) throws DAOException {
-		// TODO Auto-generated method stub
-		// TODO Auto-generated method stub
+
 		Connection connexion = null;
 		PreparedStatement preparedStatement = null;
 
 		try {
-			/* Récupération d'une connexion depuis la Factory */
+
 			connexion = daoFactory.getConnection();
 			preparedStatement = initialisationRequetePreparee(connexion, SQL_DELETE, false, computer.getId());
 
 			int statut = preparedStatement.executeUpdate();
-			/* Analyse du statut retourné par la requête d'insertion */
+
 			if (statut == 0) {
 				throw new DAOException("Échec de la suppression de l'ordinateur, aucune ligne ajoutée dans la table.");
 			}
@@ -128,7 +122,6 @@ public class ComputerDAOImpl implements ComputerDAO {
 
 	}
 
-	@Override
 	public Computer search(Long id) throws DAOException {
 		Connection connexion = null;
 		PreparedStatement preparedStatement = null;
@@ -136,11 +129,10 @@ public class ComputerDAOImpl implements ComputerDAO {
 		Computer computer = null;
 
 		try {
-			/* Récupération d'une connexion depuis la Factory */
+
 			connexion = daoFactory.getConnection();
 			preparedStatement = initialisationRequetePreparee(connexion, SQL_SELECT, false, id);
 			resultSet = preparedStatement.executeQuery();
-			/* Parcours de la ligne de données de l'éventuel ResulSet retourné */
 
 			if (resultSet.next()) {
 				computer = map(resultSet);
@@ -154,7 +146,6 @@ public class ComputerDAOImpl implements ComputerDAO {
 		return computer;
 	}
 
-	@Override
 	public List<Computer> searchAll() throws DAOException {
 		List<Computer> computers = new ArrayList<>();
 		Connection connexion = null;
@@ -162,7 +153,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 		ResultSet resultSet = null;
 		Computer computer = null;
 		try {
-			/* Récupération d'une connexion depuis la Factory */
+
 			connexion = daoFactory.getConnection();
 			preparedStatement = initialisationRequetePreparee(connexion, SQL_ALL_COMPUTER, false);
 			resultSet = preparedStatement.executeQuery();
@@ -181,7 +172,6 @@ public class ComputerDAOImpl implements ComputerDAO {
 		return computers;
 	}
 
-	@Override
 	public List<Computer> searchAllPagination(int page) throws DAOException {
 		List<Computer> computers = new ArrayList<>();
 		Connection connexion = null;
@@ -191,7 +181,6 @@ public class ComputerDAOImpl implements ComputerDAO {
 		int offset = page * 10;
 		try {
 
-			/* Récupération d'une connexion depuis la Factory */
 			connexion = daoFactory.getConnection();
 			preparedStatement = initialisationRequetePreparee(connexion, SQL_ALL_COMPUTER_PAGINATION, false, offset,
 					10);

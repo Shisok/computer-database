@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.excilys.cdb.dao.CompanyDAOImpl;
 import com.excilys.cdb.dao.ComputerDAOImpl;
-import com.excilys.cdb.dao.DAOFactory;
+import com.excilys.cdb.dao.DBConnexion;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.view.CliMenu;
@@ -36,7 +36,7 @@ public class Page {
 
 	public void searchAllComputerPagination() {
 
-		DAOFactory daoFactory = DAOFactory.getInstance();
+		DBConnexion daoFactory = DBConnexion.getInstance();
 		ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl(daoFactory);
 		page = 0;
 		pageInitial = 0;
@@ -94,7 +94,7 @@ public class Page {
 
 	public void searchAllCompanyPageUseDAO() {
 
-		DAOFactory daoFactory = DAOFactory.getInstance();
+		DBConnexion daoFactory = DBConnexion.getInstance();
 		CompanyDAOImpl companyDAOImpl = new CompanyDAOImpl(daoFactory);
 		page = 0;
 		pageInitial = 0;

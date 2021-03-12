@@ -7,7 +7,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-public class DAOFactory {
+public class DBConnexion {
 
 	private static final String FICHIER_PROPERTIES = "resources/dao.properties";
 	private static final String PROPERTY_URL = "url";
@@ -19,33 +19,21 @@ public class DAOFactory {
 	private String username;
 	private String password;
 
-	DAOFactory(String url, String username, String password) {
+	DBConnexion(String url, String username, String password) {
 		this.url = url;
 		this.username = username;
 		this.password = password;
 	}
 
-	/*
-	 * Méthode chargée de récupérer les informations de connexion à la base de
-	 * données, charger le driver JDBC et retourner une instance de la Factory
-	 */
-	public static DAOFactory getInstance() throws DAOConfigurationException {
+	public static DBConnexion getInstance() throws DAOConfigurationException {
 		Properties properties = new Properties();
 		String url;
 		String driver;
 		String nomUtilisateur;
 		String motDePasse;
-		/*
-		 * Classloader = classe abstraite qui permet de localiser ou de generer de la
-		 * donnée pour la definition de classe
-		 * 
-		 */
+
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-		/*
-		 * GetRessouceasstream() ouvre le flux demande et retourne null en cas d'erreur,
-		 * ce qui nous permet de ne pas gerer filenotFoundException si nous utilisons
-		 * FileInputStream
-		 */
+
 		InputStream fichierProperties = classLoader.getResourceAsStream(FICHIER_PROPERTIES);
 
 		if (fichierProperties == null) {
@@ -68,25 +56,12 @@ public class DAOFactory {
 			throw new DAOConfigurationException("Le driver est introuvable dans le classpath.", e);
 		}
 
-		DAOFactory instance = new DAOFactory(url, nomUtilisateur, motDePasse);
+		DBConnexion instance = new DBConnexion(url, nomUtilisateur, motDePasse);
 		return instance;
 	}
 
-	/* Méthode chargée de fournir une connexion à la base de données */
-	/* package */
 	Connection getConnection() throws SQLException {
 		return DriverManager.getConnection(url, username, password);
 	}
 
-	/*
-	 * Méthodes de récupération de l'implémentation des différents DAO
-	 */
-
-	public CompanyDAO getCompanyDao() {
-		return new CompanyDAOImpl(this);
-	}
-
-	public ComputerDAO getComputerDao() {
-		return new ComputerDAOImpl(this);
-	}
 }

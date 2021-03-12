@@ -1,7 +1,7 @@
 package com.excilys.cdb.controller;
 
 import com.excilys.cdb.dao.ComputerDAOImpl;
-import com.excilys.cdb.dao.DAOFactory;
+import com.excilys.cdb.dao.DBConnexion;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.view.CliMenu;
 import com.excilys.cdb.view.InputException;
@@ -66,7 +66,7 @@ public class CliComputerMenu {
 
 	private static void searchAllComputer() {
 
-		DAOFactory daoFactory = DAOFactory.getInstance();
+		DBConnexion daoFactory = DBConnexion.getInstance();
 		ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl(daoFactory);
 		for (Computer comp : computerDAOImpl.searchAll()) {
 			System.out.println(comp.toString());
@@ -75,7 +75,7 @@ public class CliComputerMenu {
 
 	private static void searchByIdComputer() {
 		try {
-			DAOFactory daoFactory = DAOFactory.getInstance();
+			DBConnexion daoFactory = DBConnexion.getInstance();
 			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl(daoFactory);
 			Long idToSearch = CliMenu.searchOneComputer();
 			Computer compSearched = computerDAOImpl.search(idToSearch);
@@ -92,7 +92,7 @@ public class CliComputerMenu {
 
 	private static void createComputer() {
 		try {
-			DAOFactory daoFactory = DAOFactory.getInstance();
+			DBConnexion daoFactory = DBConnexion.getInstance();
 			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl(daoFactory);
 			Computer compToCreate = CliMenu.createOneComputer();
 			if (CliMenu.validateCreation(compToCreate)) {
@@ -106,7 +106,7 @@ public class CliComputerMenu {
 
 	private static void updateComputer() {
 		try {
-			DAOFactory daoFactory = DAOFactory.getInstance();
+			DBConnexion daoFactory = DBConnexion.getInstance();
 			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl(daoFactory);
 
 			Computer compToUpdate = CliMenu.updateOneComputer();
@@ -125,7 +125,7 @@ public class CliComputerMenu {
 	private static void deleteComputer() {
 		try {
 
-			DAOFactory daoFactory = DAOFactory.getInstance();
+			DBConnexion daoFactory = DBConnexion.getInstance();
 			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl(daoFactory);
 			Computer compToDelete = CliMenu.deleteOneComputer();
 			compToDelete = computerDAOImpl.search(compToDelete.getId());

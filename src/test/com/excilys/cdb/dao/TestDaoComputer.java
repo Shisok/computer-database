@@ -11,17 +11,17 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.excilys.cdb.dao.ComputerDAOImpl;
-import com.excilys.cdb.dao.DAOFactory;
+import com.excilys.cdb.dao.DBConnexion;
 import com.excilys.cdb.model.Computer;
 
 public class TestDaoComputer {
-	static DAOFactory daoFactory;
+	static DBConnexion daoFactory;
 	ComputerDAOImpl computerDAOImpl;
 
 	@BeforeClass
 	public static void setUpFactory() {
 		// DAOFactory ne doit etre instancier qu'une seule foi car Factory
-		daoFactory = DAOFactory.getInstance();
+		daoFactory = DBConnexion.getInstance();
 	}
 
 	@Before

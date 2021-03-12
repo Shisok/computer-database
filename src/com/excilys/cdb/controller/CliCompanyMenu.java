@@ -1,7 +1,7 @@
 package com.excilys.cdb.controller;
 
 import com.excilys.cdb.dao.CompanyDAOImpl;
-import com.excilys.cdb.dao.DAOFactory;
+import com.excilys.cdb.dao.DBConnexion;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.view.CliMenu;
 
@@ -48,7 +48,7 @@ public class CliCompanyMenu {
 
 	private static void searchAllCompany() {
 
-		DAOFactory daoFactory = DAOFactory.getInstance();
+		DBConnexion daoFactory = DBConnexion.getInstance();
 		CompanyDAOImpl companyDAOImpl = new CompanyDAOImpl(daoFactory);
 		for (Company comp : companyDAOImpl.searchAll()) {
 			System.out.println(comp.toString());
