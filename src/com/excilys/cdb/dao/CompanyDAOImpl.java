@@ -34,7 +34,7 @@ public class CompanyDAOImpl {
 				ResultSet resultSet = statement.executeQuery(SQL_ALL_COMPANY)) {
 
 			while (resultSet.next()) {
-				Company company = mapperCompany.mapSqlToJava(resultSet);
+				Company company = mapperCompany.mapFromResultSet(resultSet);
 				companies.add(company);
 			}
 		} catch (SQLException e) {
@@ -54,7 +54,7 @@ public class CompanyDAOImpl {
 
 			while (resultSet.next()) {
 
-				Company company = mapperCompany.mapSqlToJava(resultSet);
+				Company company = mapperCompany.mapFromResultSet(resultSet);
 				companys.add(company);
 			}
 		} catch (SQLException e) {

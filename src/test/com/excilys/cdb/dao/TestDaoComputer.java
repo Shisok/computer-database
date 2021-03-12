@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.After;
 import org.junit.Before;
@@ -46,22 +47,22 @@ public class TestDaoComputer {
 		for (Computer comp : listComp) {
 			System.out.println(comp.toString());
 		}
-		Computer computerCreatedSearched = computerDAOImpl.search(computer.getId());
+		Optional<Computer> computerCreatedSearched = computerDAOImpl.search(computer.getId());
 		// sachant qu'il existe dans la base de données
-		Computer computerSearched = computerDAOImpl.search(574L);
+		Optional<Computer> computerSearched = computerDAOImpl.search(574L);
 
 		System.out.println(computerSearched.toString());
 
-		computerDAOImpl.delete(computer);
+		computerDAOImpl.delete(computer.getId());
 		System.out.println("All computer + deleted");
 		List<Computer> listCompu = computerDAOImpl.searchAll();
 		for (Computer comp : listCompu) {
 			System.out.println(comp.toString());
 		}
-		Computer computerDeletedSearch = computerDAOImpl.search(computer.getId());
-		assertTrue(computer.equals(computerCreatedSearched));
-		assertTrue(computerSearched != null);
-		assertTrue(computerDeletedSearch == null);
+		Optional<Computer> computerDeletedSearch = computerDAOImpl.search(computer.getId());
+		assertTrue(computer.equals(computerCreatedSearched.get()));
+		assertTrue(computerSearched.get() != null);
+		assertTrue(computerDeletedSearch.get() == null);
 
 	}
 }

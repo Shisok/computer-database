@@ -1,23 +1,22 @@
 package com.excilys.cdb.dao;
 
-import static com.excilys.cdb.dao.DAOUtilitaire.fermeturesSilencieuses;
-import static com.excilys.cdb.dao.DAOUtilitaire.initialisationRequetePreparee;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import com.excilys.cdb.mapper.MapperComputer;
 import com.excilys.cdb.model.Computer;
+import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 
 public class ComputerDAOImpl {
-	private DBConnexion daoFactory;
-
-	public ComputerDAOImpl(DBConnexion daoFactory) {
-		this.daoFactory = daoFactory;
-	}
+	private DBConnexion dbConnexion;
+	private MapperComputer mapperComputer;
 
 	private static final String SQL_INSERT = "INSERT INTO computer ( name, introduced, discontinued, company_id) VALUES ( ?, ?, ?, ?);";
 	private static final String SQL_UPDATE = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?;";
@@ -25,35 +24,19 @@ public class ComputerDAOImpl {
 	private static final String SQL_SELECT = "SELECT * FROM computer WHERE id = ?;";
 	private static final String SQL_ALL_COMPUTER = "SELECT id,name,introduced,discontinued,company_id From computer;";
 	private static final String SQL_ALL_COMPUTER_PAGINATION = "SELECT id,name,introduced,discontinued,company_id From computer ORDER BY id LIMIT ?,?;";
+	private static final int OBJECT_NUMBER_PER_PAGE = 10;
 
-	private static Computer map(ResultSet resultSet) throws SQLException {
-		Computer computer = new Computer();
-		computer.setId(resultSet.getLong("id"));
-		computer.setName(resultSet.getString("name"));
-		if (resultSet.getDate("introduced") != null) {
-			computer.setIntroduced(resultSet.getDate("introduced").toLocalDate());
-		}
-		if (resultSet.getDate("discontinued") != null) {
-			computer.setDiscontinued(resultSet.getDate("discontinued").toLocalDate());
-		}
-		if (resultSet.getObject("company_id") == null) {
-			computer.setCompanyId(null);
-		} else {
-			computer.setCompanyId(resultSet.getLong("company_id"));
-		}
-		return computer;
+	public ComputerDAOImpl(DBConnexion dbConnexion) {
+		this.dbConnexion = dbConnexion;
+		this.mapperComputer = new MapperComputer();
 	}
 
 	public void create(Computer computer) throws DAOException {
-		Connection connexion = null;
-		PreparedStatement preparedStatement = null;
+
 		ResultSet valeursAutoGenerees = null;
 
-		try {
-
-			connexion = daoFactory.getConnection();
-			preparedStatement = initialisationRequetePreparee(connexion, SQL_INSERT, true, computer.getName(),
-					computer.getIntroduced(), computer.getDiscontinued(), computer.getCompanyId());
+		try (Connection connexion = dbConnexion.getConnection();
+				PreparedStatement preparedStatement = createPrepaStateForCreate(connexion, computer);) {
 
 			int statut = preparedStatement.executeUpdate();
 
@@ -68,23 +51,31 @@ public class ComputerDAOImpl {
 			} else {
 				throw new DAOException("Échec de la création de l'ordinateur en base, aucun ID auto-généré retourné.");
 			}
+		} catch (MysqlDataTruncation e) {
+			System.out.println("An error occured because date cannot be bellow 1970-01-01.");
+		} catch (SQLIntegrityConstraintViolationException e) {
+			System.out.println("An error occured because the company doesn't exist.");
 		} catch (SQLException e) {
-			throw new DAOException(e);
-		} finally {
-			fermeturesSilencieuses(valeursAutoGenerees, preparedStatement, connexion);
+			System.out.println("An has error occured during the creation.");
 		}
+
+	}
+
+	private static PreparedStatement createPrepaStateForCreate(Connection connexion, Computer computer)
+			throws SQLException {
+		PreparedStatement preparedStatement = connexion.prepareStatement(SQL_INSERT);
+		preparedStatement.setString(1, computer.getName());
+		preparedStatement.setObject(2, computer.getIntroduced());
+		preparedStatement.setObject(3, computer.getDiscontinued());
+		preparedStatement.setObject(4, computer.getCompanyId());
+		return preparedStatement;
 	}
 
 	public void update(Computer computer) throws DAOException {
 
-		Connection connexion = null;
-		PreparedStatement preparedStatement = null;
+		try (Connection connexion = dbConnexion.getConnection();
+				PreparedStatement preparedStatement = createPrepaStateForUpdate(connexion, computer);) {
 
-		try {
-
-			connexion = daoFactory.getConnection();
-			preparedStatement = initialisationRequetePreparee(connexion, SQL_UPDATE, false, computer.getName(),
-					computer.getIntroduced(), computer.getDiscontinued(), computer.getCompanyId(), computer.getId());
 			int statut = preparedStatement.executeUpdate();
 			if (statut == 0) {
 				throw new DAOException("Échec de la mise à jour de l'ordinateur, aucune ligne ajoutée dans la table.");
@@ -92,21 +83,25 @@ public class ComputerDAOImpl {
 
 		} catch (SQLException e) {
 			throw new DAOException(e);
-		} finally {
-			fermeturesSilencieuses(preparedStatement, connexion);
 		}
 
 	}
 
-	public void delete(Computer computer) throws DAOException {
+	private static PreparedStatement createPrepaStateForUpdate(Connection connexion, Computer computer)
+			throws SQLException {
+		PreparedStatement preparedStatement = connexion.prepareStatement(SQL_UPDATE);
+		preparedStatement.setString(1, computer.getName());
+		preparedStatement.setObject(2, computer.getIntroduced());
+		preparedStatement.setObject(3, computer.getDiscontinued());
+		preparedStatement.setObject(4, computer.getCompanyId());
+		preparedStatement.setLong(5, computer.getId());
+		return preparedStatement;
+	}
 
-		Connection connexion = null;
-		PreparedStatement preparedStatement = null;
+	public void delete(Long id) throws DAOException {
 
-		try {
-
-			connexion = daoFactory.getConnection();
-			preparedStatement = initialisationRequetePreparee(connexion, SQL_DELETE, false, computer.getId());
+		try (Connection connexion = dbConnexion.getConnection();
+				PreparedStatement preparedStatement = createPrepaStateWithCompId(connexion, id, SQL_DELETE);) {
 
 			int statut = preparedStatement.executeUpdate();
 
@@ -115,58 +110,48 @@ public class ComputerDAOImpl {
 			}
 
 		} catch (SQLException e) {
-			throw new DAOException(e);
-		} finally {
-			fermeturesSilencieuses(preparedStatement, connexion);
+			System.out.println("An error occured while deleting the computer");
 		}
 
 	}
 
-	public Computer search(Long id) throws DAOException {
-		Connection connexion = null;
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
-		Computer computer = null;
-
-		try {
-
-			connexion = daoFactory.getConnection();
-			preparedStatement = initialisationRequetePreparee(connexion, SQL_SELECT, false, id);
-			resultSet = preparedStatement.executeQuery();
+	public Optional<Computer> search(Long id) throws DAOException {
+		Optional<Computer> computer = Optional.empty();
+		try (Connection connexion = dbConnexion.getConnection();
+				PreparedStatement preparedStatement = createPrepaStateWithCompId(connexion, id, SQL_SELECT);
+				ResultSet resultSet = preparedStatement.executeQuery();) {
 
 			if (resultSet.next()) {
-				computer = map(resultSet);
+				computer = Optional.ofNullable(mapperComputer.mapFromResultSet(resultSet));
 			}
 		} catch (SQLException e) {
-			throw new DAOException(e);
-		} finally {
-			fermeturesSilencieuses(resultSet, preparedStatement, connexion);
+			System.out.println("An error occured during the research.");
 		}
 
 		return computer;
 	}
 
+	private static PreparedStatement createPrepaStateWithCompId(Connection connexion, Long id, String sql)
+			throws SQLException {
+		PreparedStatement preparedStatement = connexion.prepareStatement(sql);
+		preparedStatement.setLong(1, id);
+		return preparedStatement;
+	}
+
 	public List<Computer> searchAll() throws DAOException {
 		List<Computer> computers = new ArrayList<>();
-		Connection connexion = null;
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
-		Computer computer = null;
-		try {
 
-			connexion = daoFactory.getConnection();
-			preparedStatement = initialisationRequetePreparee(connexion, SQL_ALL_COMPUTER, false);
-			resultSet = preparedStatement.executeQuery();
+		try (Connection connexion = dbConnexion.getConnection();
+				Statement statement = connexion.createStatement();
+				ResultSet resultSet = statement.executeQuery(SQL_ALL_COMPUTER)) {
 
 			while (resultSet.next()) {
 
-				computer = map(resultSet);
+				Computer computer = mapperComputer.mapFromResultSet(resultSet);
 				computers.add(computer);
 			}
 		} catch (SQLException e) {
-			throw new DAOException(e);
-		} finally {
-			fermeturesSilencieuses(resultSet, preparedStatement, connexion);
+			System.out.println("An error occured during the research.");
 		}
 
 		return computers;
@@ -174,30 +159,31 @@ public class ComputerDAOImpl {
 
 	public List<Computer> searchAllPagination(int page) throws DAOException {
 		List<Computer> computers = new ArrayList<>();
-		Connection connexion = null;
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
-		Computer computer = null;
-		int offset = page * 10;
-		try {
 
-			connexion = daoFactory.getConnection();
-			preparedStatement = initialisationRequetePreparee(connexion, SQL_ALL_COMPUTER_PAGINATION, false, offset,
-					10);
-			resultSet = preparedStatement.executeQuery();
+		int offset = page * 10;
+		try (Connection connexion = dbConnexion.getConnection();
+				PreparedStatement preparedStatement = createPrepaStateForPagination(connexion, offset);
+				ResultSet resultSet = preparedStatement.executeQuery();) {
 
 			while (resultSet.next()) {
 
-				computer = map(resultSet);
+				Computer computer = mapperComputer.mapFromResultSet(resultSet);
 				computers.add(computer);
 			}
 		} catch (SQLException e) {
-			throw new DAOException(e);
-		} finally {
-			fermeturesSilencieuses(resultSet, preparedStatement, connexion);
+			System.out.println("An error occured while searching the page.");
 		}
 
 		return computers;
+	}
+
+	private static PreparedStatement createPrepaStateForPagination(Connection connexion, int offset)
+			throws SQLException {
+		PreparedStatement preparedStatement = connexion.prepareStatement(SQL_ALL_COMPUTER_PAGINATION,
+				Statement.RETURN_GENERATED_KEYS);
+		preparedStatement.setInt(1, offset);
+		preparedStatement.setInt(2, OBJECT_NUMBER_PER_PAGE);
+		return preparedStatement;
 	}
 
 }

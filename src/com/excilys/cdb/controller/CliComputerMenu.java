@@ -1,5 +1,8 @@
 package com.excilys.cdb.controller;
 
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
 import com.excilys.cdb.dao.ComputerDAOImpl;
 import com.excilys.cdb.dao.DBConnexion;
 import com.excilys.cdb.model.Computer;
@@ -78,14 +81,10 @@ public class CliComputerMenu {
 			DBConnexion daoFactory = DBConnexion.getInstance();
 			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl(daoFactory);
 			Long idToSearch = CliMenu.searchOneComputer();
-			Computer compSearched = computerDAOImpl.search(idToSearch);
-			if (compSearched == null) {
-				throw new InputException("L'ordinateur n'existe pas");
-			} else {
-				System.out.println(compSearched.toString());
-			}
-		} catch (InputException e) {
-			System.out.println(e.getMessage());
+			Optional<Computer> compSearched = computerDAOImpl.search(idToSearch);
+			System.out.println(compSearched.orElseThrow().toString());
+		} catch (NoSuchElementException e) {
+			System.out.println("L'ordinateur n'existe pas");
 			CliMenu.computerMenu();
 		}
 	}
@@ -94,13 +93,16 @@ public class CliComputerMenu {
 		try {
 			DBConnexion daoFactory = DBConnexion.getInstance();
 			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl(daoFactory);
-			Computer compToCreate = CliMenu.createOneComputer();
+			Optional<Computer> compToCreate = CliMenu.createOneComputer();
 			if (CliMenu.validateCreation(compToCreate)) {
-				computerDAOImpl.create(compToCreate);
+				computerDAOImpl.create(compToCreate.orElseThrow());
 				System.out.println(compToCreate.toString() + " created");
 			}
-		} catch (com.excilys.cdb.dao.DAOException e) {
-			System.out.println("Date cannot be bellow 1970-01-01 Or company doesn't exist");
+//		} catch (com.excilys.cdb.dao.DAOException e) {
+//			System.out.println("Date cannot be bellow 1970-01-01 Or company doesn't exist");
+//		} 
+		} catch (NoSuchElementException e) {
+			System.out.println("The computer cannot be created");
 		}
 	}
 
@@ -110,10 +112,7 @@ public class CliComputerMenu {
 			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl(daoFactory);
 
 			Computer compToUpdate = CliMenu.updateOneComputer();
-			compToUpdate = computerDAOImpl.search(compToUpdate.getId());
-			if (compToUpdate == null) {
-				throw new InputException("L'ordinateur n'existe pas");
-			}
+
 			computerDAOImpl.update(compToUpdate);
 			System.out.println(compToUpdate.toString() + " updated");
 		} catch (InputException e) {
@@ -127,13 +126,10 @@ public class CliComputerMenu {
 
 			DBConnexion daoFactory = DBConnexion.getInstance();
 			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl(daoFactory);
-			Computer compToDelete = CliMenu.deleteOneComputer();
-			compToDelete = computerDAOImpl.search(compToDelete.getId());
-			if (compToDelete == null) {
-				throw new InputException("L'ordinateur n'existe pas");
-			}
-			computerDAOImpl.delete(compToDelete);
-			System.out.println(compToDelete.toString() + " deleted");
+			Long compToDeleteID = CliMenu.deleteOneComputer();
+
+			computerDAOImpl.delete(compToDeleteID);
+			System.out.println("Computer " + compToDeleteID + ": deleted");
 		} catch (InputException e) {
 			System.out.println(e.getMessage());
 			CliMenu.computerMenu();

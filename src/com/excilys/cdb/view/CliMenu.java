@@ -3,6 +3,7 @@ package com.excilys.cdb.view;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
+import java.util.Optional;
 import java.util.Scanner;
 
 import com.excilys.cdb.model.Computer;
@@ -107,34 +108,32 @@ public class CliMenu {
 		return choix;
 	}
 
-	public static Computer createOneComputer() {
+	public static Optional<Computer> createOneComputer() {
 		lineSeparator();
 		System.out.println(
-				"Computer To Create [name, introduced, discontinued, company_id] (Write null if null And Date in format :YYYY-MM-DD):");
+				"Computer To Create [name, introduced, discontinued, company_id] (Write null if no data And Date in format :YYYY-MM-DD):");
 		String input = null;
 		String name = "";
 		LocalDate introduced = null;
 		LocalDate discontinued = null;
 		Long companyId = null;
-		// Scanner keyboard = null;
-		Computer computer = null;
+		Optional<Computer> computer = Optional.empty();
 		try {
-			// keyboard = new Scanner(System.in);
 			input = USER_INPUT.nextLine();
 			String[] inputArray = input.split(SCANNER_DELIMITER);
 			if (inputArray.length != 4) {
 				throw new InputException("You didn't enter the right number of argument.");
 			}
-			if (!inputArray[0].equals("")) {
+			if (!("").equals(inputArray[0])) {
 				name = inputArray[0];
 			}
-			if (!inputArray[1].equals("null")) {
+			if (!"null".equals(inputArray[1])) {
 				introduced = LocalDate.parse(inputArray[1]);
 			}
 
-			if (!inputArray[2].equals("null")) {
+			if (!"null".equals(inputArray[2])) {
 				discontinued = LocalDate.parse(inputArray[2]);
-				if (!inputArray[1].equals("null")) {
+				if (!"null".equals(inputArray[1])) {
 					if (introduced.isAfter(discontinued) || introduced.equals(discontinued)) {
 						throw new InputException("Discontinued is before introduced");
 					}
@@ -142,13 +141,11 @@ public class CliMenu {
 					throw new InputException("Discontinued cannot be registered without introduced");
 				}
 			}
-
-			if (!inputArray[3].equals("null")) {
+			if (!"null".equals(inputArray[3])) {
 				companyId = Long.parseLong(inputArray[3]);
 			}
-
-			computer = new Computer.ComputerBuilder(null).name(name).introduced(introduced).discontinued(discontinued)
-					.companyId(companyId).build();
+			computer = Optional.ofNullable(new Computer.ComputerBuilder(null).name(name).introduced(introduced)
+					.discontinued(discontinued).companyId(companyId).build());
 		} catch (InputMismatchException e) {
 			System.out.println("You didn't enter a numerical value.");
 			computer = createOneComputer();
@@ -198,7 +195,7 @@ public class CliMenu {
 
 			if (!inputArray[3].equals("null")) {
 				discontinued = LocalDate.parse(inputArray[3]);
-				if (!inputArray[2].equals("null")) {
+				if (!("null").equals(inputArray[2])) {
 					if (introduced.isAfter(discontinued) || introduced.equals(discontinued)) {
 						throw new InputException("Discontinued is before introduced");
 					}
@@ -231,27 +228,27 @@ public class CliMenu {
 		return computer;
 	}
 
-	public static Computer deleteOneComputer() {
+	public static long deleteOneComputer() {
 		lineSeparator();
 		System.out.print("Computer to delete id: ");
-		Computer computer = null;
-		Long id = null;
+
+		long id = 0L;
 		try {
 
 			id = Long.parseLong(USER_INPUT.nextLine());
-			computer = new Computer.ComputerBuilder(id).build();
+
 		} catch (NumberFormatException e) {
 			System.out.println("You didn't enter a numerical value.");
-			computer = deleteOneComputer();
+			id = deleteOneComputer();
 		}
 
-		return computer;
+		return id;
 	}
 
-	public static boolean validateCreation(Computer computer) {
+	public static boolean validateCreation(Optional<Computer> compToCreate) {
 		boolean validate = false;
 		lineSeparator();
-		System.out.println("Do you validate the creation of " + computer.toString());
+		System.out.println("Do you validate the creation of " + compToCreate.toString());
 		lineSeparator();
 		System.out.println("1.Yes");
 		System.out.println("2.No");
@@ -268,7 +265,7 @@ public class CliMenu {
 				validate = false;
 			} else {
 				System.out.println("Revalider votre choix");
-				validate = validateCreation(computer);
+				validate = validateCreation(compToCreate);
 			}
 		} catch (NumberFormatException e) {
 			System.out.println("You didn't enter a numerical value");

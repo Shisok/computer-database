@@ -7,14 +7,7 @@ import com.excilys.cdb.model.Company;
 
 public class MapperCompany {
 
-	/**
-	 * Default constructor.
-	 */
-	public MapperCompany() {
-
-	}
-
-	public Company mapSqlToJava(ResultSet resultSet) throws SQLException {
+	public Company mapFromResultSet(ResultSet resultSet) throws SQLException {
 		Company company = new Company();
 		company.setId(resultSet.getLong("id"));
 		company.setName(resultSet.getString("name"));
