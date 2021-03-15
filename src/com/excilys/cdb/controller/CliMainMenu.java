@@ -10,6 +10,7 @@ public class CliMainMenu {
 
 	CliComputerMenu cliComputerMenu;
 	CliCompanyMenu cliCompanyMenu;
+	CliMenu cliMenu;
 
 	/**
 	 * Default Constructor.
@@ -18,6 +19,7 @@ public class CliMainMenu {
 		super();
 		this.cliComputerMenu = new CliComputerMenu();
 		this.cliCompanyMenu = new CliCompanyMenu();
+		this.cliMenu = new CliMenu();
 	}
 
 	public void mainMenu() {
@@ -30,7 +32,7 @@ public class CliMainMenu {
 				cliCompanyMenu.companyMenu();
 				break;
 			case OPTION_COMPUTER:
-				cliComputerMenu.computerMenu();
+				cliMenu.computerMenu();
 				break;
 			case OPTION_EXIT:
 				System.exit(0);

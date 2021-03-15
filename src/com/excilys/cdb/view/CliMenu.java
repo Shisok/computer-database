@@ -6,15 +6,29 @@ import java.util.InputMismatchException;
 import java.util.Optional;
 import java.util.Scanner;
 
+import com.excilys.cdb.controller.Page;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.service.ComputerService;
 
 public class CliMenu {
 
+	private static final int OPTION_SEARCH_ALL = 1;
+	private static final int OPTION_SEARCH_ALL_PAGINATION = 2;
+	private static final int OPTION_SEARCH_BY_ID = 3;
+	private static final int OPTION_CREATE = 4;
+	private static final int OPTION_UPDATE = 5;
+	private static final int OPTION_DELETE = 6;
+	private static final int OPTION_BACK_TO_MAIN = 7;
+	private static final int OPTION_EXIT = 8;
 	private static final String SCANNER_DELIMITER = "\\s*,\\s*";
 	private static final Scanner USER_INPUT = new Scanner(System.in);
+	private Page page;
+	private ComputerService computerService;
 
 	public CliMenu() {
 		super();
+		this.page = new Page();
+		this.computerService = new ComputerService();
 	}
 
 	public static void showMainMenu() {
@@ -360,6 +374,44 @@ public class CliMenu {
 		}
 
 		return choix;
+	}
+
+	public void computerMenu() {
+		int choix = 0;
+		computerLoop: while (choix != OPTION_EXIT) {
+			showMainMenu();
+			choix = computerMenuAskInput();
+			switch (choix) {
+
+			case OPTION_SEARCH_ALL:
+				computerService.searchAllComputer();
+				break;
+			case OPTION_SEARCH_ALL_PAGINATION:
+				page.searchAllComputerPagination();
+				break;
+			case OPTION_SEARCH_BY_ID:
+				computerService.searchByIdComputer();
+				break;
+			case OPTION_CREATE:
+				computerService.createComputer();
+				break;
+			case OPTION_UPDATE:
+				computerService.updateComputer();
+				break;
+			case OPTION_DELETE:
+				computerService.deleteComputer();
+				break;
+			case OPTION_BACK_TO_MAIN:
+				break computerLoop;
+			case OPTION_EXIT:
+				System.exit(0);
+				break;
+			default:
+				System.out.println("Sorry, please enter valid Option");
+
+			}
+		}
+
 	}
 
 }
