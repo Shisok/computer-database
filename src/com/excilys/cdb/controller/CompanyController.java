@@ -1,7 +1,6 @@
 package com.excilys.cdb.controller;
 
 import com.excilys.cdb.service.CompanyService;
-import com.excilys.cdb.view.CliMenu;
 
 public class CompanyController {
 
@@ -18,14 +17,7 @@ public class CompanyController {
 	}
 
 	public void searchAllCompany() {
-
 		companyService.searchAllCompany();
-
 	}
 
-	public int showCompanyMenuAndAskInput() {
-		CliMenu.showCompanyMenu();
-		return CliMenu.askCompanyMenuInput();
-
-	}
 }

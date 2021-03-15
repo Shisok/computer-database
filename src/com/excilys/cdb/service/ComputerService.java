@@ -40,10 +40,11 @@ public class ComputerService {
 			DBConnexion daoFactory = DBConnexion.getInstance();
 			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl(daoFactory);
 			CliMenu.showCreateOneComputer();
-			Optional<Computer> compToCreate = CliMenu.createOneComputerAskInput();
+			Optional<Computer> compToCreateOptionnal = CliMenu.createOneComputerAskInput();
+			Computer compToCreate = compToCreateOptionnal.orElseThrow();
 			CliMenu.validateCreation(compToCreate);
 			if (CliMenu.validatoinCreationAskInput(compToCreate)) {
-				computerDAOImpl.create(compToCreate.orElseThrow());
+				computerDAOImpl.create(compToCreate);
 				System.out.println(compToCreate.toString() + " created");
 			}
 

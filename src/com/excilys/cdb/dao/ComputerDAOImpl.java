@@ -63,11 +63,11 @@ public class ComputerDAOImpl {
 
 	private static PreparedStatement createPrepaStateForCreate(Connection connexion, Computer computer)
 			throws SQLException {
-		PreparedStatement preparedStatement = connexion.prepareStatement(SQL_INSERT);
+		PreparedStatement preparedStatement = connexion.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
 		preparedStatement.setString(1, computer.getName());
 		preparedStatement.setObject(2, computer.getIntroduced());
 		preparedStatement.setObject(3, computer.getDiscontinued());
-		preparedStatement.setObject(4, computer.getCompanyId());
+		preparedStatement.setObject(4, computer.getCompany().getId());
 		return preparedStatement;
 	}
 
@@ -93,7 +93,7 @@ public class ComputerDAOImpl {
 		preparedStatement.setString(1, computer.getName());
 		preparedStatement.setObject(2, computer.getIntroduced());
 		preparedStatement.setObject(3, computer.getDiscontinued());
-		preparedStatement.setObject(4, computer.getCompanyId());
+		preparedStatement.setObject(4, computer.getCompany().getId());
 		preparedStatement.setLong(5, computer.getId());
 		return preparedStatement;
 	}

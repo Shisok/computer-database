@@ -7,14 +7,14 @@ public class Computer {
 	private String name;
 	private LocalDate introduced;
 	private LocalDate discontinued;
-	private Long companyId;
+	private Company company;
 
 	private Computer(ComputerBuilder computerBuilder) {
 		this.id = computerBuilder.id;
 		this.name = computerBuilder.name;
 		this.introduced = computerBuilder.introduced;
 		this.discontinued = computerBuilder.discontinued;
-		this.companyId = computerBuilder.company_id;
+		this.company = computerBuilder.company;
 	}
 
 	/**
@@ -29,7 +29,7 @@ public class Computer {
 		private String name;
 		private LocalDate introduced;
 		private LocalDate discontinued;
-		private Long company_id;
+		private Company company;
 
 		public ComputerBuilder(Long id) {
 			this.id = id;
@@ -50,8 +50,8 @@ public class Computer {
 			return this;
 		}
 
-		public ComputerBuilder companyId(Long companyId) {
-			this.company_id = companyId;
+		public ComputerBuilder company(Company company) {
+			this.company = company;
 			return this;
 		}
 
@@ -94,25 +94,19 @@ public class Computer {
 		this.discontinued = discontinued;
 	}
 
-	public Long getCompanyId() {
-		return companyId;
+	public Company getCompany() {
+		return company;
 	}
 
-	public void setCompanyId(Long companyId) {
-		this.companyId = companyId;
-	}
-
-	@Override
-	public String toString() {
-		return "Computer [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued
-				+ ", company_id=" + companyId + "]";
+	public void setCompany(Company company) {
+		this.company = company;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((companyId == null) ? 0 : companyId.hashCode());
+		result = prime * result + ((company == null) ? 0 : company.hashCode());
 		result = prime * result + ((discontinued == null) ? 0 : discontinued.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((introduced == null) ? 0 : introduced.hashCode());
@@ -132,11 +126,11 @@ public class Computer {
 			return false;
 		}
 		Computer other = (Computer) obj;
-		if (companyId == null) {
-			if (other.companyId != null) {
+		if (company == null) {
+			if (other.company != null) {
 				return false;
 			}
-		} else if (!companyId.equals(other.companyId)) {
+		} else if (!company.equals(other.company)) {
 			return false;
 		}
 		if (discontinued == null) {
@@ -168,6 +162,12 @@ public class Computer {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Computer [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued
+				+ ", company=" + company + "]";
 	}
 
 }

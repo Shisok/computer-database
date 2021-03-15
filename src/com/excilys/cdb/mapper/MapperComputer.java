@@ -17,11 +17,11 @@ public class MapperComputer {
 		if (resultSet.getDate("discontinued") != null) {
 			computer.setDiscontinued(resultSet.getDate("discontinued").toLocalDate());
 		}
-		if (resultSet.getObject("company_id") == null) {
-			computer.setCompanyId(null);
-		} else {
-			computer.setCompanyId(resultSet.getLong("company_id"));
-		}
+//		if (resultSet.getObject("company_id") == null) {
+//			computer.setCompanyId(null);
+//		} else {
+//			computer.setCompanyId(resultSet.getLong("company_id"));
+//		}
 		return computer;
 	}
 }

@@ -9,6 +9,7 @@ import java.util.Scanner;
 import com.excilys.cdb.controller.CompanyController;
 import com.excilys.cdb.controller.ComputerController;
 import com.excilys.cdb.controller.Page;
+import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 
 public class CliMenu {
@@ -190,7 +191,7 @@ public class CliMenu {
 				companyId = Long.parseLong(inputArray[3]);
 			}
 			computer = Optional.ofNullable(new Computer.ComputerBuilder(null).name(name).introduced(introduced)
-					.discontinued(discontinued).companyId(companyId).build());
+					.discontinued(discontinued).company(new Company.CompanyBuilder(companyId).build()).build());
 		} catch (InputMismatchException e) {
 			System.out.println("You didn't enter a numerical value.");
 			showCreateOneComputer();
@@ -263,7 +264,7 @@ public class CliMenu {
 			}
 
 			computer = new Computer.ComputerBuilder(id).name(name).introduced(introduced).discontinued(discontinued)
-					.companyId(companyId).build();
+					.company(new Company.CompanyBuilder(companyId).build()).build();
 		} catch (InputMismatchException e) {
 			System.out.println("You didn't enter a numerical value.");
 			showUpdateOneComputer();
@@ -305,7 +306,7 @@ public class CliMenu {
 		return id;
 	}
 
-	public static void validateCreation(Optional<Computer> compToCreate) {
+	public static void validateCreation(Computer compToCreate) {
 
 		lineSeparator();
 		System.out.println("Do you validate the creation of " + compToCreate.toString());
@@ -317,7 +318,7 @@ public class CliMenu {
 
 	}
 
-	public static boolean validatoinCreationAskInput(Optional<Computer> compToCreate) {
+	public static boolean validatoinCreationAskInput(Computer compToCreate) {
 		boolean validate = false;
 		int choix = 0;
 		try {
