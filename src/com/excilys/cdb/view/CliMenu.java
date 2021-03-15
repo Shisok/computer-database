@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 import com.excilys.cdb.controller.CompanyController;
 import com.excilys.cdb.controller.ComputerController;
-import com.excilys.cdb.controller.Page;
+import com.excilys.cdb.controller.PageController;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 
@@ -24,7 +24,10 @@ public class CliMenu {
 	private static final int OPTION_EXIT_COMPUTER = 8;
 	private static final String SCANNER_DELIMITER = "\\s*,\\s*";
 	private static final Scanner USER_INPUT = new Scanner(System.in);
-	private Page page;
+//	private PageController<Computer> pageComputer;
+//	private PageController<Company> pageCompany;
+	private PageController pageCompany;
+	private PageController pageComputer;
 	private ComputerController cliComputerMenuController;
 	private static final int OPTION_SEARCH_ALL_COMPANY = 1;
 	private static final int OPTION_SEARCH_ALL_PAGINATION_COMPANY = 2;
@@ -37,7 +40,11 @@ public class CliMenu {
 
 	public CliMenu() {
 		super();
-		this.page = new Page();
+//		this.pageComputer = new PageController<Computer>();
+//		this.pageCompany = new PageController<Company>();
+		pageComputer = new PageController();
+		pageCompany = new PageController();
+		// pageComputer = new PageController();
 		this.cliComputerMenuController = new ComputerController();
 		this.cliCompanyMenuController = new CompanyController();
 	}
@@ -398,7 +405,8 @@ public class CliMenu {
 				cliComputerMenuController.searchAllComputer();
 				break;
 			case OPTION_SEARCH_ALL_PAGINATION_COMPUTER:
-				page.searchAllComputerPagination();
+				// to change
+				pageComputer.searchAllComputerPagination();
 				break;
 			case OPTION_SEARCH_BY_ID_COMPUTER:
 				cliComputerMenuController.searchByIdComputer();
@@ -436,7 +444,7 @@ public class CliMenu {
 				cliCompanyMenuController.searchAllCompany();
 				break;
 			case OPTION_SEARCH_ALL_PAGINATION_COMPANY:
-				page.searchAllCompanyPageUseDAO();
+				pageCompany.searchAllCompanyPageUseDAO();
 				break;
 			case OPTION_BACK_COMPANY:
 				break companyLoop;

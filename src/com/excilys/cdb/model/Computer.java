@@ -17,13 +17,6 @@ public class Computer {
 		this.company = computerBuilder.company;
 	}
 
-	/**
-	 * Default Constructor.
-	 */
-	public Computer() {
-		super();
-	}
-
 	public static class ComputerBuilder {
 		private Long id;
 		private String name;

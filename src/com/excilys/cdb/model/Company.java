@@ -16,14 +16,6 @@ public class Company {
 
 	}
 
-	/**
-	 * default Constructor.
-	 */
-	public Company() {
-		super();
-
-	}
-
 	public static class CompanyBuilder {
 
 		Long id;
