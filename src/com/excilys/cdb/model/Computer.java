@@ -9,22 +9,6 @@ public class Computer {
 	private LocalDate discontinued;
 	private Long companyId;
 
-	/**
-	 * @param id           any Long value
-	 * @param name         any String value
-	 * @param introduced   any Date Value
-	 * @param discontinued any Date Value
-	 * @param companyId   Long Value of the company
-	 */
-	public Computer(Long id, String name, LocalDate introduced, LocalDate discontinued, Long companyId) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.introduced = introduced;
-		this.discontinued = discontinued;
-		this.companyId = companyId;
-	}
-
 	private Computer(ComputerBuilder computerBuilder) {
 		this.id = computerBuilder.id;
 		this.name = computerBuilder.name;
@@ -71,17 +55,11 @@ public class Computer {
 			return this;
 		}
 
-		// Return the finally consrcuted User object
 		public Computer build() {
 			Computer computer = new Computer(this);
-			// validateComputerObject(user);
 			return computer;
 		}
 
-//		private void validateComputerObject(Computer computer) {
-//			// Do some basic validations to check
-//			// if user object does not break any assumption of system
-//		}
 	}
 
 	public Long getId() {

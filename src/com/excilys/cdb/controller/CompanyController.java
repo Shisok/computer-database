@@ -3,7 +3,7 @@ package com.excilys.cdb.controller;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.view.CliMenu;
 
-public class CliCompanyMenuController {
+public class CompanyController {
 
 	/**
 	 * Default Constructor.
@@ -11,7 +11,7 @@ public class CliCompanyMenuController {
 
 	CompanyService companyService;
 
-	public CliCompanyMenuController() {
+	public CompanyController() {
 		super();
 		this.companyService = new CompanyService();
 

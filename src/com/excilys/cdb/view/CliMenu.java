@@ -6,8 +6,8 @@ import java.util.InputMismatchException;
 import java.util.Optional;
 import java.util.Scanner;
 
-import com.excilys.cdb.controller.CliCompanyMenuController;
-import com.excilys.cdb.controller.CliComputerMenuController;
+import com.excilys.cdb.controller.CompanyController;
+import com.excilys.cdb.controller.ComputerController;
 import com.excilys.cdb.controller.Page;
 import com.excilys.cdb.model.Computer;
 
@@ -24,12 +24,12 @@ public class CliMenu {
 	private static final String SCANNER_DELIMITER = "\\s*,\\s*";
 	private static final Scanner USER_INPUT = new Scanner(System.in);
 	private Page page;
-	private CliComputerMenuController cliComputerMenuController;
+	private ComputerController cliComputerMenuController;
 	private static final int OPTION_SEARCH_ALL_COMPANY = 1;
 	private static final int OPTION_SEARCH_ALL_PAGINATION_COMPANY = 2;
 	private static final int OPTION_BACK_COMPANY = 3;
 	private static final int OPTION_EXIT_COMPANY = 4;
-	private CliCompanyMenuController cliCompanyMenuController;
+	private CompanyController cliCompanyMenuController;
 	private static final int OPTION_COMPANY_MAIN = 1;
 	private static final int OPTION_COMPUTER_MAIN = 2;
 	private static final int OPTION_EXIT_MAIN = 3;
@@ -37,8 +37,8 @@ public class CliMenu {
 	public CliMenu() {
 		super();
 		this.page = new Page();
-		this.cliComputerMenuController = new CliComputerMenuController();
-		this.cliCompanyMenuController = new CliCompanyMenuController();
+		this.cliComputerMenuController = new ComputerController();
+		this.cliCompanyMenuController = new CompanyController();
 	}
 
 	public static void showMainMenu() {

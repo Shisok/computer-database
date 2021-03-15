@@ -10,14 +10,10 @@ public class Company {
 	Long id;
 	String name;
 
-	/**
-	 * @param id   any Long Value
-	 * @param name any String Value
-	 */
-	public Company(Long id, String name) {
-		super();
-		this.id = id;
-		this.name = name;
+	private Company(CompanyBuilder computerBuilder) {
+		this.id = computerBuilder.id;
+		this.name = computerBuilder.name;
+
 	}
 
 	/**
@@ -25,6 +21,27 @@ public class Company {
 	 */
 	public Company() {
 		super();
+
+	}
+
+	public static class CompanyBuilder {
+
+		Long id;
+		String name;
+
+		public CompanyBuilder(Long id) {
+			this.id = id;
+		}
+
+		public CompanyBuilder name(String name) {
+			this.name = name;
+			return this;
+		}
+
+		public Company build() {
+			Company company = new Company(this);
+			return company;
+		}
 
 	}
 

@@ -2,14 +2,14 @@ package com.excilys.cdb.controller;
 
 import com.excilys.cdb.service.ComputerService;
 
-public class CliComputerMenuController {
+public class ComputerController {
 
 	ComputerService computerService;
 
 	/**
 	 * Default Constructor.
 	 */
-	public CliComputerMenuController() {
+	public ComputerController() {
 		super();
 		this.computerService = new ComputerService();
 
