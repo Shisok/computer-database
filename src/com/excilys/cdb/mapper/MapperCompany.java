@@ -8,9 +8,9 @@ import com.excilys.cdb.model.Company;
 public class MapperCompany {
 
 	public Company mapFromResultSet(ResultSet resultSet) throws SQLException {
-		Company company = new Company();
-		company.setId(resultSet.getLong("id"));
-		company.setName(resultSet.getString("name"));
+
+		Company company = new Company.CompanyBuilder(resultSet.getLong("id")).name(resultSet.getString("name")).build();
+
 		return company;
 	}
 }

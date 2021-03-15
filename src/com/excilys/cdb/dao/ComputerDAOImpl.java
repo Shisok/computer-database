@@ -21,12 +21,13 @@ public class ComputerDAOImpl {
 	private static final String SQL_INSERT = "INSERT INTO computer ( name, introduced, discontinued, company_id) VALUES ( ?, ?, ?, ?);";
 	private static final String SQL_UPDATE = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?;";
 	private static final String SQL_DELETE = "DELETE FROM computer WHERE id=?;";
-	private static final String SQL_SELECT = "SELECT * FROM computer WHERE id = ?;";
-	private static final String SQL_ALL_COMPUTER = "SELECT id,name,introduced,discontinued,company_id From computer;";
+	private static final String SQL_SELECT = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued ,company.id as company_id, company.name as companyName  FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.id = ?;";
+	private static final String SQL_ALL_COMPUTER = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, company.id as company_id, company.name as companyName  FROM computer LEFT JOIN company ON computer.company_id=company.id;";
 	private static final String SQL_ALL_COMPUTER_PAGINATION = "SELECT id,name,introduced,discontinued,company_id From computer ORDER BY id LIMIT ?,?;";
 	private static final int OBJECT_NUMBER_PER_PAGE = 10;
 
 	public ComputerDAOImpl(DBConnexion dbConnexion) {
+
 		this.dbConnexion = dbConnexion;
 		this.mapperComputer = new MapperComputer();
 	}
@@ -151,6 +152,7 @@ public class ComputerDAOImpl {
 				computers.add(computer);
 			}
 		} catch (SQLException e) {
+			e.printStackTrace();
 			System.out.println("An error occured during the research.");
 		}
 
