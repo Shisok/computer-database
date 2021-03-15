@@ -6,29 +6,39 @@ import java.util.InputMismatchException;
 import java.util.Optional;
 import java.util.Scanner;
 
+import com.excilys.cdb.controller.CliCompanyMenuController;
+import com.excilys.cdb.controller.CliComputerMenuController;
 import com.excilys.cdb.controller.Page;
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.service.ComputerService;
 
 public class CliMenu {
 
-	private static final int OPTION_SEARCH_ALL = 1;
-	private static final int OPTION_SEARCH_ALL_PAGINATION = 2;
-	private static final int OPTION_SEARCH_BY_ID = 3;
-	private static final int OPTION_CREATE = 4;
-	private static final int OPTION_UPDATE = 5;
-	private static final int OPTION_DELETE = 6;
-	private static final int OPTION_BACK_TO_MAIN = 7;
-	private static final int OPTION_EXIT = 8;
+	private static final int OPTION_SEARCH_ALL_COMPUTER = 1;
+	private static final int OPTION_SEARCH_ALL_PAGINATION_COMPUTER = 2;
+	private static final int OPTION_SEARCH_BY_ID_COMPUTER = 3;
+	private static final int OPTION_CREATE_COMPUTER = 4;
+	private static final int OPTION_UPDATE_COMPUTER = 5;
+	private static final int OPTION_DELETE_COMPUTER = 6;
+	private static final int OPTION_BACK_TO_MAIN_COMPUTER = 7;
+	private static final int OPTION_EXIT_COMPUTER = 8;
 	private static final String SCANNER_DELIMITER = "\\s*,\\s*";
 	private static final Scanner USER_INPUT = new Scanner(System.in);
 	private Page page;
-	private ComputerService computerService;
+	private CliComputerMenuController cliComputerMenuController;
+	private static final int OPTION_SEARCH_ALL_COMPANY = 1;
+	private static final int OPTION_SEARCH_ALL_PAGINATION_COMPANY = 2;
+	private static final int OPTION_BACK_COMPANY = 3;
+	private static final int OPTION_EXIT_COMPANY = 4;
+	private CliCompanyMenuController cliCompanyMenuController;
+	private static final int OPTION_COMPANY_MAIN = 1;
+	private static final int OPTION_COMPUTER_MAIN = 2;
+	private static final int OPTION_EXIT_MAIN = 3;
 
 	public CliMenu() {
 		super();
 		this.page = new Page();
-		this.computerService = new ComputerService();
+		this.cliComputerMenuController = new CliComputerMenuController();
+		this.cliCompanyMenuController = new CliCompanyMenuController();
 	}
 
 	public static void showMainMenu() {
@@ -378,32 +388,81 @@ public class CliMenu {
 
 	public void computerMenu() {
 		int choix = 0;
-		computerLoop: while (choix != OPTION_EXIT) {
-			showMainMenu();
+		computerLoop: while (choix != OPTION_EXIT_COMPUTER) {
+			showComputerMenu();
 			choix = computerMenuAskInput();
 			switch (choix) {
 
-			case OPTION_SEARCH_ALL:
-				computerService.searchAllComputer();
+			case OPTION_SEARCH_ALL_COMPUTER:
+				cliComputerMenuController.searchAllComputer();
 				break;
-			case OPTION_SEARCH_ALL_PAGINATION:
+			case OPTION_SEARCH_ALL_PAGINATION_COMPUTER:
 				page.searchAllComputerPagination();
 				break;
-			case OPTION_SEARCH_BY_ID:
-				computerService.searchByIdComputer();
+			case OPTION_SEARCH_BY_ID_COMPUTER:
+				cliComputerMenuController.searchByIdComputer();
 				break;
-			case OPTION_CREATE:
-				computerService.createComputer();
+			case OPTION_CREATE_COMPUTER:
+				cliComputerMenuController.createComputer();
 				break;
-			case OPTION_UPDATE:
-				computerService.updateComputer();
+			case OPTION_UPDATE_COMPUTER:
+				cliComputerMenuController.updateComputer();
 				break;
-			case OPTION_DELETE:
-				computerService.deleteComputer();
+			case OPTION_DELETE_COMPUTER:
+				cliComputerMenuController.deleteComputer();
 				break;
-			case OPTION_BACK_TO_MAIN:
+			case OPTION_BACK_TO_MAIN_COMPUTER:
 				break computerLoop;
-			case OPTION_EXIT:
+			case OPTION_EXIT_COMPUTER:
+				System.exit(0);
+				break;
+			default:
+				System.out.println("Sorry, please enter valid Option");
+
+			}
+		}
+
+	}
+
+	public void companyMenu() {
+		int choix = 0;
+		companyLoop: while (choix != OPTION_EXIT_COMPANY) {
+			showCompanyMenu();
+			choix = askCompanyMenuInput();
+			switch (choix) {
+
+			case OPTION_SEARCH_ALL_COMPANY:
+				cliCompanyMenuController.searchAllCompany();
+				break;
+			case OPTION_SEARCH_ALL_PAGINATION_COMPANY:
+				page.searchAllCompanyPageUseDAO();
+				break;
+			case OPTION_BACK_COMPANY:
+				break companyLoop;
+			case OPTION_EXIT_COMPANY:
+				System.exit(0);
+			default:
+				System.out.println("Sorry, please enter valid Option");
+
+			}
+
+		}
+	}
+
+	public void mainMenu() {
+		int choix = 0;
+		while (choix != OPTION_EXIT_MAIN) {
+			showMainMenu();
+			choix = askInputMainMenu();
+			switch (choix) {
+
+			case OPTION_COMPANY_MAIN:
+				companyMenu();
+				break;
+			case OPTION_COMPUTER_MAIN:
+				computerMenu();
+				break;
+			case OPTION_EXIT_MAIN:
 				System.exit(0);
 				break;
 			default:

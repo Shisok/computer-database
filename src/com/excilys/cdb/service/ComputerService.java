@@ -11,13 +11,6 @@ import com.excilys.cdb.view.InputException;
 
 public class ComputerService {
 
-	/**
-	 * Default Constructor.
-	 */
-	public ComputerService() {
-		super();
-	}
-
 	public void searchAllComputer() {
 
 		DBConnexion daoFactory = DBConnexion.getInstance();
