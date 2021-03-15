@@ -36,7 +36,8 @@ public class CliPage {
 				case OPTION_NEXT:
 					return page += 1;
 				case OPTION_PAGE:
-					return CliMenu.choixPage();
+					CliMenu.showChoixPage();
+					return CliMenu.choixPageAskInput();
 				case OPTION_BACK_TO_MENU:
 					this.pageComputer.setContentPage(new ArrayList<Computer>());
 					return -1;
@@ -76,7 +77,8 @@ public class CliPage {
 				case OPTION_NEXT:
 					return page += 1;
 				case OPTION_PAGE:
-					return CliMenu.choixPage();
+					CliMenu.showChoixPage();
+					return CliMenu.choixPageAskInput();
 				case OPTION_BACK_TO_MENU:
 					this.pageCompany.setContentPage(new ArrayList<Company>());
 					return -1;

@@ -26,8 +26,7 @@ public class CliMenu {
 	private static final Scanner USER_INPUT = new Scanner(System.in);
 //	private PageController<Computer> pageComputer;
 //	private PageController<Company> pageCompany;
-	private PageController pageCompany;
-	private PageController pageComputer;
+	private PageController pageController;
 	private ComputerController cliComputerMenuController;
 	private static final int OPTION_SEARCH_ALL_COMPANY = 1;
 	private static final int OPTION_SEARCH_ALL_PAGINATION_COMPANY = 2;
@@ -42,8 +41,8 @@ public class CliMenu {
 		super();
 //		this.pageComputer = new PageController<Computer>();
 //		this.pageCompany = new PageController<Company>();
-		pageComputer = new PageController();
-		pageCompany = new PageController();
+
+		pageController = new PageController();
 		// pageComputer = new PageController();
 		this.cliComputerMenuController = new ComputerController();
 		this.cliCompanyMenuController = new CompanyController();
@@ -377,10 +376,13 @@ public class CliMenu {
 		return choix;
 	}
 
-	public static int choixPage() {
+	public static void showChoixPage() {
 		lineSeparator();
 		System.out.print("Page to go: ");
 
+	}
+
+	public static int choixPageAskInput() {
 		Integer choix = null;
 		try {
 
@@ -388,7 +390,7 @@ public class CliMenu {
 
 		} catch (NumberFormatException e) {
 			System.out.println("You didn't enter a numerical value.");
-			choix = choixPage();
+			choix = choixPageAskInput();
 		}
 
 		return choix;
@@ -406,7 +408,7 @@ public class CliMenu {
 				break;
 			case OPTION_SEARCH_ALL_PAGINATION_COMPUTER:
 				// to change
-				pageComputer.searchAllComputerPagination();
+				pageController.searchAllComputerPagination();
 				break;
 			case OPTION_SEARCH_BY_ID_COMPUTER:
 				cliComputerMenuController.searchByIdComputer();
@@ -444,7 +446,7 @@ public class CliMenu {
 				cliCompanyMenuController.searchAllCompany();
 				break;
 			case OPTION_SEARCH_ALL_PAGINATION_COMPANY:
-				pageCompany.searchAllCompanyPageUseDAO();
+				pageController.searchAllCompanyPageUseDAO();
 				break;
 			case OPTION_BACK_COMPANY:
 				break companyLoop;
