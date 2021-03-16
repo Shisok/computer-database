@@ -30,9 +30,8 @@ public class PageService {
 			}
 			page.setContentPage(computerDAOImpl.searchAllPagination(page.getPageInt()));
 			System.out.println("Page " + page.getPageInt());
-			for (Computer comp : page.getContentPage()) {
-				System.out.println(comp.toString());
-			}
+			page.getContentPage().stream().forEach(c -> System.out.println(c.toString()));
+
 			page.setPageInitial(page.getPageInt());
 			page.setPageInt(cliPage.pageComputerVerifyChoice(page.getPageInt()));
 
@@ -61,8 +60,7 @@ public class PageService {
 	}
 
 	private void showCompanyContent(Page<Company> page) {
-		for (Company comp : page.getContentPage()) {
-			System.out.println(comp.toString());
-		}
+		page.getContentPage().stream().forEach(c -> System.out.println(c.toString()));
+
 	}
 }

@@ -15,9 +15,8 @@ public class ComputerService {
 
 		DBConnexion daoFactory = DBConnexion.getInstance();
 		ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl(daoFactory);
-		for (Computer comp : computerDAOImpl.searchAll()) {
-			System.out.println(comp.toString());
-		}
+		computerDAOImpl.searchAll().stream().forEach(c -> System.out.println(c.toString()));
+
 	}
 
 	public void searchByIdComputer() {
@@ -27,7 +26,7 @@ public class ComputerService {
 			CliMenu.showSearchOneComputer();
 			Long idToSearch = CliMenu.searchOneComputerAskInput();
 			Optional<Computer> compSearched = computerDAOImpl.search(idToSearch);
-			System.out.println(compSearched.orElseThrow(null).toString());
+			System.out.println(compSearched.orElseThrow(() -> new NoSuchElementException()).toString());
 		} catch (NoSuchElementException e) {
 			System.out.println("L'ordinateur n'existe pas");
 			CliMenu.showComputerMenu();
@@ -41,7 +40,7 @@ public class ComputerService {
 			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl(daoFactory);
 			CliMenu.showCreateOneComputer();
 			Optional<Computer> compToCreateOptionnal = CliMenu.createOneComputerAskInput();
-			Computer compToCreate = compToCreateOptionnal.orElseThrow(null);
+			Computer compToCreate = compToCreateOptionnal.orElseThrow(() -> new NoSuchElementException());
 			CliMenu.validateCreation(compToCreate);
 			if (CliMenu.validatoinCreationAskInput(compToCreate)) {
 				computerDAOImpl.create(compToCreate);

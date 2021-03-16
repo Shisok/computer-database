@@ -9,7 +9,7 @@ import java.util.Properties;
 
 public class DBConnexion {
 
-	private static final String FICHIER_PROPERTIES = "resources/dao.properties";
+	private static final String FICHIER_PROPERTIES = "com/excilys/cdb/dao/dao.properties";
 	private static final String PROPERTY_URL = "url";
 	private static final String PROPERTY_DRIVER = "driver";
 	private static final String PROPERTY_NOM_UTILISATEUR = "nomutilisateur";
@@ -47,13 +47,13 @@ public class DBConnexion {
 			nomUtilisateur = properties.getProperty(PROPERTY_NOM_UTILISATEUR);
 			motDePasse = properties.getProperty(PROPERTY_MOT_DE_PASSE);
 		} catch (IOException e) {
-			throw new DAOConfigurationException("Impossible de charger le fichier properties " + FICHIER_PROPERTIES, e);
+			throw new DAOConfigurationException("Impossible de charger le fichier properties " + FICHIER_PROPERTIES);
 		}
 
 		try {
 			Class.forName(driver);
 		} catch (ClassNotFoundException e) {
-			throw new DAOConfigurationException("Le driver est introuvable dans le classpath.", e);
+			throw new DAOConfigurationException("Le driver est introuvable dans le classpath.");
 		}
 
 		DBConnexion instance = new DBConnexion(url, nomUtilisateur, motDePasse);
