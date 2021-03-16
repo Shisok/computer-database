@@ -9,6 +9,7 @@ import java.util.Scanner;
 import com.excilys.cdb.controller.CompanyController;
 import com.excilys.cdb.controller.ComputerController;
 import com.excilys.cdb.controller.PageController;
+import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 
@@ -24,8 +25,6 @@ public class CliMenu {
 	private static final int OPTION_EXIT_COMPUTER = 8;
 	private static final String SCANNER_DELIMITER = "\\s*,\\s*";
 	private static final Scanner USER_INPUT = new Scanner(System.in);
-//	private PageController<Computer> pageComputer;
-//	private PageController<Company> pageCompany;
 	private PageController pageController;
 	private ComputerController cliComputerMenuController;
 	private static final int OPTION_SEARCH_ALL_COMPANY = 1;
@@ -39,11 +38,7 @@ public class CliMenu {
 
 	public CliMenu() {
 		super();
-//		this.pageComputer = new PageController<Computer>();
-//		this.pageCompany = new PageController<Company>();
-
 		pageController = new PageController();
-		// pageComputer = new PageController();
 		this.cliComputerMenuController = new ComputerController();
 		this.cliCompanyMenuController = new CompanyController();
 	}
@@ -65,7 +60,9 @@ public class CliMenu {
 		try {
 			choix = Integer.parseInt(USER_INPUT.nextLine());
 		} catch (NumberFormatException e) {
+			LoggerCdb.logInfo(CliMenu.class, e);
 			System.out.println("You didn't enter a numerical value");
+
 			showMainMenu();
 			choix = askInputMainMenu();
 		}
@@ -99,6 +96,7 @@ public class CliMenu {
 		try {
 			choix = Integer.parseInt(USER_INPUT.nextLine());
 		} catch (NumberFormatException e) {
+			LoggerCdb.logInfo(CliMenu.class, e);
 			System.out.println("You didn't enter a numerical value");
 			showCompanyMenu();
 			choix = askCompanyMenuInput();
@@ -129,6 +127,7 @@ public class CliMenu {
 		try {
 			choix = Integer.parseInt(USER_INPUT.nextLine());
 		} catch (NumberFormatException e) {
+			LoggerCdb.logInfo(CliMenu.class, e);
 			System.out.println("You didn't enter a numerical value");
 			showComputerMenu();
 			choix = computerMenuAskInput();
@@ -148,6 +147,7 @@ public class CliMenu {
 		try {
 			choix = Long.parseLong(USER_INPUT.nextLine());
 		} catch (NumberFormatException e) {
+			LoggerCdb.logInfo(CliMenu.class, e);
 			System.out.println("You didn't enter a numerical value");
 			showSearchOneComputer();
 			choix = searchOneComputerAskInput();
@@ -199,18 +199,22 @@ public class CliMenu {
 			computer = Optional.ofNullable(new Computer.ComputerBuilder(null).name(name).introduced(introduced)
 					.discontinued(discontinued).company(new Company.CompanyBuilder(companyId).build()).build());
 		} catch (InputMismatchException e) {
+			LoggerCdb.logInfo(CliMenu.class, e);
 			System.out.println("You didn't enter a numerical value.");
 			showCreateOneComputer();
 			computer = createOneComputerAskInput();
 		} catch (DateTimeParseException e) {
+			LoggerCdb.logInfo(CliMenu.class, e);
 			System.out.println("You didn't the date in the right format.");
 			showCreateOneComputer();
 			computer = createOneComputerAskInput();
 		} catch (ArrayIndexOutOfBoundsException e) {
+			LoggerCdb.logInfo(CliMenu.class, e);
 			System.out.println("You didn't enter the right number of argument.");
 			showCreateOneComputer();
 			computer = createOneComputerAskInput();
 		} catch (InputException e) {
+			LoggerCdb.logInfo(CliMenu.class, e);
 			System.out.println(e.getMessage());
 			showCreateOneComputer();
 			computer = createOneComputerAskInput();
@@ -272,18 +276,22 @@ public class CliMenu {
 			computer = new Computer.ComputerBuilder(id).name(name).introduced(introduced).discontinued(discontinued)
 					.company(new Company.CompanyBuilder(companyId).build()).build();
 		} catch (InputMismatchException e) {
+			LoggerCdb.logInfo(CliMenu.class, e);
 			System.out.println("You didn't enter a numerical value.");
 			showUpdateOneComputer();
 			computer = updateOneComputerAskInput();
 		} catch (DateTimeParseException e) {
+			LoggerCdb.logInfo(CliMenu.class, e);
 			System.out.println("You didn't the date in the right format.");
 			showUpdateOneComputer();
 			computer = updateOneComputerAskInput();
 		} catch (ArrayIndexOutOfBoundsException e) {
+			LoggerCdb.logInfo(CliMenu.class, e);
 			System.out.println("You didn't enter the right number of argument.");
 			showUpdateOneComputer();
 			computer = updateOneComputerAskInput();
 		} catch (InputException e) {
+			LoggerCdb.logInfo(CliMenu.class, e);
 			System.out.println(e.getMessage());
 			showUpdateOneComputer();
 			computer = updateOneComputerAskInput();
@@ -305,6 +313,7 @@ public class CliMenu {
 			id = Long.parseLong(USER_INPUT.nextLine());
 
 		} catch (NumberFormatException e) {
+			LoggerCdb.logInfo(CliMenu.class, e);
 			System.out.println("You didn't enter a numerical value.");
 			id = deleteOneComputerAskInput();
 		}
@@ -340,6 +349,7 @@ public class CliMenu {
 				validate = validatoinCreationAskInput(compToCreate);
 			}
 		} catch (NumberFormatException e) {
+			LoggerCdb.logInfo(CliMenu.class, e);
 			System.out.println("You didn't enter a numerical value");
 			showComputerMenu();
 			choix = computerMenuAskInput();
@@ -368,6 +378,7 @@ public class CliMenu {
 
 			choix = Integer.parseInt(USER_INPUT.nextLine());
 		} catch (NumberFormatException e) {
+			LoggerCdb.logInfo(CliMenu.class, e);
 			System.out.println("You didn't enter a numerical value");
 			showPaginationrMenu();
 			choix = paginationMenuAskInput();
@@ -389,6 +400,7 @@ public class CliMenu {
 			choix = Integer.parseInt(USER_INPUT.nextLine());
 
 		} catch (NumberFormatException e) {
+			LoggerCdb.logInfo(CliMenu.class, e);
 			System.out.println("You didn't enter a numerical value.");
 			choix = choixPageAskInput();
 		}

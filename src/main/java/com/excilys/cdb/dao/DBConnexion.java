@@ -36,10 +36,6 @@ public class DBConnexion {
 
 		InputStream fichierProperties = classLoader.getResourceAsStream(FICHIER_PROPERTIES);
 
-		if (fichierProperties == null) {
-			throw new DAOConfigurationException("Le fichier properties " + FICHIER_PROPERTIES + " est introuvable.");
-		}
-
 		try {
 			properties.load(fichierProperties);
 			url = properties.getProperty(PROPERTY_URL);
@@ -47,13 +43,15 @@ public class DBConnexion {
 			nomUtilisateur = properties.getProperty(PROPERTY_NOM_UTILISATEUR);
 			motDePasse = properties.getProperty(PROPERTY_MOT_DE_PASSE);
 		} catch (IOException e) {
-			throw new DAOConfigurationException("Impossible de charger le fichier properties " + FICHIER_PROPERTIES);
+			throw new DAOConfigurationException("Impossible de charger le fichier properties " + FICHIER_PROPERTIES, e);
+		} catch (NullPointerException e) {
+			throw new DAOConfigurationException("Le fichier properties " + FICHIER_PROPERTIES + " est introuvable.");
 		}
 
 		try {
 			Class.forName(driver);
 		} catch (ClassNotFoundException e) {
-			throw new DAOConfigurationException("Le driver est introuvable dans le classpath.");
+			throw new DAOConfigurationException("Le driver est introuvable dans le classpath.", e);
 		}
 
 		DBConnexion instance = new DBConnexion(url, nomUtilisateur, motDePasse);

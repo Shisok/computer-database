@@ -2,6 +2,7 @@ package com.excilys.cdb.view;
 
 import java.util.ArrayList;
 
+import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
@@ -50,6 +51,7 @@ public class CliPage {
 				}
 			}
 		} catch (InputException e) {
+			LoggerCdb.logInfo(this.getClass(), e);
 			System.out.println(e.getMessage());
 			choix = pageComputerVerifyChoice(page);
 		}
@@ -91,6 +93,7 @@ public class CliPage {
 				}
 			}
 		} catch (InputException e) {
+			LoggerCdb.logInfo(this.getClass(), e);
 			System.out.println(e.getMessage());
 			showCompanyContent(this.pageCompany);
 			choix = pageCompanyVerifChoice(page);

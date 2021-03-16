@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.mapper.MapperCompany;
 import com.excilys.cdb.model.Company;
 
@@ -38,7 +39,8 @@ public class CompanyDAOImpl {
 				companies.add(company);
 			}
 		} catch (SQLException e) {
-			System.out.println("An error Occured during the research.");
+			LoggerCdb.logError(this.getClass(), e);
+
 		}
 
 		return companies;
@@ -58,7 +60,7 @@ public class CompanyDAOImpl {
 				companys.add(company);
 			}
 		} catch (SQLException e) {
-			System.out.println("An error Occured during the research.");
+			LoggerCdb.logError(this.getClass(), e);
 		}
 
 		return companys;

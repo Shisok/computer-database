@@ -4,7 +4,9 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import com.excilys.cdb.dao.ComputerDAOImpl;
+import com.excilys.cdb.dao.DAOConfigurationException;
 import com.excilys.cdb.dao.DBConnexion;
+import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.view.CliMenu;
 import com.excilys.cdb.view.InputException;
@@ -12,11 +14,13 @@ import com.excilys.cdb.view.InputException;
 public class ComputerService {
 
 	public void searchAllComputer() {
-
-		DBConnexion daoFactory = DBConnexion.getInstance();
-		ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl(daoFactory);
-		computerDAOImpl.searchAll().stream().forEach(c -> System.out.println(c.toString()));
-
+		try {
+			DBConnexion daoFactory = DBConnexion.getInstance();
+			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl(daoFactory);
+			computerDAOImpl.searchAll().stream().forEach(c -> System.out.println(c.toString()));
+		} catch (DAOConfigurationException e) {
+			LoggerCdb.logError(getClass(), e);
+		}
 	}
 
 	public void searchByIdComputer() {
@@ -28,9 +32,12 @@ public class ComputerService {
 			Optional<Computer> compSearched = computerDAOImpl.search(idToSearch);
 			System.out.println(compSearched.orElseThrow(() -> new NoSuchElementException()).toString());
 		} catch (NoSuchElementException e) {
-			System.out.println("L'ordinateur n'existe pas");
+			LoggerCdb.logError(this.getClass(), e);
+
 			CliMenu.showComputerMenu();
 			CliMenu.computerMenuAskInput();
+		} catch (DAOConfigurationException e) {
+			LoggerCdb.logError(getClass(), e);
 		}
 	}
 
@@ -48,7 +55,10 @@ public class ComputerService {
 			}
 
 		} catch (NoSuchElementException e) {
-			System.out.println("The computer cannot be created");
+			LoggerCdb.logError(this.getClass(), e);
+
+		} catch (DAOConfigurationException e) {
+			LoggerCdb.logError(getClass(), e);
 		}
 	}
 
@@ -61,9 +71,11 @@ public class ComputerService {
 			computerDAOImpl.update(compToUpdate);
 			System.out.println(compToUpdate.toString() + " updated");
 		} catch (InputException e) {
-			System.out.println(e.getMessage());
+			LoggerCdb.logError(this.getClass(), e);
 			CliMenu.showComputerMenu();
 			CliMenu.computerMenuAskInput();
+		} catch (DAOConfigurationException e) {
+			LoggerCdb.logError(getClass(), e);
 		}
 	}
 
@@ -74,13 +86,14 @@ public class ComputerService {
 			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl(daoFactory);
 			CliMenu.showDeleteOneComputer();
 			Long compToDeleteID = CliMenu.deleteOneComputerAskInput();
-
 			computerDAOImpl.delete(compToDeleteID);
 			System.out.println("Computer " + compToDeleteID + ": deleted");
 		} catch (InputException e) {
-			System.out.println(e.getMessage());
+			LoggerCdb.logError(this.getClass(), e);
 			CliMenu.showComputerMenu();
 			CliMenu.computerMenuAskInput();
+		} catch (DAOConfigurationException e) {
+			LoggerCdb.logError(getClass(), e);
 		}
 	}
 

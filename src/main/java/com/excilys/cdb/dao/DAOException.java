@@ -21,7 +21,4 @@ public class DAOException extends RuntimeException {
 		super(message, cause);
 	}
 
-	public DAOException(Throwable cause) {
-		super(cause);
-	}
 }

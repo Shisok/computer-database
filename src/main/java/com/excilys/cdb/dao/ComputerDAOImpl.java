@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.mapper.MapperComputer;
 import com.excilys.cdb.model.Computer;
 import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
@@ -53,11 +54,14 @@ public class ComputerDAOImpl {
 				throw new DAOException("Échec de la création de l'ordinateur en base, aucun ID auto-généré retourné.");
 			}
 		} catch (MysqlDataTruncation e) {
-			System.out.println("An error occured because date cannot be bellow 1970-01-01.");
+			// LoggerCdb.logError(this.getClass(), e);
+			throw new DAOException("An error occured because date cannot be bellow 1970-01-01.");
 		} catch (SQLIntegrityConstraintViolationException e) {
-			System.out.println("An error occured because the company doesn't exist.");
+			// LoggerCdb.logError(this.getClass(), e);
+			throw new DAOException("An error occured because the company doesn't exist.");
+
 		} catch (SQLException e) {
-			System.out.println("An has error occured during the creation.");
+			LoggerCdb.logError(this.getClass(), e);
 		}
 
 	}
@@ -83,7 +87,9 @@ public class ComputerDAOImpl {
 			}
 
 		} catch (SQLException e) {
-			throw new DAOException(e);
+			LoggerCdb.logError(this.getClass(), e);
+		} catch (DAOException e) {
+			LoggerCdb.logError(this.getClass(), e);
 		}
 
 	}
@@ -111,7 +117,8 @@ public class ComputerDAOImpl {
 			}
 
 		} catch (SQLException e) {
-			System.out.println("An error occured while deleting the computer");
+			LoggerCdb.logError(this.getClass(), e);
+
 		}
 
 	}
@@ -126,7 +133,7 @@ public class ComputerDAOImpl {
 				computer = Optional.ofNullable(mapperComputer.mapFromResultSet(resultSet));
 			}
 		} catch (SQLException e) {
-			System.out.println("An error occured during the research.");
+			LoggerCdb.logError(this.getClass(), e);
 		}
 
 		return computer;
@@ -152,14 +159,14 @@ public class ComputerDAOImpl {
 				computers.add(computer);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("An error occured during the research.");
+			LoggerCdb.logError(this.getClass(), e);
+
 		}
 
 		return computers;
 	}
 
-	public List<Computer> searchAllPagination(int page) throws DAOException {
+	public List<Computer> searchAllPagination(int page) {
 		List<Computer> computers = new ArrayList<>();
 
 		int offset = page * 10;
@@ -173,7 +180,7 @@ public class ComputerDAOImpl {
 				computers.add(computer);
 			}
 		} catch (SQLException e) {
-			System.out.println("An error occured while searching the page.");
+			LoggerCdb.logError(this.getClass(), e);
 		}
 
 		return computers;
