@@ -3,12 +3,13 @@ package com.excilys.cdb.view;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Scanner;
 
 import com.excilys.cdb.controller.CompanyController;
 import com.excilys.cdb.controller.ComputerController;
-import com.excilys.cdb.controller.PageController;
 import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
@@ -25,7 +26,7 @@ public class CliMenu {
 	private static final int OPTION_EXIT_COMPUTER = 8;
 	private static final String SCANNER_DELIMITER = "\\s*,\\s*";
 	private static final Scanner USER_INPUT = new Scanner(System.in);
-	private PageController pageController;
+
 	private ComputerController cliComputerMenuController;
 	private static final int OPTION_SEARCH_ALL_COMPANY = 1;
 	private static final int OPTION_SEARCH_ALL_PAGINATION_COMPANY = 2;
@@ -36,9 +37,12 @@ public class CliMenu {
 	private static final int OPTION_COMPUTER_MAIN = 2;
 	private static final int OPTION_EXIT_MAIN = 3;
 
+	private CliPage cliPage;
+
 	public CliMenu() {
 		super();
-		pageController = new PageController();
+
+		this.cliPage = new CliPage();
 		this.cliComputerMenuController = new ComputerController();
 		this.cliCompanyMenuController = new CompanyController();
 	}
@@ -409,40 +413,81 @@ public class CliMenu {
 	}
 
 	public void computerMenu() {
-		int choix = 0;
-		computerLoop: while (choix != OPTION_EXIT_COMPUTER) {
-			showComputerMenu();
-			choix = computerMenuAskInput();
-			switch (choix) {
+		boolean success = false;
+		try {
+			int choix = 0;
+			computerLoop: while (choix != OPTION_EXIT_COMPUTER) {
+				showComputerMenu();
+				choix = computerMenuAskInput();
+				switch (choix) {
 
-			case OPTION_SEARCH_ALL_COMPUTER:
-				cliComputerMenuController.searchAllComputer();
-				break;
-			case OPTION_SEARCH_ALL_PAGINATION_COMPUTER:
-				// to change
-				pageController.searchAllComputerPagination();
-				break;
-			case OPTION_SEARCH_BY_ID_COMPUTER:
-				cliComputerMenuController.searchByIdComputer();
-				break;
-			case OPTION_CREATE_COMPUTER:
-				cliComputerMenuController.createComputer();
-				break;
-			case OPTION_UPDATE_COMPUTER:
-				cliComputerMenuController.updateComputer();
-				break;
-			case OPTION_DELETE_COMPUTER:
-				cliComputerMenuController.deleteComputer();
-				break;
-			case OPTION_BACK_TO_MAIN_COMPUTER:
-				break computerLoop;
-			case OPTION_EXIT_COMPUTER:
-				System.exit(0);
-				break;
-			default:
-				System.out.println("Sorry, please enter valid Option");
+				case OPTION_SEARCH_ALL_COMPUTER:
+					List<Computer> listComputer = cliComputerMenuController.searchAllComputer();
+					listComputer.stream().forEach(c -> System.out.println(c.toString()));
+					break;
+				case OPTION_SEARCH_ALL_PAGINATION_COMPUTER:
+					cliPage.searchAllComputerPagination();
+					break;
+				case OPTION_SEARCH_BY_ID_COMPUTER:
+					CliMenu.showSearchOneComputer();
+					Long idToSearch = CliMenu.searchOneComputerAskInput();
+					Optional<Computer> computer = cliComputerMenuController.searchByIdComputer(idToSearch);
+					System.out.println(computer
+							.orElseThrow(() -> new NoSuchElementException("The computer dosen't exist.")).toString());
+					break;
+				case OPTION_CREATE_COMPUTER:
+					try {
+						CliMenu.showCreateOneComputer();
+						Optional<Computer> compToCreateOptionnal = CliMenu.createOneComputerAskInput();
+						Computer compToCreate = compToCreateOptionnal
+								.orElseThrow(() -> new NoSuchElementException("the computer is impossible to create."));
+						CliMenu.validateCreation(compToCreate);
+						if (CliMenu.validatoinCreationAskInput(compToCreate)) {
+							success = cliComputerMenuController.createComputer(compToCreate);
+						}
+						System.out.println(success ? "Computer created" : "Computer failed to create");
+						break;
+					} catch (NoSuchElementException e) {
+						LoggerCdb.logError(this.getClass(), e);
 
+					}
+				case OPTION_UPDATE_COMPUTER:
+					try {
+						CliMenu.showUpdateOneComputer();
+						Computer compToUpdate = CliMenu.updateOneComputerAskInput();
+						success = cliComputerMenuController.updateComputer(compToUpdate);
+						System.out.println(success ? "Computer updated" : "Computer failed to update");
+					} catch (InputException e) {
+						LoggerCdb.logError(this.getClass(), e);
+						CliMenu.showComputerMenu();
+						CliMenu.computerMenuAskInput();
+					}
+					break;
+				case OPTION_DELETE_COMPUTER:
+					try {
+						CliMenu.showDeleteOneComputer();
+						Long compToDeleteID = CliMenu.deleteOneComputerAskInput();
+						success = cliComputerMenuController.deleteComputer(compToDeleteID);
+						System.out.println(success ? "Computer deleted" : "Computer failed to delete");
+					} catch (InputException e) {
+						LoggerCdb.logError(this.getClass(), e);
+						CliMenu.showComputerMenu();
+						CliMenu.computerMenuAskInput();
+					}
+					break;
+				case OPTION_BACK_TO_MAIN_COMPUTER:
+					break computerLoop;
+				case OPTION_EXIT_COMPUTER:
+					System.exit(0);
+					break;
+				default:
+					System.out.println("Sorry, please enter valid Option");
+				}
 			}
+		} catch (NoSuchElementException e) {
+			LoggerCdb.logError(this.getClass(), e);
+			CliMenu.showComputerMenu();
+			CliMenu.computerMenuAskInput();
 		}
 
 	}
@@ -455,10 +500,11 @@ public class CliMenu {
 			switch (choix) {
 
 			case OPTION_SEARCH_ALL_COMPANY:
-				cliCompanyMenuController.searchAllCompany();
+				List<Company> listCompany = cliCompanyMenuController.searchAllCompany();
+				listCompany.stream().forEach(c -> System.out.println(c.toString()));
 				break;
 			case OPTION_SEARCH_ALL_PAGINATION_COMPANY:
-				pageController.searchAllCompanyPageUseDAO();
+				cliPage.searchAllCompanyPage();
 				break;
 			case OPTION_BACK_COMPANY:
 				break companyLoop;

@@ -27,9 +27,9 @@ public class ComputerDAOImpl {
 	private static final String SQL_ALL_COMPUTER_PAGINATION = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, company.id as company_id, company.name as companyName  FROM computer LEFT JOIN company ON computer.company_id=company.id ORDER BY id LIMIT ?,?;";
 	private static final int OBJECT_NUMBER_PER_PAGE = 10;
 
-	public ComputerDAOImpl(DBConnexion dbConnexion) {
+	public ComputerDAOImpl() {
 
-		this.dbConnexion = dbConnexion;
+		this.dbConnexion = DBConnexion.getInstance();
 		this.mapperComputer = new MapperComputer();
 	}
 

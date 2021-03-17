@@ -1,5 +1,9 @@
 package com.excilys.cdb.controller;
 
+import java.util.List;
+import java.util.Optional;
+
+import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.service.ComputerService;
 
 public class ComputerController {
@@ -15,25 +19,25 @@ public class ComputerController {
 
 	}
 
-	public void searchAllComputer() {
+	public List<Computer> searchAllComputer() {
 
-		computerService.searchAllComputer();
+		return computerService.searchAllComputer();
 	}
 
-	public void searchByIdComputer() {
-		computerService.searchByIdComputer();
+	public Optional<Computer> searchByIdComputer(Long idToSearch) {
+		return computerService.searchByIdComputer(idToSearch);
 	}
 
-	public void createComputer() {
-		computerService.createComputer();
+	public boolean createComputer(Computer compToCreate) {
+		return computerService.createComputer(compToCreate);
 	}
 
-	public void updateComputer() {
-		computerService.updateComputer();
+	public boolean updateComputer(Computer compToUpdate) {
+		return computerService.updateComputer(compToUpdate);
 	}
 
-	public void deleteComputer() {
-		computerService.deleteComputer();
+	public boolean deleteComputer(Long compToDeleteID) {
+		return computerService.deleteComputer(compToDeleteID);
 	}
 
 }

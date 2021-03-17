@@ -1,100 +1,83 @@
 package com.excilys.cdb.service;
 
-import java.util.NoSuchElementException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import com.excilys.cdb.dao.ComputerDAOImpl;
 import com.excilys.cdb.dao.DAOConfigurationException;
-import com.excilys.cdb.dao.DBConnexion;
+import com.excilys.cdb.dao.DAOException;
 import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.view.CliMenu;
-import com.excilys.cdb.view.InputException;
 
 public class ComputerService {
 
-	public void searchAllComputer() {
+	public List<Computer> searchAllComputer() {
 		try {
-			DBConnexion daoFactory = DBConnexion.getInstance();
-			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl(daoFactory);
-			computerDAOImpl.searchAll().stream().forEach(c -> System.out.println(c.toString()));
+
+			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl();
+			return computerDAOImpl.searchAll();
 		} catch (DAOConfigurationException e) {
 			LoggerCdb.logError(getClass(), e);
 		}
+		return new ArrayList<Computer>();
 	}
 
-	public void searchByIdComputer() {
+	public Optional<Computer> searchByIdComputer(Long idToSearch) {
 		try {
-			DBConnexion daoFactory = DBConnexion.getInstance();
-			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl(daoFactory);
-			CliMenu.showSearchOneComputer();
-			Long idToSearch = CliMenu.searchOneComputerAskInput();
+
+			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl();
 			Optional<Computer> compSearched = computerDAOImpl.search(idToSearch);
-			System.out.println(compSearched.orElseThrow(() -> new NoSuchElementException()).toString());
-		} catch (NoSuchElementException e) {
-			LoggerCdb.logError(this.getClass(), e);
-
-			CliMenu.showComputerMenu();
-			CliMenu.computerMenuAskInput();
+			return compSearched;
 		} catch (DAOConfigurationException e) {
 			LoggerCdb.logError(getClass(), e);
 		}
+		return Optional.empty();
 	}
 
-	public void createComputer() {
+	public boolean createComputer(Computer compToCreate) {
+		boolean success = false;
 		try {
-			DBConnexion daoFactory = DBConnexion.getInstance();
-			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl(daoFactory);
-			CliMenu.showCreateOneComputer();
-			Optional<Computer> compToCreateOptionnal = CliMenu.createOneComputerAskInput();
-			Computer compToCreate = compToCreateOptionnal.orElseThrow(() -> new NoSuchElementException());
-			CliMenu.validateCreation(compToCreate);
-			if (CliMenu.validatoinCreationAskInput(compToCreate)) {
-				computerDAOImpl.create(compToCreate);
-				System.out.println(compToCreate.toString() + " created");
-			}
 
-		} catch (NoSuchElementException e) {
-			LoggerCdb.logError(this.getClass(), e);
+			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl();
+
+			computerDAOImpl.create(compToCreate);
+			success = true;
 
 		} catch (DAOConfigurationException e) {
 			LoggerCdb.logError(getClass(), e);
 		}
+		return success;
 	}
 
-	public void updateComputer() {
+	public boolean updateComputer(Computer compToUpdate) {
+		boolean success = false;
 		try {
-			DBConnexion daoFactory = DBConnexion.getInstance();
-			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl(daoFactory);
+
+			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl();
 			CliMenu.showUpdateOneComputer();
-			Computer compToUpdate = CliMenu.updateOneComputerAskInput();
 			computerDAOImpl.update(compToUpdate);
-			System.out.println(compToUpdate.toString() + " updated");
-		} catch (InputException e) {
-			LoggerCdb.logError(this.getClass(), e);
-			CliMenu.showComputerMenu();
-			CliMenu.computerMenuAskInput();
+			success = true;
+
 		} catch (DAOConfigurationException e) {
 			LoggerCdb.logError(getClass(), e);
 		}
+		return success;
 	}
 
-	public void deleteComputer() {
+	public boolean deleteComputer(Long compToDeleteID) {
+		boolean success = false;
 		try {
 
-			DBConnexion daoFactory = DBConnexion.getInstance();
-			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl(daoFactory);
-			CliMenu.showDeleteOneComputer();
-			Long compToDeleteID = CliMenu.deleteOneComputerAskInput();
+			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl();
 			computerDAOImpl.delete(compToDeleteID);
-			System.out.println("Computer " + compToDeleteID + ": deleted");
-		} catch (InputException e) {
-			LoggerCdb.logError(this.getClass(), e);
-			CliMenu.showComputerMenu();
-			CliMenu.computerMenuAskInput();
-		} catch (DAOConfigurationException e) {
+			success = true;
+
+		} catch (DAOException e) {
 			LoggerCdb.logError(getClass(), e);
 		}
+		return success;
 	}
 
 	public static int showMainMenu() {

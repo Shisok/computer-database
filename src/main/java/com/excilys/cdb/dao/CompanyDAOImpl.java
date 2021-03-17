@@ -21,8 +21,8 @@ public class CompanyDAOImpl {
 	private static final String SQL_ALL_COMPANY = "SELECT * FROM company";
 	private static final String SQL_ALL_COMPANY_PAGINATION = "SELECT id,name From company ORDER BY id LIMIT ?,? ;";
 
-	public CompanyDAOImpl(DBConnexion dbConexion) {
-		this.dbConnexion = dbConexion;
+	public CompanyDAOImpl() {
+		this.dbConnexion = DBConnexion.getInstance();
 		this.mapperCompany = new MapperCompany();
 
 	}

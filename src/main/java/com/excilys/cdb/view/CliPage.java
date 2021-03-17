@@ -2,6 +2,8 @@ package com.excilys.cdb.view;
 
 import java.util.ArrayList;
 
+import com.excilys.cdb.controller.PageController;
+import com.excilys.cdb.dao.DAOConfigurationException;
 import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
@@ -15,10 +17,12 @@ public class CliPage {
 	private static final int OPTION_EXIT_PAGINATION = 5;
 	private Page<Computer> pageComputer;
 	private Page<Company> pageCompany;
+	private PageController pageController;
 
 	public CliPage() {
 		this.pageComputer = new Page<Computer>();
 		this.pageCompany = new Page<Company>();
+		this.pageController = new PageController();
 	}
 
 	public int pageComputerVerifyChoice(int page) {
@@ -106,4 +110,57 @@ public class CliPage {
 			System.out.println(comp.toString());
 		}
 	}
+
+	public void searchAllComputerPagination() {
+		try {
+			// ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl();
+			pageComputer.setPageInt(0);
+			pageComputer.setPageInitial(0);
+
+			do {
+				// page.setContentPage(computerDAOImpl.searchAllPagination(page.getPageInt()));
+				pageComputer.setContentPage(pageController.searchAllComputerPagination(pageComputer.getPageInt()));
+				if (pageComputer.getContentPage().isEmpty()) {
+					System.out.println("Page " + pageComputer.getPageInt() + " doesn't exist.");
+					pageComputer.setPageInt(pageComputer.getPageInitial());
+				}
+				// page.setContentPage(computerDAOImpl.searchAllPagination(page.getPageInt()));
+				pageComputer.setContentPage(pageController.searchAllComputerPagination(pageComputer.getPageInt()));
+				System.out.println("Page " + pageComputer.getPageInt());
+				pageComputer.getContentPage().stream().forEach(c -> System.out.println(c.toString()));
+
+				pageComputer.setPageInitial(pageComputer.getPageInt());
+				pageComputer.setPageInt(pageComputerVerifyChoice(pageComputer.getPageInt()));
+
+			} while (pageComputer.getPageInt() != -1);
+		} catch (DAOConfigurationException e) {
+			LoggerCdb.logError(getClass(), e);
+		}
+	}
+
+	public void searchAllCompanyPage() {
+		try {
+
+			pageCompany.setPageInt(0);
+			pageCompany.setPageInitial(0);
+			do {
+
+				pageCompany.setContentPage(pageController.searchAllCompanyPagination(pageCompany.getPageInt()));
+				if (pageCompany.getContentPage().isEmpty()) {
+					System.out.println("Page " + pageCompany.getPageInt() + " doesn't exist.");
+					pageCompany.setPageInt(pageCompany.getPageInitial());
+				}
+
+				pageCompany.setContentPage(pageController.searchAllCompanyPagination(pageCompany.getPageInt()));
+				System.out.println("Page " + pageCompany.getPageInt());
+				showCompanyContent(pageCompany);
+				pageCompany.setPageInitial(pageCompany.getPageInt());
+				pageCompany.setPageInt(pageCompanyVerifChoice(pageCompany.getPageInt()));
+
+			} while (pageCompany.getPageInt() != -1);
+		} catch (DAOConfigurationException e) {
+			LoggerCdb.logError(getClass(), e);
+		}
+	}
+
 }
