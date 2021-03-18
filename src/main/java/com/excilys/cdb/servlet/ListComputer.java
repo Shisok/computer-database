@@ -48,18 +48,26 @@ public class ListComputer extends HttpServlet {
 			throws ServletException, IOException {
 		Page<Computer> page = new Page<Computer>();
 		HttpSession session = request.getSession();
-		int nbComputer = this.computerService.countComputer();
-		request.setAttribute("countComputer", nbComputer + "");
-
-		String stringNombreObjet = (String) session.getAttribute("nbObject");
-
-		if (stringNombreObjet == null) {
-			stringNombreObjet = "10";
-		}
-		page.setObjetPerPage(Integer.parseInt(stringNombreObjet));
+		int nbComputer = countComputer(request);
+		setObjectPerPage(page, session);
 		int objectPerPage = page.getObjetPerPage();
 		int pageMax = nbComputer / objectPerPage;
+		int numeroPage = setPageInt(request, page, session);
+		setIndexDebutFin(page, session, pageMax);
+		page.setContentPage(this.pageService.searchAllComputerPagination(numeroPage - 1, objectPerPage));
+		List<ComputerDTOList> listeComputers = page.getContentPage().stream()
+				.map(c -> mapperComputer.mapFromModelToDTOList(c)).collect(Collectors.toList());
+		request.setAttribute("listeComputers", listeComputers);
+		this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
+	}
 
+	private void setIndexDebutFin(Page<Computer> page, HttpSession session, int pageMax) {
+		page.setIndex(pageMax);
+		session.setAttribute("indexDebut", page.getIndexDebut());
+		session.setAttribute("indexFin", page.getIndexFin());
+	}
+
+	private int setPageInt(HttpServletRequest request, Page<Computer> page, HttpSession session) {
 		String stringNumeroDePage = request.getParameter("pageno");
 		if (stringNumeroDePage == null) {
 			session.setAttribute("pageno", 1);
@@ -67,15 +75,22 @@ public class ListComputer extends HttpServlet {
 		}
 		int numeroPage = Integer.parseInt(stringNumeroDePage);
 		page.setPageInt(numeroPage);
-		page.setIndex(pageMax);
-		session.setAttribute("indexDebut", page.getIndexDebut());
-		session.setAttribute("indexFin", page.getIndexFin());
+		return numeroPage;
 
-		page.setContentPage(this.pageService.searchAllComputerPagination(numeroPage - 1, objectPerPage));
-		List<ComputerDTOList> listeComputers = page.getContentPage().stream().map(c -> mapperComputer.mapFromModelToDTOList(c))
-				.collect(Collectors.toList());
-		request.setAttribute("listeComputers", listeComputers);
-		this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
+	}
+
+	private void setObjectPerPage(Page<Computer> page, HttpSession session) {
+		String stringNombreObjet = (String) session.getAttribute("nbObject");
+		if (stringNombreObjet == null) {
+			stringNombreObjet = "10";
+		}
+		page.setObjetPerPage(Integer.parseInt(stringNombreObjet));
+	}
+
+	private int countComputer(HttpServletRequest request) {
+		int nbComputer = this.computerService.countComputer();
+		request.setAttribute("countComputer", nbComputer + "");
+		return nbComputer;
 	}
 
 	/**
@@ -87,32 +102,22 @@ public class ListComputer extends HttpServlet {
 			throws ServletException, IOException {
 		Page<Computer> page = new Page<Computer>();
 		HttpSession session = request.getSession();
-		int nbComputer = this.computerService.countComputer();
-		request.setAttribute("countComputer", nbComputer + "");
+		int nbComputer = countComputer(request);
 
 		String stringNombreObjet = request.getParameter("nbObject");
-		if (stringNombreObjet == null) {
-			stringNombreObjet = "10";
-		}
 		session.setAttribute("nbObject", stringNombreObjet);
 		page.setObjetPerPage(Integer.parseInt(stringNombreObjet));
+
 		int objectPerPage = page.getObjetPerPage();
 		int pageMax = nbComputer / objectPerPage;
 
-		String stringNumeroDePage = request.getParameter("pageno");
-		if (stringNumeroDePage == null) {
-			session.setAttribute("pageno", 1);
-			stringNumeroDePage = "1";
-		}
-		int numeroPage = Integer.parseInt(stringNumeroDePage);
-		page.setPageInt(numeroPage);
-		page.setIndex(pageMax);
-		session.setAttribute("indexDebut", page.getIndexDebut());
-		session.setAttribute("indexFin", page.getIndexFin());
+		int numeroPage = setPageInt(request, page, session);
+
+		setIndexDebutFin(page, session, pageMax);
 
 		page.setContentPage(this.pageService.searchAllComputerPagination(numeroPage - 1, objectPerPage));
-		List<ComputerDTOList> listeComputers = page.getContentPage().stream().map(c -> mapperComputer.mapFromModelToDTOList(c))
-				.collect(Collectors.toList());
+		List<ComputerDTOList> listeComputers = page.getContentPage().stream()
+				.map(c -> mapperComputer.mapFromModelToDTOList(c)).collect(Collectors.toList());
 		request.setAttribute("listeComputers", listeComputers);
 		this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
 	}

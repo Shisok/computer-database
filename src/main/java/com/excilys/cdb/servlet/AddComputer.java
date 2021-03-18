@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.cdb.dto.CompanyDTO;
 import com.excilys.cdb.dto.ComputerDTOAdd;
-import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.mapper.MapperCompany;
 import com.excilys.cdb.mapper.MapperComputer;
 import com.excilys.cdb.model.Company;
@@ -75,7 +74,7 @@ public class AddComputer extends HttpServlet {
 		ComputerDTOAdd computerDTOAdd = new ComputerDTOAdd.ComputerDTOAddBuilder(computerName)
 				.introduced(stringIntroduced).discontinued(stringDiscontinued).company(stringCompanyId).build();
 		Computer computer = mapperComputer.mapFromDTOAddToModel(computerDTOAdd);
-		LoggerCdb.logInfo(getClass(), null);
+
 		computerService.createComputer(computer);
 		doGet(request, response);
 

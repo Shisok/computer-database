@@ -20,6 +20,8 @@ public class ComputerService {
 			return computerDAOImpl.searchAll();
 		} catch (DAOConfigurationException e) {
 			LoggerCdb.logError(getClass(), e);
+		} catch (DAOException e) {
+			LoggerCdb.logError(getClass(), e);
 		}
 		return new ArrayList<Computer>();
 	}
@@ -30,6 +32,8 @@ public class ComputerService {
 			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl();
 			Optional<Computer> compSearched = computerDAOImpl.search(idToSearch);
 			return compSearched;
+		} catch (DAOException e) {
+			LoggerCdb.logError(getClass(), e);
 		} catch (DAOConfigurationException e) {
 			LoggerCdb.logError(getClass(), e);
 		}
@@ -45,6 +49,8 @@ public class ComputerService {
 			computerDAOImpl.create(compToCreate);
 			success = true;
 
+		} catch (DAOException e) {
+			LoggerCdb.logError(getClass(), e);
 		} catch (DAOConfigurationException e) {
 			LoggerCdb.logError(getClass(), e);
 		}
@@ -60,6 +66,8 @@ public class ComputerService {
 			computerDAOImpl.update(compToUpdate);
 			success = true;
 
+		} catch (DAOException e) {
+			LoggerCdb.logError(getClass(), e);
 		} catch (DAOConfigurationException e) {
 			LoggerCdb.logError(getClass(), e);
 		}
@@ -76,6 +84,8 @@ public class ComputerService {
 
 		} catch (DAOException e) {
 			LoggerCdb.logError(getClass(), e);
+		} catch (DAOConfigurationException e) {
+			LoggerCdb.logError(getClass(), e);
 		}
 		return success;
 	}
@@ -88,6 +98,8 @@ public class ComputerService {
 			nbCompûter = computerDAOImpl.searchAllCount();
 
 		} catch (DAOException e) {
+			LoggerCdb.logError(getClass(), e);
+		} catch (DAOConfigurationException e) {
 			LoggerCdb.logError(getClass(), e);
 		}
 		return nbCompûter;

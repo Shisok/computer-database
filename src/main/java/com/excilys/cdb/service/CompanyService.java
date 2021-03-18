@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.excilys.cdb.dao.CompanyDAOImpl;
 import com.excilys.cdb.dao.DAOConfigurationException;
+import com.excilys.cdb.dao.DAOException;
 import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.view.CliMenu;
@@ -16,6 +17,8 @@ public class CompanyService {
 			CompanyDAOImpl companyDAOImpl = new CompanyDAOImpl();
 			return companyDAOImpl.searchAll();
 
+		} catch (DAOException e) {
+			LoggerCdb.logError(getClass(), e);
 		} catch (DAOConfigurationException e) {
 			LoggerCdb.logError(getClass(), e);
 		}

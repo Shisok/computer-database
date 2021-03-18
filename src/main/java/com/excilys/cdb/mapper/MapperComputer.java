@@ -64,8 +64,9 @@ public class MapperComputer {
 			introduced = LocalDate.parse(computerDTOAdd.getDiscontinued());
 		}
 
-		if (computerDTOAdd.getCompanyId() != null && computerDTOAdd.getCompanyId().compareTo("") != 0) {
+		if (computerDTOAdd.getCompanyId() != null && computerDTOAdd.getCompanyId().compareTo("0") != 0) {
 			company = new Company.CompanyBuilder(Long.parseLong(computerDTOAdd.getCompanyId())).build();
+
 		}
 		computer = new Computer.ComputerBuilder(null).name(computerDTOAdd.getComputerName()).introduced(introduced)
 				.discontinued(discontinued).company(company).build();
