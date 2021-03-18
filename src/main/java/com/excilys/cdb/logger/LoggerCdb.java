@@ -15,27 +15,15 @@ public class LoggerCdb {
 		logger.error(exception.getClass() + " : " + exception.getMessage());
 	}
 
-	public static void logError(String message, Throwable throwable, Class<?> c) {
-		Logger logger = getLogger(c);
-		logger.error(message, throwable);
-	}
-
-//	public static void logError(Class<?> c, Exception exception, String message) {
+//	public static void logError(String message, Throwable throwable, Class<?> c) {
 //		Logger logger = getLogger(c);
-//		logger.error(exception.getClass() + " : " + exception.getMessage());
-//		logger.error(message);
+//		logger.error(message, throwable);
 //	}
 
 	public static void logInfo(Class<?> c, Exception exception) {
 		Logger logger = getLogger(c);
 		logger.info(exception.getClass() + " : " + exception.getMessage());
 	}
-
-//	public static void logInfo(Class<?> c, Exception exception, String message) {
-//		Logger logger = getLogger(c);
-//		logger.info(exception.getClass() + " : " + exception.getMessage());
-//		logger.info(message);
-//	}
 
 	public static void logWarn(Class<?> c, Exception exception) {
 		Logger logger = getLogger(c);

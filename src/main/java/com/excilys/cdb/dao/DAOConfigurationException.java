@@ -1,7 +1,5 @@
 package com.excilys.cdb.dao;
 
-import com.excilys.cdb.logger.LoggerCdb;
-
 /**
  * Encapsule les exceptions liees a sql ou jdbc afin de masquer les exceptions
  * specifique propres au DAO.
@@ -20,7 +18,8 @@ public class DAOConfigurationException extends RuntimeException {
 	}
 
 	public DAOConfigurationException(String message, Throwable cause) {
-		LoggerCdb.logError(message, cause, getClass());
+		// LoggerCdb.logError(message, cause, getClass());
+		super(message, cause);
 
 	}
 

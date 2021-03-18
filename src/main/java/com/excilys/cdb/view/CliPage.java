@@ -113,19 +113,21 @@ public class CliPage {
 
 	public void searchAllComputerPagination() {
 		try {
-			// ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl();
+
 			pageComputer.setPageInt(0);
 			pageComputer.setPageInitial(0);
 
 			do {
-				// page.setContentPage(computerDAOImpl.searchAllPagination(page.getPageInt()));
-				pageComputer.setContentPage(pageController.searchAllComputerPagination(pageComputer.getPageInt()));
+
+				pageComputer.setContentPage(pageController.searchAllComputerPagination(pageComputer.getPageInt(),
+						pageComputer.getObjetPerPage()));
 				if (pageComputer.getContentPage().isEmpty()) {
 					System.out.println("Page " + pageComputer.getPageInt() + " doesn't exist.");
 					pageComputer.setPageInt(pageComputer.getPageInitial());
 				}
-				// page.setContentPage(computerDAOImpl.searchAllPagination(page.getPageInt()));
-				pageComputer.setContentPage(pageController.searchAllComputerPagination(pageComputer.getPageInt()));
+
+				pageComputer.setContentPage(pageController.searchAllComputerPagination(pageComputer.getPageInt(),
+						pageComputer.getObjetPerPage()));
 				System.out.println("Page " + pageComputer.getPageInt());
 				pageComputer.getContentPage().stream().forEach(c -> System.out.println(c.toString()));
 

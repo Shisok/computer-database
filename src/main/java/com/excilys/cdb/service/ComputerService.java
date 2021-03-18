@@ -80,10 +80,17 @@ public class ComputerService {
 		return success;
 	}
 
-	public static int showMainMenu() {
-		CliMenu.showComputerMenu();
-		return CliMenu.computerMenuAskInput();
+	public int countComputer() {
+		int nbCompûter = 0;
+		try {
 
+			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl();
+			nbCompûter = computerDAOImpl.searchAllCount();
+
+		} catch (DAOException e) {
+			LoggerCdb.logError(getClass(), e);
+		}
+		return nbCompûter;
 	}
 
 }

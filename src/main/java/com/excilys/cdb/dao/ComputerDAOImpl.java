@@ -25,7 +25,8 @@ public class ComputerDAOImpl {
 	private static final String SQL_SELECT = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued ,company.id as company_id, company.name as companyName  FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.id = ?;";
 	private static final String SQL_ALL_COMPUTER = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, company.id as company_id, company.name as companyName  FROM computer LEFT JOIN company ON computer.company_id=company.id;";
 	private static final String SQL_ALL_COMPUTER_PAGINATION = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, company.id as company_id, company.name as companyName  FROM computer LEFT JOIN company ON computer.company_id=company.id ORDER BY id LIMIT ?,?;";
-	private static final int OBJECT_NUMBER_PER_PAGE = 10;
+	private static final String SQL_COUNT_ALL_COMPUTER = "SELECT COUNT(computer.id) as nbComputer  FROM computer LEFT JOIN company ON computer.company_id=company.id;";
+	// private static final int OBJECT_NUMBER_PER_PAGE = 10;
 
 	public ComputerDAOImpl() {
 
@@ -166,12 +167,12 @@ public class ComputerDAOImpl {
 		return computers;
 	}
 
-	public List<Computer> searchAllPagination(int page) {
+	public List<Computer> searchAllPagination(int page, int objectPerPage) {
 		List<Computer> computers = new ArrayList<>();
 
-		int offset = page * 10;
+		int offset = page * objectPerPage;
 		try (Connection connexion = dbConnexion.getConnection();
-				PreparedStatement preparedStatement = createPrepaStateForPagination(connexion, offset);
+				PreparedStatement preparedStatement = createPrepaStateForPagination(connexion, offset, objectPerPage);
 				ResultSet resultSet = preparedStatement.executeQuery();) {
 
 			while (resultSet.next()) {
@@ -186,13 +187,32 @@ public class ComputerDAOImpl {
 		return computers;
 	}
 
-	private static PreparedStatement createPrepaStateForPagination(Connection connexion, int offset)
+	private static PreparedStatement createPrepaStateForPagination(Connection connexion, int offset, int objectPerPage)
 			throws SQLException {
 		PreparedStatement preparedStatement = connexion.prepareStatement(SQL_ALL_COMPUTER_PAGINATION,
 				Statement.RETURN_GENERATED_KEYS);
 		preparedStatement.setInt(1, offset);
-		preparedStatement.setInt(2, OBJECT_NUMBER_PER_PAGE);
+		preparedStatement.setInt(2, objectPerPage);
 		return preparedStatement;
+	}
+
+	public int searchAllCount() throws DAOException {
+
+		int nbComputer = 0;
+		try (Connection connexion = dbConnexion.getConnection();
+				Statement statement = connexion.createStatement();
+				ResultSet resultSet = statement.executeQuery(SQL_COUNT_ALL_COMPUTER)) {
+
+			while (resultSet.next()) {
+				nbComputer = resultSet.getInt("nbComputer");
+
+			}
+		} catch (SQLException e) {
+			LoggerCdb.logError(this.getClass(), e);
+
+		}
+
+		return nbComputer;
 	}
 
 }

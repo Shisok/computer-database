@@ -15,9 +15,9 @@ public class PageController {
 		pageService = new PageService();
 	}
 
-	public List<Computer> searchAllComputerPagination(int pageInt) {
+	public List<Computer> searchAllComputerPagination(int pageInt, int objectPerPage) {
 
-		return pageService.searchAllComputerPagination(pageInt);
+		return pageService.searchAllComputerPagination(pageInt, objectPerPage);
 	}
 
 	public List<Company> searchAllCompanyPagination(int pageInt) {
