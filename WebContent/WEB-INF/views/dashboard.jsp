@@ -27,11 +27,8 @@
 	<section id="main">
 		<div class="container">
 			<h1 id="homeTitle">
-				<%
-				String attribut = (String) request.getAttribute("countComputer");
-				out.println(attribut + " Computers found");
-				%>
-
+				
+				${countComputer} Computers found
 			</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
@@ -101,16 +98,17 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<ul class="pagination">
-				<li><a href="#" aria-label="Previous"> <span
+				<li><a href="ListComputer?pageno=1" aria-label="Previous"> <span
 						aria-hidden="true">&laquo;</span>
 				</a></li>
+				<li><a href="ListComputer?pageno=${numeroPage - 1}">Previous</a></li>
 				<c:forEach var="entry" begin="${indexDebut}" end="${indexFin}" step="1">
 						
 						<li><a href="ListComputer?pageno=${entry}">${entry}</a></li>
 					
 				</c:forEach>
-			
-				<li><a href="#" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+				<li><a href="ListComputer?pageno=${numeroPage + 1}">Next</a></li>
+				<li><a href="ListComputer?pageno=${pageMax}" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 				</a></li>
 			</ul>
 
