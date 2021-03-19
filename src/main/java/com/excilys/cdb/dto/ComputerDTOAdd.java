@@ -41,8 +41,14 @@ public class ComputerDTOAdd {
 
 		public ComputerDTOAdd build() {
 			ComputerDTOAdd computerDTOAdd = new ComputerDTOAdd(this);
+
 			return computerDTOAdd;
 		}
+
+//		private void validateUserObject(ComputerDTOAdd computerDTOAdd) {
+//			// Do some basic validations to check
+//			// if user object does not break any assumption of system
+//		}
 
 	}
 

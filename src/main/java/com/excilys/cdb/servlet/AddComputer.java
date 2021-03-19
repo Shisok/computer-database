@@ -73,6 +73,7 @@ public class AddComputer extends HttpServlet {
 
 		ComputerDTOAdd computerDTOAdd = new ComputerDTOAdd.ComputerDTOAddBuilder(computerName)
 				.introduced(stringIntroduced).discontinued(stringDiscontinued).company(stringCompanyId).build();
+
 		Computer computer = mapperComputer.mapFromDTOAddToModel(computerDTOAdd);
 
 		computerService.createComputer(computer);

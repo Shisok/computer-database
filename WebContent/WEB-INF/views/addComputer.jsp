@@ -24,11 +24,12 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <h1>Add Computer</h1>
-                    <form action="AddComputer" method="POST">
+                    <form action="AddComputer" id="addComputerFrom" method="POST" >
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
                                 <input type="text" class="form-control" name="computerName" id="computerName" placeholder="Computer name" required="required">
+                                 <span class="error" id="nameError" style="display:none">This field is required</span>
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
@@ -36,7 +37,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
-                                <input type="date" class="form-control" name="discontinued" id="discontinued" placeholder="Discontinued date">
+                                <input type="date" class="form-control" name="discontinued" id="discontinued" placeholder="Discontinued date" >
+                                <span class="error" id="discontinuedError" style="display:none">Discontinued is before introduced</span>
                             </div>
                             <div class="form-group">
                                 <label for="companyId">Company</label>
@@ -60,5 +62,11 @@
             </div>
         </div>
     </section>
+    <script src="${pageContext.request.contextPath}/js/addCompValidator.js"></script> 
+    
+
+
+
+
 </body>
 </html>

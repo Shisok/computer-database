@@ -57,11 +57,11 @@ public class MapperComputer {
 		Company company = new Company.CompanyBuilder(null).build();
 		Computer computer = new Computer.ComputerBuilder(null).build();
 		if (computerDTOAdd.getIntroduced() != null && computerDTOAdd.getIntroduced().compareTo("") != 0) {
-			discontinued = LocalDate.parse(computerDTOAdd.getIntroduced());
+			introduced = LocalDate.parse(computerDTOAdd.getIntroduced());
 		}
 
 		if (computerDTOAdd.getDiscontinued() != null && computerDTOAdd.getDiscontinued().compareTo("") != 0) {
-			introduced = LocalDate.parse(computerDTOAdd.getDiscontinued());
+			discontinued = LocalDate.parse(computerDTOAdd.getDiscontinued());
 		}
 
 		if (computerDTOAdd.getCompanyId() != null && computerDTOAdd.getCompanyId().compareTo("0") != 0) {

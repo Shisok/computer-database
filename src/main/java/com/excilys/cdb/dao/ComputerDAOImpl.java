@@ -26,7 +26,6 @@ public class ComputerDAOImpl {
 	private static final String SQL_ALL_COMPUTER = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, company.id as company_id, company.name as companyName  FROM computer LEFT JOIN company ON computer.company_id=company.id;";
 	private static final String SQL_ALL_COMPUTER_PAGINATION = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, company.id as company_id, company.name as companyName  FROM computer LEFT JOIN company ON computer.company_id=company.id ORDER BY id LIMIT ?,?;";
 	private static final String SQL_COUNT_ALL_COMPUTER = "SELECT COUNT(computer.id) as nbComputer  FROM computer LEFT JOIN company ON computer.company_id=company.id;";
-	// private static final int OBJECT_NUMBER_PER_PAGE = 10;
 
 	public ComputerDAOImpl() {
 
@@ -55,10 +54,10 @@ public class ComputerDAOImpl {
 				throw new DAOException("Échec de la création de l'ordinateur en base, aucun ID auto-généré retourné.");
 			}
 		} catch (MysqlDataTruncation e) {
-			// LoggerCdb.logError(this.getClass(), e);
+
 			throw new DAOException("An error occured because date cannot be bellow 1970-01-01.");
 		} catch (SQLIntegrityConstraintViolationException e) {
-			// LoggerCdb.logError(this.getClass(), e);
+
 			throw new DAOException("An error occured because the company doesn't exist.");
 
 		} catch (SQLException e) {
