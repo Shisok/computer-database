@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.mapper.MapperCompany;
 import com.excilys.cdb.model.Company;

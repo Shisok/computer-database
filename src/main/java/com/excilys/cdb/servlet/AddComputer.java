@@ -12,12 +12,16 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.cdb.dto.CompanyDTO;
 import com.excilys.cdb.dto.ComputerDTOAdd;
+import com.excilys.cdb.exception.ValidatorException;
+import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.mapper.MapperCompany;
 import com.excilys.cdb.mapper.MapperComputer;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
+import com.excilys.cdb.validator.ComputerValidator;
+import com.excilys.cdb.validator.ComputerValidatorError;
 
 /**
  * Servlet implementation class AddComputer
@@ -30,6 +34,8 @@ public class AddComputer extends HttpServlet {
 	private CompanyService companyService;
 	private ComputerService computerService;
 
+	private ComputerValidator computerValidator;
+
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -39,7 +45,7 @@ public class AddComputer extends HttpServlet {
 		companyService = new CompanyService();
 		mapperComputer = new MapperComputer();
 		computerService = new ComputerService();
-
+		computerValidator = ComputerValidator.getInstance();
 	}
 
 	/**
@@ -65,20 +71,38 @@ public class AddComputer extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String computerName = request.getParameter("computerName");
-		String stringIntroduced = request.getParameter("introduced");
+		try {
+			String computerName = request.getParameter("computerName");
+			String stringIntroduced = request.getParameter("introduced");
 
-		String stringDiscontinued = request.getParameter("discontinued");
-		String stringCompanyId = request.getParameter("companyId");
+			String stringDiscontinued = request.getParameter("discontinued");
+			String stringCompanyId = request.getParameter("companyId");
 
-		ComputerDTOAdd computerDTOAdd = new ComputerDTOAdd.ComputerDTOAddBuilder(computerName)
-				.introduced(stringIntroduced).discontinued(stringDiscontinued).company(stringCompanyId).build();
+			ComputerDTOAdd computerDTOAdd = new ComputerDTOAdd.ComputerDTOAddBuilder(computerName)
+					.introduced(stringIntroduced).discontinued(stringDiscontinued).company(stringCompanyId).build();
 
-		Computer computer = mapperComputer.mapFromDTOAddToModel(computerDTOAdd);
+			Computer computer = mapperComputer.mapFromDTOAddToModel(computerDTOAdd);
+			computerValidator.validationComputer(computer);
+			computerService.createComputer(computer);
+			doGet(request, response);
+		} catch (ValidatorException e) {
+			LoggerCdb.logError(getClass(), e);
+			showError(request, e);
+			doGet(request, response);
+		}
 
-		computerService.createComputer(computer);
-		doGet(request, response);
+	}
 
+	private void showError(HttpServletRequest request, ValidatorException e) {
+		if (e.getMessage().equals(ComputerValidatorError.NONAME.getMessage())) {
+			request.setAttribute("erreurName", e.getMessage());
+		}
+		if (e.getMessage().equals(ComputerValidatorError.NOINTRO.getMessage())) {
+			request.setAttribute("erreurNoIntro", e.getMessage());
+		}
+		if (e.getMessage().equals(ComputerValidatorError.NOINTRO.getMessage())) {
+			request.setAttribute("erreurDiscoBeforeIntro", e.getMessage());
+		}
 	}
 
 }

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.excilys.cdb.dao.CompanyDAOImpl;
-import com.excilys.cdb.dao.DAOConfigurationException;
-import com.excilys.cdb.dao.DAOException;
+import com.excilys.cdb.exception.DAOConfigurationException;
+import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.view.CliMenu;

@@ -27,7 +27,6 @@
 	<section id="main">
 		<div class="container">
 			<h1 id="homeTitle">
-				
 				${countComputer} Computers found
 			</h1>
 			<div id="actions" class="form-horizontal">
@@ -77,7 +76,9 @@
 					</tr>
 				</thead>
 				<!-- Browse attribute computers -->
+				<c:if test="${ !empty erreur }"> <span class="error" style="color:red"> There is an error in the DB date : <c:out value ="${ erreur }"/> </span></c:if>
 				<tbody id="results">
+				
 					<c:forEach items="${listeComputers}" var="c">
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"

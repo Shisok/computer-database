@@ -1,4 +1,4 @@
-package com.excilys.cdb.view;
+package com.excilys.cdb.exception;
 
 public class InputException extends RuntimeException {
 	/**

@@ -1,4 +1,4 @@
-package com.excilys.cdb.dao;
+package com.excilys.cdb.exception;
 
 /**
  * Encapsule les exceptions liees a sql ou jdbc afin de masquer les exceptions

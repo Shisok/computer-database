@@ -14,14 +14,18 @@ formAdd.addEventListener("submit", function(event) {
 		isValidate = false;
 		document.getElementById("nameError").style.display = "block";
 	}
-	if (introduced !== null && discontinued !== null) {
-		let dateIntroduced = Date.parse(introduced);
-		let dateDiscontinued = Date.parse(discontinued);
-		if (dateIntroduced > 0) {
-			if (dateIntroduced > dateDiscontinued) {
-				document.getElementById("discontinuedError").style.display = "block";
-				isValidate = false;
+	if ( discontinued !== null) {
+		if(introduced !== null ){
+			let dateIntroduced = Date.parse(introduced);
+			let dateDiscontinued = Date.parse(discontinued);
+			if (dateIntroduced > 0) {
+				if (dateIntroduced > dateDiscontinued) {
+					document.getElementById("discontinuedError").style.display = "block";
+					isValidate = false;
+				}
 			}
+		document.getElementById("noIntroError").style.display = "block";
+		isValidate = false;
 		}
 	}
 	if (!isValidate) {

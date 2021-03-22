@@ -10,6 +10,7 @@ import java.util.Scanner;
 
 import com.excilys.cdb.controller.CompanyController;
 import com.excilys.cdb.controller.ComputerController;
+import com.excilys.cdb.exception.InputException;
 import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;

@@ -7,6 +7,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import com.excilys.cdb.exception.DAOConfigurationException;
+
 public class DBConnexion {
 
 	private static final String FICHIER_PROPERTIES = "com/excilys/cdb/dao/dao.properties";

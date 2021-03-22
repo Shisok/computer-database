@@ -3,7 +3,8 @@ package com.excilys.cdb.view;
 import java.util.ArrayList;
 
 import com.excilys.cdb.controller.PageController;
-import com.excilys.cdb.dao.DAOConfigurationException;
+import com.excilys.cdb.exception.DAOConfigurationException;
+import com.excilys.cdb.exception.InputException;
 import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
