@@ -63,11 +63,8 @@
             </div>
         </div>
     </section>
-    <script src="${pageContext.request.contextPath}/js/addCompValidator.js"></script> 
-    
-
-
-
+    <script src="${pageContext.request.contextPath}/js/addCompValidator.js"></script>  
+   
 
 </body>
 </html>

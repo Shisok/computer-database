@@ -17,6 +17,8 @@
 		<logback-classic.version>1.2.3</logback-classic.version>
 		<dbunit.version>2.7.0</dbunit.version>
 		<jstl.version>1.2</jstl.version>
+		<selenium.version>3.141.59</selenium.version>
+		<phantomjs.version>1.4.1</phantomjs.version>
 
 	</properties>
 
@@ -84,13 +86,26 @@
 			<version>${dbunit.version}</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<!-- https://mvnrepository.com/artifact/javax.servlet/jstl -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
 			<version>${jstl.version}</version>
 		</dependency>
-		
+
+		<!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>${selenium.version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.codeborne/phantomjsdriver -->
+		<dependency>
+			<groupId>com.codeborne</groupId>
+			<artifactId>phantomjsdriver</artifactId>
+			<version>${phantomjs.version}</version>
+		</dependency>
 	</dependencies>
 </project>

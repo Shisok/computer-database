@@ -1,7 +1,7 @@
 /**
  * To validate discontinued after introduced
  */
-let formAdd = document.getElementById("addComputerFrom");
+/*let formAdd = document.getElementById("addComputerFrom");
 formAdd.addEventListener("submit", function(event) {
 	let name = document.getElementById("computerName").value;
 
@@ -31,4 +31,37 @@ formAdd.addEventListener("submit", function(event) {
 	if (!isValidate) {
 		event.preventDefault();
 	}
-});
+});*/
+
+$(function() {
+	    $( "#addComputerFrom" ).submit(function( event ) {
+	    	console.log("thomas");
+	    	let name =$("#computerName").val();
+	    	let introduced = $("#introduced").val(); 
+	    	let discontinued = $("#discontinued").val();  
+	    	let isValidate = true;
+	    	if (name.length < 1) {
+	    		isValidate = false;
+	    		$("#nameError").show(); 
+	    	}
+	    	
+	    	if ( discontinued !== null) {
+	    		if(introduced !== null ){
+	    			let dateIntroduced = Date.parse(introduced);
+	    			let dateDiscontinued = Date.parse(discontinued);
+	    			if (dateIntroduced > 0) {
+	    				if (dateIntroduced > dateDiscontinued) {
+	    					$("#discontinuedError").show(); 
+	    					isValidate = false;
+	    				}
+	    			}
+	    			$("#noIntroError").show(); 
+	    		isValidate = false;
+	    		}
+	    	}
+	    	if (!isValidate) {
+	    		event.preventDefault();
+	    	}
+	    });
+	
+    });
