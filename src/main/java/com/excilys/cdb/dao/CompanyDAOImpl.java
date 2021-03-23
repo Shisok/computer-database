@@ -19,13 +19,21 @@ public class CompanyDAOImpl {
 	private MapperCompany mapperCompany;
 	private static final int OBJECT_NUMBER_PER_PAGE = 10;
 
-	private static final String SQL_ALL_COMPANY = "SELECT id,name FROM company";
+	private static final String SQL_ALL_COMPANY = "SELECT id,name FROM company ORDER BY id";
 	private static final String SQL_ALL_COMPANY_PAGINATION = "SELECT id,name From company ORDER BY id LIMIT ?,? ;";
 
 	public CompanyDAOImpl() {
 		this.dbConnexion = DBConnexion.getInstance();
 		this.mapperCompany = new MapperCompany();
 
+	}
+
+	public DBConnexion getDbConnexion() {
+		return dbConnexion;
+	}
+
+	public void setDbConnexion(DBConnexion dbConnexion) {
+		this.dbConnexion = dbConnexion;
 	}
 
 	public List<Company> searchAll() {

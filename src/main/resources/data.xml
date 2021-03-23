@@ -2,11 +2,20 @@
 <dataset>
 	<COMPANY id='1' name='Apple Inc.' />
 	<COMPANY id='2' name='Thinking Machines' />
-	<COMPANY id='3' name='RCA' />
-<!-- 	<COMPUTER id='1' name='MacBook Pro 15.4 inch'
+	<COMPANY id='3' name='RCA1' />
+	<COMPANY id='4' name='RCA2' />
+	<COMPANY id='5' name='RCA3' />
+	<COMPANY id='6' name='RCA4' />
+	<COMPANY id='7' name='RCA5' />
+	<COMPANY id='8' name='RCA6' />
+	<COMPANY id='9' name='RCA7' />
+	<COMPANY id='10' name='RCA8' />
+	<COMPANY id='11' name='RCA9' />
+	<COMPANY id='12' name='RCA10' />
+ 	<COMPUTER id='1' name='MacBook Pro 15.4 inch'
 		introduced='1991-01-01' discontinued='1991-02-02' company_id='1' />
 	<COMPUTER id='2' name='CM-2a' introduced='1991-01-01'
-		discontinued='1991-02-02' company_id='2' /> -->
-<!-- 	<COMPUTER id='3' name='CM-5' introduced='1991-01-01'
-		discontinued='1991-02-02' company_id='3' /> -->
+		discontinued='1991-02-02' company_id='2' />
+	<COMPUTER id='3' name='CM-5' introduced='1991-01-01'
+		discontinued='1991-02-02' company_id='3' /> 
 </dataset>
