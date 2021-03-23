@@ -8,6 +8,17 @@ public class ComputerDTOList {
 	private String discontinued;
 	private String companyName;
 
+	public ComputerDTOList(String id, String name, String introduced, String discontinued, String companyName) {
+		this.id = id;
+		this.name = name;
+		this.introduced = introduced;
+		this.discontinued = discontinued;
+		this.companyName = companyName;
+	}
+
+	public ComputerDTOList() {
+	}
+
 	public String getId() {
 		return id;
 	}

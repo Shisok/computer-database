@@ -19,8 +19,8 @@ public class ComputerValidator {
 		return INSTANCE;
 	}
 
-	public boolean validationComputer(Computer computer) throws ValidatorException {
-		boolean validate = true;
+	public void validationComputer(Computer computer) throws ValidatorException {
+
 		String name = computer.getName();
 		LocalDate introduced = computer.getIntroduced();
 		LocalDate discontinued = computer.getDiscontinued();
@@ -38,6 +38,6 @@ public class ComputerValidator {
 				throw new ValidatorException(ComputerValidatorError.NOINTRO.getMessage());
 			}
 		}
-		return validate;
+
 	}
 }

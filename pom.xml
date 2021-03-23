@@ -19,7 +19,8 @@
 		<jstl.version>1.2</jstl.version>
 		<selenium.version>3.141.59</selenium.version>
 		<phantomjs.version>1.4.1</phantomjs.version>
-
+		<dbUnit.version>2.7.0</dbUnit.version>
+		<h2database.version>1.4.200</h2database.version>
 	</properties>
 
 	<build>
@@ -107,5 +108,22 @@
 			<artifactId>phantomjsdriver</artifactId>
 			<version>${phantomjs.version}</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.dbunit/dbunit -->
+		<dependency>
+			<groupId>org.dbunit</groupId>
+			<artifactId>dbunit</artifactId>
+			<version>2.7.0</version>
+			<scope>${dbUnit.version}</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>${h2database.version}</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 </project>

@@ -19,7 +19,7 @@
 
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard.html"> Application -
+			<a class="navbar-brand" href="dashboard.html" id="applicationTitle"> Application -
 				Computer Database </a>
 		</div>
 	</header>
@@ -53,7 +53,7 @@
 		</form>
 
 		<div class="container" style="margin-top: 10px;">
-			<table class="table table-striped table-bordered">
+			<table class="table table-striped table-bordered" >
 				<thead>
 					<tr>
 						<!-- Variable declarations for passing labels as parameters -->
@@ -77,7 +77,7 @@
 				</thead>
 				<!-- Browse attribute computers -->
 				<c:if test="${ !empty erreur }"> <span class="error" style="color:red"> There is an error in the DB date : <c:out value ="${ erreur }"/> </span></c:if>
-				<tbody id="results">
+				<tbody id="results" >
 				
 					<c:forEach items="${listeComputers}" var="c">
 						<tr>
@@ -99,25 +99,25 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<ul class="pagination">
-				<li><a href="ListComputer?pageno=1" aria-label="Previous"> <span
+				<li><a id="firstPage" href="ListComputer?pageno=1" aria-label="Previous"> <span
 						aria-hidden="true">&laquo;</span>
 				</a></li>
-				<li><a href="ListComputer?pageno=${numeroPage - 1}">Previous</a></li>
+				<li><a id="previousPage" href="ListComputer?pageno=${numeroPage - 1}">Previous</a></li>
 				<c:forEach var="entry" begin="${indexDebut}" end="${indexFin}" step="1">
 						
-						<li><a href="ListComputer?pageno=${entry}">${entry}</a></li>
+						<li><a id="page${entry}" href="ListComputer?pageno=${entry}">${entry}</a></li>
 					
 				</c:forEach>
-				<li><a href="ListComputer?pageno=${numeroPage + 1}">Next</a></li>
-				<li><a href="ListComputer?pageno=${pageMax}" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+				<li><a id="nextPage" href="ListComputer?pageno=${numeroPage + 1}">Next</a></li>
+				<li><a id="lastPage" href="ListComputer?pageno=${pageMax}" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 				</a></li>
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
 				<form action="${pageContext.request.contextPath}/ListComputer" method="post">
-					<button name="nbObject" type="submit" class="btn btn-default" value="10">10</button>
-					<button name="nbObject" type="submit" class="btn btn-default" value="50">50</button>
-					<button name="nbObject" type="submit" class="btn btn-default" value="100">100</button>
+					<button name="nbObject" id ="nbObject10" type="submit" class="btn btn-default" value="10">10</button>
+					<button name="nbObject" id ="nbObject50" type="submit" class="btn btn-default" value="50">50</button>
+					<button name="nbObject" id ="nbObject100" type="submit" class="btn btn-default" value="100">100</button>
 				</form>
 			</div>
 		</div>

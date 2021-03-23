@@ -4,11 +4,8 @@
 /*let formAdd = document.getElementById("addComputerFrom");
 formAdd.addEventListener("submit", function(event) {
 	let name = document.getElementById("computerName").value;
-
 	let introduced = document.getElementById("introduced").value;
 	let discontinued = document.getElementById("discontinued").value;
-
-
 	let isValidate = true;
 	if (name.length < 1) {
 		isValidate = false;
