@@ -5,8 +5,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -18,21 +18,22 @@ public class TestListComputer {
 
 	private static final String GECKO_DRIVER_PATH = "/home/excilys/Téléchargements/geckodriver-v0.29.0-linux64/geckodriver";
 	private static final String DASHBOARD_HOMETITLE_REGEX = "([0-9]*)+\\s+Computers found";
-	private WebDriver driver;
+	private static WebDriver driver;
 
-	@Before
-	public void init() {
+	@BeforeClass
+	public static void init() {
 
 		File file = new File(GECKO_DRIVER_PATH);
 		System.setProperty("webdriver.gecko.driver", file.getAbsolutePath());
 		driver = new FirefoxDriver();
 	}
 
-	@After
-	public void finish() {
+	@AfterClass
+	public static void finish() {
 		driver.quit();
 	}
 
+	@Test
 	public void testOuverture() {
 		driver.get(" http://localhost:8080/computer-database-db/ListComputer");
 
@@ -40,8 +41,6 @@ public class TestListComputer {
 		assertEquals(applicatoinTitleElement.getText(), "Application - Computer Database");
 		WebElement pageTitleElement = driver.findElement(By.id("homeTitle"));
 		assertTrue(pageTitleElement.getText().matches(DASHBOARD_HOMETITLE_REGEX));
-		WebElement addComputerElement = driver.findElement(By.id("addComputer"));
-		addComputerElement.click();
 
 	}
 
@@ -74,6 +73,7 @@ public class TestListComputer {
 		}
 	}
 
+	@Test
 	public void testNbObject() {
 		driver.get(" http://localhost:8080/computer-database-db/ListComputer");
 		WebElement nbObject100Element = driver.findElement(By.id("nbObject100"));
@@ -85,6 +85,7 @@ public class TestListComputer {
 
 	}
 
+	@Test
 	public void testNaviguerVersAdd() {
 		driver.get(" http://localhost:8080/computer-database-db/ListComputer");
 		WebElement addComputerElement = driver.findElement(By.id("addComputer"));

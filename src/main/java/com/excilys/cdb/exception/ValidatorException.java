@@ -10,11 +10,4 @@ public class ValidatorException extends RuntimeException {
 		super(message);
 	}
 
-	public ValidatorException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	public ValidatorException(Throwable cause) {
-		super(cause);
-	}
 }

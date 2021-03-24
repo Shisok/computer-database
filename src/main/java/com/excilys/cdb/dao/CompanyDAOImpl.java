@@ -20,7 +20,9 @@ public class CompanyDAOImpl {
 	private static final int OBJECT_NUMBER_PER_PAGE = 10;
 
 	private static final String SQL_ALL_COMPANY = "SELECT id,name FROM company ORDER BY id";
-	private static final String SQL_ALL_COMPANY_PAGINATION = "SELECT id,name From company ORDER BY id LIMIT ?,? ;";
+	// private static final String SQL_ALL_COMPANY_PAGINATION = "SELECT id,name From
+	// company ORDER BY id LIMIT ?,? ;";
+	private static final String SQL_ALL_COMPANY_PAGINATION = "SELECT id,name From company ORDER BY id LIMIT ? OFFSET ? ;";
 
 	public CompanyDAOImpl() {
 		this.dbConnexion = DBConnexion.getInstance();
@@ -79,8 +81,9 @@ public class CompanyDAOImpl {
 			throws SQLException {
 		PreparedStatement preparedStatement = connexion.prepareStatement(SQL_ALL_COMPANY_PAGINATION,
 				Statement.RETURN_GENERATED_KEYS);
-		preparedStatement.setInt(1, offset);
-		preparedStatement.setInt(2, OBJECT_NUMBER_PER_PAGE);
+
+		preparedStatement.setInt(1, OBJECT_NUMBER_PER_PAGE);
+		preparedStatement.setInt(2, offset);
 		return preparedStatement;
 	}
 

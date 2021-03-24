@@ -25,13 +25,21 @@ public class ComputerDAOImpl {
 	private static final String SQL_DELETE = "DELETE FROM computer WHERE id=?;";
 	private static final String SQL_SELECT = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued ,company.id as company_id, company.name as companyName  FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.id = ?;";
 	private static final String SQL_ALL_COMPUTER = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, company.id as company_id, company.name as companyName  FROM computer LEFT JOIN company ON computer.company_id=company.id;";
-	private static final String SQL_ALL_COMPUTER_PAGINATION = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, company.id as company_id, company.name as companyName  FROM computer LEFT JOIN company ON computer.company_id=company.id ORDER BY id LIMIT ?,?;";
+	private static final String SQL_ALL_COMPUTER_PAGINATION = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, company.id as company_id, company.name as companyName  FROM computer LEFT JOIN company ON computer.company_id=company.id ORDER BY id LIMIT ? OFFSET ?;";
 	private static final String SQL_COUNT_ALL_COMPUTER = "SELECT COUNT(computer.id) as nbComputer  FROM computer LEFT JOIN company ON computer.company_id=company.id;";
 
 	public ComputerDAOImpl() {
 
 		this.dbConnexion = DBConnexion.getInstance();
 		this.mapperComputer = new MapperComputer();
+	}
+
+	public DBConnexion getDbConnexion() {
+		return dbConnexion;
+	}
+
+	public void setDbConnexion(DBConnexion dbConnexion) {
+		this.dbConnexion = dbConnexion;
 	}
 
 	public void create(Computer computer) throws DAOException {
@@ -191,8 +199,9 @@ public class ComputerDAOImpl {
 			throws SQLException {
 		PreparedStatement preparedStatement = connexion.prepareStatement(SQL_ALL_COMPUTER_PAGINATION,
 				Statement.RETURN_GENERATED_KEYS);
-		preparedStatement.setInt(1, offset);
-		preparedStatement.setInt(2, objectPerPage);
+		preparedStatement.setInt(1, objectPerPage);
+		preparedStatement.setInt(2, offset);
+
 		return preparedStatement;
 	}
 

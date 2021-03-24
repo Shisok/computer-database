@@ -20,7 +20,6 @@ public class DAOConfigurationException extends RuntimeException {
 	public DAOConfigurationException(String message, Throwable cause) {
 		// LoggerCdb.logError(message, cause, getClass());
 		super(message, cause);
-
 	}
 
 }

@@ -12,10 +12,20 @@
 	<COMPANY id='10' name='RCA8' />
 	<COMPANY id='11' name='RCA9' />
 	<COMPANY id='12' name='RCA10' />
- 	<COMPUTER id='1' name='MacBook Pro 15.4 inch'
+	<COMPUTER id='1' name='MacBook Pro 15.4 inch'
 		introduced='1991-01-01' discontinued='1991-02-02' company_id='1' />
-	<COMPUTER id='2' name='CM-2a' introduced='1991-01-01'
-		discontinued='1991-02-02' company_id='2' />
+	<COMPUTER id='2' name='CM-2a' company_id='2' />
 	<COMPUTER id='3' name='CM-5' introduced='1991-01-01'
-		discontinued='1991-02-02' company_id='3' /> 
+		company_id='3' />
+	<COMPUTER id='5' name='CM-7' introduced='1991-04-01'
+		discontinued='1991-05-02' company_id='5' />
+	<COMPUTER id='6' name='CM-8' introduced='1995-04-01' />
+	<COMPUTER id='7' name='CM-9' />
+	<COMPUTER id='8' name='CM-10' />
+	<COMPUTER id='9' name='CM-11' />
+	<COMPUTER id='10' name='CM-12' />
+	<COMPUTER id='11' name='CM-13' company_id='8' />
+	<COMPUTER id='12' name='CM-14' />
+	<COMPUTER id='13' name='CM-15' />
+
 </dataset>

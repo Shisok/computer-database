@@ -25,7 +25,7 @@ public class ComputerValidator {
 		LocalDate introduced = computer.getIntroduced();
 		LocalDate discontinued = computer.getDiscontinued();
 
-		if ("".equals(name) || null == name || "\\s".equals(name)) {
+		if ("".equals(name) || null == name || name.matches("\\s*")) {
 			throw new ValidatorException(ComputerValidatorError.NONAME.getMessage());
 		}
 
