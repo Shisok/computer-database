@@ -60,7 +60,7 @@ public class DBConnexion {
 		return instance;
 	}
 
-	Connection getConnection() throws SQLException {
+	public Connection getConnection() throws SQLException {
 		return DriverManager.getConnection(url, username, password);
 	}
 

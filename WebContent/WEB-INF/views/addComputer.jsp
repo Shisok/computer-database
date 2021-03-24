@@ -15,7 +15,7 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="dashboard.html"> Application - Computer Database </a>
+            <a class="navbar-brand" href="dashboard.html" id="applicationTitle"> Application - Computer Database </a>
         </div>
     </header>
 
@@ -23,7 +23,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
-                    <h1>Add Computer</h1>
+                    <h1 id="addTitle">Add Computer</h1>
+                    
                     <form action="AddComputer" id="addComputerFrom" method="POST" >
                         <fieldset>
                             <div class="form-group">
@@ -59,6 +60,8 @@
                             <a href="${pageContext.request.contextPath}/ListComputer" class="btn btn-default">Cancel</a>
                         </div>
                     </form>
+                    <c:if test="${ !empty computerAdded }"><span id="computerAdded"><c:out
+										value="${computerAdded}"></c:out> </span></c:if>
                 </div>
             </div>
         </div>

@@ -84,6 +84,7 @@ public class AddComputer extends HttpServlet {
 			Computer computer = mapperComputer.mapFromDTOAddToModel(computerDTOAdd);
 			computerValidator.validationComputer(computer);
 			computerService.createComputer(computer);
+			request.setAttribute("computerAdded", "The computer was successfully added");
 			doGet(request, response);
 		} catch (ValidatorException e) {
 			LoggerCdb.logError(getClass(), e);
