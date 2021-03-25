@@ -34,14 +34,6 @@ public class ComputerDAOImpl {
 		this.mapperComputer = new MapperComputer();
 	}
 
-	public DBConnexion getDbConnexion() {
-		return dbConnexion;
-	}
-
-	public void setDbConnexion(DBConnexion dbConnexion) {
-		this.dbConnexion = dbConnexion;
-	}
-
 	public void create(Computer computer) throws DAOException {
 
 		ResultSet valeursAutoGenerees = null;

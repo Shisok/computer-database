@@ -30,14 +30,6 @@ public class CompanyDAOImpl {
 
 	}
 
-	public DBConnexion getDbConnexion() {
-		return dbConnexion;
-	}
-
-	public void setDbConnexion(DBConnexion dbConnexion) {
-		this.dbConnexion = dbConnexion;
-	}
-
 	public List<Company> searchAll() {
 		List<Company> companies = new ArrayList<>();
 
