@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 
 import com.excilys.cdb.dto.ComputerDTOAdd;
+import com.excilys.cdb.dto.ComputerDTOEdit;
 import com.excilys.cdb.dto.ComputerDTOList;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
@@ -70,6 +71,29 @@ public class MapperComputer {
 		}
 		computer = new Computer.ComputerBuilder(null).name(computerDTOAdd.getComputerName()).introduced(introduced)
 				.discontinued(discontinued).company(company).build();
+		return computer;
+	}
+
+	public Computer mapFromDTOEditToModel(ComputerDTOEdit computerDTOEdit) {
+		LocalDate introduced = null;
+		LocalDate discontinued = null;
+		Company company = new Company.CompanyBuilder(null).build();
+		Computer computer = new Computer.ComputerBuilder(null).build();
+		if (computerDTOEdit.getIntroduced() != null && computerDTOEdit.getIntroduced().compareTo("") != 0) {
+			introduced = LocalDate.parse(computerDTOEdit.getIntroduced());
+		}
+
+		if (computerDTOEdit.getDiscontinued() != null && computerDTOEdit.getDiscontinued().compareTo("") != 0) {
+			discontinued = LocalDate.parse(computerDTOEdit.getDiscontinued());
+		}
+
+		if (computerDTOEdit.getCompanyId() != null && computerDTOEdit.getCompanyId().compareTo("0") != 0) {
+			company = new Company.CompanyBuilder(Long.parseLong(computerDTOEdit.getCompanyId())).build();
+
+		}
+		computer = new Computer.ComputerBuilder(Long.valueOf(computerDTOEdit.getId()))
+				.name(computerDTOEdit.getComputerName()).introduced(introduced).discontinued(discontinued)
+				.company(company).build();
 		return computer;
 	}
 }

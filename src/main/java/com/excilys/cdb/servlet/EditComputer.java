@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.cdb.dto.CompanyDTO;
-import com.excilys.cdb.dto.ComputerDTOAdd;
+import com.excilys.cdb.dto.ComputerDTOEdit;
 import com.excilys.cdb.exception.ValidatorException;
 import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.mapper.MapperCompany;
@@ -24,10 +24,10 @@ import com.excilys.cdb.validator.ComputerValidator;
 import com.excilys.cdb.validator.ComputerValidatorError;
 
 /**
- * Servlet implementation class AddComputer
+ * Servlet implementation class EditComputer
  */
-@WebServlet("/AddComputer")
-public class AddComputer extends HttpServlet {
+@WebServlet("/EditComputer")
+public class EditComputer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private MapperCompany mapperCompany;
 	private MapperComputer mapperComputer;
@@ -39,8 +39,7 @@ public class AddComputer extends HttpServlet {
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public AddComputer() {
-
+	public EditComputer() {
 		mapperCompany = new MapperCompany();
 		companyService = new CompanyService();
 		mapperComputer = new MapperComputer();
@@ -55,13 +54,15 @@ public class AddComputer extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
 		List<Company> listCompanies = this.companyService.searchAllCompany();
 		List<CompanyDTO> listCompaniesDTO = listCompanies.stream().map(c -> mapperCompany.mapFromModelToDTO(c))
 				.collect(Collectors.toList());
 		request.setAttribute("listCompanies", listCompaniesDTO);
-		this.getServletContext().getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request, response);
-
+		String id = request.getParameter("id");
+		request.setAttribute("id", id);
+		String name = request.getParameter("name");
+		request.setAttribute("name", name);
+		this.getServletContext().getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request, response);
 	}
 
 	/**
@@ -71,19 +72,21 @@ public class AddComputer extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
 		try {
 			String computerName = request.getParameter("computerName");
 			String stringIntroduced = request.getParameter("introduced");
 
 			String stringDiscontinued = request.getParameter("discontinued");
 			String stringCompanyId = request.getParameter("companyId");
-
-			ComputerDTOAdd computerDTOAdd = new ComputerDTOAdd.ComputerDTOAddBuilder(computerName)
-					.introduced(stringIntroduced).discontinued(stringDiscontinued).company(stringCompanyId).build();
-			computerValidator.validationComputerDTOAdd(computerDTOAdd);
-			Computer computer = mapperComputer.mapFromDTOAddToModel(computerDTOAdd);
-			computerService.createComputer(computer);
-			request.setAttribute("computerAdded", "The computer was successfully added");
+			String stringComputerId = request.getParameter("id");
+			ComputerDTOEdit computerDTOEdit = new ComputerDTOEdit.ComputerDTOEditBuilder(computerName)
+					.introduced(stringIntroduced).discontinued(stringDiscontinued).company(stringCompanyId)
+					.id(stringComputerId).build();
+			computerValidator.validationComputerDTOEdit(computerDTOEdit);
+			Computer computer = mapperComputer.mapFromDTOEditToModel(computerDTOEdit);
+			computerService.updateComputer(computer);
+			request.setAttribute("computerEdited", "The computer was successfully updated");
 			doGet(request, response);
 		} catch (ValidatorException e) {
 			LoggerCdb.logError(getClass(), e);
@@ -104,5 +107,4 @@ public class AddComputer extends HttpServlet {
 			request.setAttribute("erreurDiscoBeforeIntro", e.getMessage());
 		}
 	}
-
 }

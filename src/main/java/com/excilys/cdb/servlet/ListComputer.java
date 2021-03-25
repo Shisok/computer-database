@@ -58,7 +58,6 @@ public class ListComputer extends HttpServlet {
 			setIndexDebutFin(page, session, pageMax);
 			request.setAttribute("pageMax", pageMax);
 			page.setContentPage(this.pageService.searchAllComputerPagination(numeroPage - 1, objectPerPage));
-
 			List<ComputerDTOList> listeComputers = page.getContentPage().stream()
 					.map(c -> mapperComputer.mapFromModelToDTOList(c)).collect(Collectors.toList());
 			request.setAttribute("listeComputers", listeComputers);

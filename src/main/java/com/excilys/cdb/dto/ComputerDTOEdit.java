@@ -1,48 +1,55 @@
 package com.excilys.cdb.dto;
 
-public class ComputerDTOAdd {
-
+public class ComputerDTOEdit {
 	private String computerName;
 	private String introduced;
 	private String discontinued;
 	private String companyId;
+	private String id;
 
-	public ComputerDTOAdd(ComputerDTOAddBuilder computerDTOAddBuilder) {
+	public ComputerDTOEdit(ComputerDTOEditBuilder computerDTOAddBuilder) {
 		this.computerName = computerDTOAddBuilder.computerName;
 		this.introduced = computerDTOAddBuilder.introduced;
 		this.discontinued = computerDTOAddBuilder.discontinued;
 		this.companyId = computerDTOAddBuilder.companyId;
+		this.id = computerDTOAddBuilder.id;
 	}
 
-	public static class ComputerDTOAddBuilder {
+	public static class ComputerDTOEditBuilder {
 		private String computerName;
 		private String introduced;
 		private String discontinued;
 		private String companyId;
+		private String id;
 
-		public ComputerDTOAddBuilder(String computerName) {
+		public ComputerDTOEditBuilder(String computerName) {
 			this.computerName = computerName;
 		}
 
-		public ComputerDTOAddBuilder introduced(String introduced) {
+		public ComputerDTOEditBuilder introduced(String introduced) {
 			this.introduced = introduced;
 			return this;
 		}
 
-		public ComputerDTOAddBuilder discontinued(String discontinued) {
+		public ComputerDTOEditBuilder discontinued(String discontinued) {
 			this.discontinued = discontinued;
 			return this;
 		}
 
-		public ComputerDTOAddBuilder company(String companyId) {
+		public ComputerDTOEditBuilder company(String companyId) {
 			this.companyId = companyId;
 			return this;
 		}
 
-		public ComputerDTOAdd build() {
-			ComputerDTOAdd computerDTOAdd = new ComputerDTOAdd(this);
+		public ComputerDTOEditBuilder id(String id) {
+			this.id = id;
+			return this;
+		}
 
-			return computerDTOAdd;
+		public ComputerDTOEdit build() {
+			ComputerDTOEdit computerDTOList = new ComputerDTOEdit(this);
+
+			return computerDTOList;
 		}
 
 	}
@@ -63,4 +70,7 @@ public class ComputerDTOAdd {
 		return companyId;
 	}
 
+	public String getId() {
+		return id;
+	}
 }

@@ -3,7 +3,7 @@ package com.excilys.cdb.validator;
 import java.time.LocalDate;
 
 import com.excilys.cdb.dto.ComputerDTOAdd;
-import com.excilys.cdb.dto.ComputerDTOList;
+import com.excilys.cdb.dto.ComputerDTOEdit;
 import com.excilys.cdb.exception.ValidatorException;
 
 public class ComputerValidator {
@@ -33,11 +33,11 @@ public class ComputerValidator {
 
 	}
 
-	public void validationComputerDTOAdd(ComputerDTOList computerDTOList) throws ValidatorException {
+	public void validationComputerDTOEdit(ComputerDTOEdit computerDTOEdit) throws ValidatorException {
 
-		String name = computerDTOList.getName();
-		String introduced = computerDTOList.getIntroduced();
-		String discontinued = computerDTOList.getDiscontinued();
+		String name = computerDTOEdit.getComputerName();
+		String introduced = computerDTOEdit.getIntroduced();
+		String discontinued = computerDTOEdit.getDiscontinued();
 
 		validateName(name);
 

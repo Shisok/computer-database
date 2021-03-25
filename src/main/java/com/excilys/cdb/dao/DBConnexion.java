@@ -3,11 +3,11 @@ package com.excilys.cdb.dao;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
 import com.excilys.cdb.exception.DAOConfigurationException;
+import com.zaxxer.hikari.HikariDataSource;
 
 public class DBConnexion {
 
@@ -17,14 +17,10 @@ public class DBConnexion {
 	private static final String PROPERTY_NOM_UTILISATEUR = "nomutilisateur";
 	private static final String PROPERTY_MOT_DE_PASSE = "motdepasse";
 
-	private String url;
-	private String username;
-	private String password;
+	private HikariDataSource ds;
 
-	private DBConnexion(String url, String username, String password) {
-		this.url = url;
-		this.username = username;
-		this.password = password;
+	private DBConnexion(HikariDataSource ds) {
+		this.ds = ds;
 	}
 
 	public static DBConnexion getInstance() throws DAOConfigurationException {
@@ -33,6 +29,7 @@ public class DBConnexion {
 		String driver;
 		String nomUtilisateur;
 		String motDePasse;
+		HikariDataSource ds;
 
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
@@ -44,24 +41,24 @@ public class DBConnexion {
 			driver = properties.getProperty(PROPERTY_DRIVER);
 			nomUtilisateur = properties.getProperty(PROPERTY_NOM_UTILISATEUR);
 			motDePasse = properties.getProperty(PROPERTY_MOT_DE_PASSE);
+			ds = new HikariDataSource();
+			ds.setDriverClassName(driver);
+			ds.setJdbcUrl(url);
+			ds.setPassword(motDePasse);
+			ds.setUsername(nomUtilisateur);
+
 		} catch (IOException e) {
 			throw new DAOConfigurationException("Impossible de charger le fichier properties " + FICHIER_PROPERTIES, e);
 		} catch (NullPointerException e) {
 			throw new DAOConfigurationException("Le fichier properties " + FICHIER_PROPERTIES + " est introuvable.");
 		}
 
-		try {
-			Class.forName(driver);
-		} catch (ClassNotFoundException e) {
-			throw new DAOConfigurationException("Le driver est introuvable dans le classpath.", e);
-		}
-
-		DBConnexion instance = new DBConnexion(url, nomUtilisateur, motDePasse);
+		DBConnexion instance = new DBConnexion(ds);
 		return instance;
 	}
 
 	public Connection getConnection() throws SQLException {
-		return DriverManager.getConnection(url, username, password);
+		return ds.getConnection();
 	}
 
 }

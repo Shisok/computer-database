@@ -32,7 +32,6 @@ formAdd.addEventListener("submit", function(event) {
 
 $(function() {
 	    $( "#addComputerFrom" ).submit(function( event ) {
-	    	console.log("thomas");
 	    	let name =$("#computerName").val();
 	    	let introduced = $("#introduced").val(); 
 	    	let discontinued = $("#discontinued").val();  

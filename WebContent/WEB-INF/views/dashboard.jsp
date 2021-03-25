@@ -19,7 +19,7 @@
 
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard.html" id="applicationTitle"> Application -
+			<a class="navbar-brand" href="ListComputer" id="applicationTitle"> Application -
 				Computer Database </a>
 		</div>
 	</header>
@@ -82,8 +82,8 @@
 					<c:forEach items="${listeComputers}" var="c">
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
-								class="cb" value="0"></td>
-							<td><a href="editComputer.html" onclick=""><c:out
+								class="cb" value="${c.getId()}"></td>
+							<td><a href="EditComputer?id=${c.getId()}&name=${c.getName()}" ><c:out
 										value="${c.getName()}"></c:out></a></td>
 							<td><c:out value="${c.getIntroduced()}"></c:out></td>
 							<td><c:out value="${c.getDiscontinued()}"></c:out></td>
