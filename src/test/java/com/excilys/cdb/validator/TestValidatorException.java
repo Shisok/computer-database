@@ -1,14 +1,12 @@
 package com.excilys.cdb.validator;
 
-import java.time.LocalDate;
-
 import org.hamcrest.CoreMatchers;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import com.excilys.cdb.dto.ComputerDTOAdd;
 import com.excilys.cdb.exception.ValidatorException;
-import com.excilys.cdb.model.Computer;
 
 public class TestValidatorException {
 
@@ -19,9 +17,9 @@ public class TestValidatorException {
 	public void testValidatorComputerNameNull() {
 		thrown.expect(ValidatorException.class);
 		thrown.expectMessage(CoreMatchers.equalTo(ComputerValidatorError.NONAME.getMessage()));
-		Computer computer = new Computer.ComputerBuilder(null).name(null).build();
+		ComputerDTOAdd computerDTOAdd = new ComputerDTOAdd.ComputerDTOAddBuilder(null).build();
 		ComputerValidator computerValidator = ComputerValidator.getInstance();
-		computerValidator.validationComputer(computer);
+		computerValidator.validationComputerDTOAdd(computerDTOAdd);
 
 	}
 
@@ -29,9 +27,9 @@ public class TestValidatorException {
 	public void testValidatorComputerNameEmpty() {
 		thrown.expect(ValidatorException.class);
 		thrown.expectMessage(CoreMatchers.equalTo(ComputerValidatorError.NONAME.getMessage()));
-		Computer computer = new Computer.ComputerBuilder(null).name("").build();
+		ComputerDTOAdd computerDTOAdd = new ComputerDTOAdd.ComputerDTOAddBuilder("").build();
 		ComputerValidator computerValidator = ComputerValidator.getInstance();
-		computerValidator.validationComputer(computer);
+		computerValidator.validationComputerDTOAdd(computerDTOAdd);
 
 	}
 
@@ -39,36 +37,36 @@ public class TestValidatorException {
 	public void testValidatorComputerNameWithBlank() {
 		thrown.expect(ValidatorException.class);
 		thrown.expectMessage(CoreMatchers.equalTo(ComputerValidatorError.NONAME.getMessage()));
-		Computer computer = new Computer.ComputerBuilder(null).name("    ").build();
+		ComputerDTOAdd computerDTOAdd = new ComputerDTOAdd.ComputerDTOAddBuilder("    ").build();
 		ComputerValidator computerValidator = ComputerValidator.getInstance();
-		computerValidator.validationComputer(computer);
+		computerValidator.validationComputerDTOAdd(computerDTOAdd);
 	}
 
 	@Test
 	public void testValidatorComputerDiscondWithoutIntro() {
 		thrown.expect(ValidatorException.class);
 		thrown.expectMessage(CoreMatchers.equalTo(ComputerValidatorError.NOINTRO.getMessage()));
-		Computer computer = new Computer.ComputerBuilder(null).name("test").discontinued(LocalDate.parse("2020-02-20"))
+		ComputerDTOAdd computerDTOAdd = new ComputerDTOAdd.ComputerDTOAddBuilder("test").discontinued("2020-02-20")
 				.build();
 		ComputerValidator computerValidator = ComputerValidator.getInstance();
-		computerValidator.validationComputer(computer);
+		computerValidator.validationComputerDTOAdd(computerDTOAdd);
 	}
 
 	@Test
 	public void testValidatorComputerDiscondBeforeIntro() {
 		thrown.expect(ValidatorException.class);
 		thrown.expectMessage(CoreMatchers.equalTo(ComputerValidatorError.INTROBEFOREDISCON.getMessage()));
-		Computer computer = new Computer.ComputerBuilder(null).name("test").introduced(LocalDate.parse("2020-04-20"))
-				.discontinued(LocalDate.parse("2020-02-20")).build();
+		ComputerDTOAdd computerDTOAdd = new ComputerDTOAdd.ComputerDTOAddBuilder("test").introduced("2020-04-20")
+				.discontinued("2020-02-20").build();
 		ComputerValidator computerValidator = ComputerValidator.getInstance();
-		computerValidator.validationComputer(computer);
+		computerValidator.validationComputerDTOAdd(computerDTOAdd);
 	}
 
 	@Test
 	public void testValidatorComputerCorrect() {
-		Computer computer = new Computer.ComputerBuilder(null).name("test").introduced(LocalDate.parse("2020-01-20"))
-				.discontinued(LocalDate.parse("2020-02-20")).build();
+		ComputerDTOAdd computerDTOAdd = new ComputerDTOAdd.ComputerDTOAddBuilder("test").introduced("2020-01-20")
+				.discontinued("2020-02-20").build();
 		ComputerValidator computerValidator = ComputerValidator.getInstance();
-		computerValidator.validationComputer(computer);
+		computerValidator.validationComputerDTOAdd(computerDTOAdd);
 	}
 }

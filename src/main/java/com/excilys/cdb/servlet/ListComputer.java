@@ -19,7 +19,6 @@ import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.service.PageService;
-import com.excilys.cdb.validator.ComputerValidator;
 
 /**
  * Servlet implementation class ListComputer
@@ -30,7 +29,6 @@ public class ListComputer extends HttpServlet {
 	private ComputerService computerService;
 	private PageService pageService;
 	private MapperComputer mapperComputer;
-	private ComputerValidator computerValidator;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -40,8 +38,6 @@ public class ListComputer extends HttpServlet {
 		this.computerService = new ComputerService();
 		this.pageService = new PageService();
 		this.mapperComputer = new MapperComputer();
-		this.computerValidator = ComputerValidator.getInstance();
-
 	}
 
 	/**
@@ -62,7 +58,7 @@ public class ListComputer extends HttpServlet {
 			setIndexDebutFin(page, session, pageMax);
 			request.setAttribute("pageMax", pageMax);
 			page.setContentPage(this.pageService.searchAllComputerPagination(numeroPage - 1, objectPerPage));
-			page.getContentPage().stream().forEach(c -> computerValidator.validationComputer(c));
+
 			List<ComputerDTOList> listeComputers = page.getContentPage().stream()
 					.map(c -> mapperComputer.mapFromModelToDTOList(c)).collect(Collectors.toList());
 			request.setAttribute("listeComputers", listeComputers);

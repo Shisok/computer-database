@@ -80,9 +80,8 @@ public class AddComputer extends HttpServlet {
 
 			ComputerDTOAdd computerDTOAdd = new ComputerDTOAdd.ComputerDTOAddBuilder(computerName)
 					.introduced(stringIntroduced).discontinued(stringDiscontinued).company(stringCompanyId).build();
-
+			computerValidator.validationComputerDTOAdd(computerDTOAdd);
 			Computer computer = mapperComputer.mapFromDTOAddToModel(computerDTOAdd);
-			computerValidator.validationComputer(computer);
 			computerService.createComputer(computer);
 			request.setAttribute("computerAdded", "The computer was successfully added");
 			doGet(request, response);
