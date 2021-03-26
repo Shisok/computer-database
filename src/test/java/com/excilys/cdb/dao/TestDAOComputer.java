@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.model.Page;
 
 public class TestDAOComputer extends DataSourceDBUnitTest {
 
@@ -45,8 +46,10 @@ public class TestDAOComputer extends DataSourceDBUnitTest {
 //		Connection conn = getDataSource().getConnection();
 
 		ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl();
-
-		List<Computer> computers = computerDAOImpl.searchAllPagination(0, 10);
+		Page<Computer> pageComputer = new Page<Computer>();
+		pageComputer.setPageInt(0);
+		pageComputer.setObjetPerPage(10);
+		List<Computer> computers = computerDAOImpl.searchAllPagination(pageComputer);
 		assertEquals(10, computers.size());
 	}
 
@@ -77,11 +80,8 @@ public class TestDAOComputer extends DataSourceDBUnitTest {
 				.getResourceAsStream("com/excilys/cdb/dao/dataExpectedDeleteComputer.xml")) {
 			IDataSet expectedDataSet = new FlatXmlDataSetBuilder().build(is);
 			ITable expectedTable = expectedDataSet.getTable("COMPUTER");
-
 			// Connection conn = getDataSource().getConnection();
-
 			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl();
-
 			computerDAOImpl.delete(4L);
 			ITable actualData = getConnection().createQueryTable("result_name", "SELECT * FROM COMPUTER ");
 			assertEqualsIgnoreCols(expectedTable, actualData, new String[] { "id" });

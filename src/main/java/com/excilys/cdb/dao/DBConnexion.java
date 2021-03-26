@@ -8,7 +8,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 public class DBConnexion {
-
+	private static DBConnexion instance;
 	private HikariDataSource ds;
 
 	private DBConnexion(HikariDataSource ds) {
@@ -16,9 +16,10 @@ public class DBConnexion {
 	}
 
 	public static DBConnexion getInstance() throws DAOConfigurationException {
-
-		DBConnexion instance = new DBConnexion(
-				new HikariDataSource(new HikariConfig("/com/excilys/cdb/dao/datasource.properties")));
+		if (instance == null) {
+			instance = new DBConnexion(
+					new HikariDataSource(new HikariConfig("/com/excilys/cdb/dao/datasource.properties")));
+		}
 		return instance;
 	}
 

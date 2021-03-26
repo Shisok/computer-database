@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.excilys.cdb.dto.ComputerDTOList;
+import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.mapper.MapperComputer;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
@@ -48,6 +49,7 @@ public class ListComputer extends HttpServlet {
 
 		Page<Computer> page = new Page<Computer>();
 		HttpSession session = request.getSession();
+		setOrderBy(page, session);
 		int nbComputer = countComputer(request);
 		setObjectPerPage(page, session);
 		int objectPerPage = page.getObjetPerPage();
@@ -55,15 +57,34 @@ public class ListComputer extends HttpServlet {
 		if (nbComputer % objectPerPage != 0) {
 			pageMax += 1;
 		}
-		int numeroPage = setPageInt(request, page, session);
+		setPageInt(request, page, session);
 		setIndexDebutFin(page, session, pageMax);
 		request.setAttribute("pageMax", pageMax);
-		page.setContentPage(this.pageService.searchAllComputerPagination(numeroPage - 1, objectPerPage));
+		page.setContentPage(this.pageService.searchAllComputerPagination(page));
 		List<ComputerDTOList> listeComputers = page.getContentPage().stream()
 				.map(c -> mapperComputer.mapFromModelToDTOList(c)).collect(Collectors.toList());
 		request.setAttribute("listeComputers", listeComputers);
 		this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
 
+	}
+
+	private void setOrderBy(Page<Computer> page, HttpSession session) {
+		if (session.getAttribute("orderAttribute") != null) {
+			LoggerCdb.logInfo(getClass(), "=========================================");
+			page.setOrderAttribute((String) session.getAttribute("orderAttribute"));
+		} else {
+			session.setAttribute("orderAttribute", "id");
+		}
+		if (session.getAttribute("orderSort") != null) {
+			page.setOrderSort((String) session.getAttribute("orderSort"));
+		} else {
+			session.setAttribute("orderSort", "asc");
+		}
+
+		LoggerCdb.logInfo(getClass(), session.getAttribute("orderAttribute") + "sessionList");
+		LoggerCdb.logInfo(getClass(), session.getAttribute("orderSort") + "sessionLiset");
+		LoggerCdb.logInfo(getClass(), page.getOrderAttribute() + "pageList");
+		LoggerCdb.logInfo(getClass(), page.getOrderSort() + "pageList");
 	}
 
 	private void setIndexDebutFin(Page<Computer> page, HttpSession session, int pageMax) {
@@ -72,7 +93,7 @@ public class ListComputer extends HttpServlet {
 		session.setAttribute("indexFin", page.getIndexFin());
 	}
 
-	private int setPageInt(HttpServletRequest request, Page<Computer> page, HttpSession session) {
+	private void setPageInt(HttpServletRequest request, Page<Computer> page, HttpSession session) {
 		String stringNumeroDePage = request.getParameter("pageno");
 		if (stringNumeroDePage == null) {
 			session.setAttribute("pageno", 1);
@@ -80,8 +101,7 @@ public class ListComputer extends HttpServlet {
 		}
 		int numeroPage = Integer.parseInt(stringNumeroDePage);
 		request.setAttribute("numeroPage", numeroPage);
-		page.setPageInt(numeroPage);
-		return numeroPage;
+		page.setPageInt(numeroPage - 1);
 
 	}
 

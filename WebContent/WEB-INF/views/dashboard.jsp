@@ -42,14 +42,17 @@
 					<a class="btn btn-success" id="addComputer"
 						href="${pageContext.request.contextPath}/AddComputer">Add
 						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
-						onclick="$.fn.toggleEditMode();">Edit</a><a class="btn btn-default" id="orderComputer" href="#"
-						onclick="$.fn.toggleOrderComputer();">Order by Id</a>
+						onclick="$.fn.toggleEditMode();">Edit</a>
 				</div>
 			</div>
 		</div>
 
 		<form id="deleteForm" action="DeleteComputer" method="POST">
 			<input type="hidden" name="selection" value="">
+		</form>
+		
+		<form id="orderForm" action="OrderBy" method="POST">
+			<input type="hidden" name="orderByAttribute" value="">
 		</form>
 
 		<div class="container" style="margin-top: 10px;">
@@ -66,12 +69,24 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th>Computer name</th>
-						<th>Introduced date</th>
+						<th><a href="#"
+							id="orderName"
+							onclick="$.fn.orderBy('computer.name');"><i
+								class="fa fa-sort"></i></a> Computer name</th>
+						<th><a href="#"
+							id="orderName"
+							onclick="$.fn.orderBy('computer.introduced');"><i
+								class="fa fa-sort"></i></a>Introduced date</th>
 						<!-- Table header for Discontinued Date -->
-						<th>Discontinued date</th>
+						<th><a href="#"
+							id="orderName"
+							onclick="$.fn.orderBy('computer.discontinued');"><i
+								class="fa fa-sort"></i></a>Discontinued date</th>
 						<!-- Table header for Company -->
-						<th>Company</th>
+						<th><a href="#"
+							id="orderName"
+							onclick="$.fn.orderBy('company.name');"><i
+								class="fa fa-sort"></i></a>Company</th>
 
 					</tr>
 				</thead>

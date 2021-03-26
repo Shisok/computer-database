@@ -14,6 +14,7 @@ import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.mapper.MapperComputer;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.model.Page;
 import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 
 public class ComputerDAOImpl {
@@ -24,8 +25,8 @@ public class ComputerDAOImpl {
 	private static final String SQL_UPDATE = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?;";
 	private static final String SQL_DELETE = "DELETE FROM computer WHERE id=?;";
 	private static final String SQL_SELECT = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued ,company.id as company_id, company.name as companyName  FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.id = ?;";
-	private static final String SQL_ALL_COMPUTER = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, company.id as company_id, company.name as companyName  FROM computer LEFT JOIN company ON computer.company_id=company.id;";
-	private static final String SQL_ALL_COMPUTER_PAGINATION = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, company.id as company_id, company.name as companyName  FROM computer LEFT JOIN company ON computer.company_id=company.id ORDER BY id LIMIT ? OFFSET ?;";
+	private static final String SQL_ALL_COMPUTER = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, company.id as company_id, company.name as companyName  FROM computer LEFT JOIN company ON computer.company_id=company.id ORDER BY id;";
+	private static final String SQL_ALL_COMPUTER_PAGINATION = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, company.id as company_id, company.name as companyName  FROM computer LEFT JOIN company ON computer.company_id=company.id ORDER BY ORDERATTRIBUTE ORDERSORT LIMIT ? OFFSET ?;";
 	private static final String SQL_COUNT_ALL_COMPUTER = "SELECT COUNT(computer.id) as nbComputer  FROM computer LEFT JOIN company ON computer.company_id=company.id;";
 	private static final String SQL_SEARCH_BY_NAME_COMPA_COMPU = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued ,company.id as company_id, company.name as companyName  FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.name LIKE ? OR company.name LIKE ? ORDER BY id LIMIT ? OFFSET ?;";
 	private static final String SQL_SEARCH_BY_NAME_COUNT = "SELECT COUNT(computer.id) as nbComputer FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.name LIKE ? OR company.name LIKE ? ;";
@@ -169,12 +170,11 @@ public class ComputerDAOImpl {
 		return computers;
 	}
 
-	public List<Computer> searchAllPagination(int page, int objectPerPage) {
+	public List<Computer> searchAllPagination(Page<Computer> page) {
 		List<Computer> computers = new ArrayList<>();
 
-		int offset = page * objectPerPage;
 		try (Connection connexion = dbConnexion.getConnection();
-				PreparedStatement preparedStatement = createPrepaStateForPagination(connexion, offset, objectPerPage);
+				PreparedStatement preparedStatement = createPrepaStateForPagination(connexion, page);
 				ResultSet resultSet = preparedStatement.executeQuery();) {
 
 			while (resultSet.next()) {
@@ -189,12 +189,14 @@ public class ComputerDAOImpl {
 		return computers;
 	}
 
-	private static PreparedStatement createPrepaStateForPagination(Connection connexion, int offset, int objectPerPage)
+	private static PreparedStatement createPrepaStateForPagination(Connection connexion, Page<Computer> page)
 			throws SQLException {
-		PreparedStatement preparedStatement = connexion.prepareStatement(SQL_ALL_COMPUTER_PAGINATION);
-		preparedStatement.setInt(1, objectPerPage);
-		preparedStatement.setInt(2, offset);
+		PreparedStatement preparedStatement = connexion.prepareStatement(SQL_ALL_COMPUTER_PAGINATION
+				.replace("ORDERATTRIBUTE", page.getOrderAttribute()).replace("ORDERSORT", page.getOrderSort()));
 
+		preparedStatement.setInt(1, page.getObjetPerPage());
+		preparedStatement.setInt(2, page.getObjetPerPage() * page.getPageInt());
+		LoggerCdb.logInfo(Computer.class, preparedStatement.toString() + "===========");
 		return preparedStatement;
 	}
 

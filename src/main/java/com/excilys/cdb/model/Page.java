@@ -12,6 +12,8 @@ public class Page<E> {
 	private int objetPerPage;
 	private int indexDebut;
 	private int indexFin;
+	private String orderAttribute;
+	private String orderSort;
 
 	public Page() {
 		this.pageInt = 0;
@@ -20,6 +22,24 @@ public class Page<E> {
 		this.objetPerPage = 10;
 		this.indexDebut = 0;
 		this.indexFin = 0;
+		this.orderAttribute = "id";
+		this.orderSort = "asc";
+	}
+
+	public String getOrderAttribute() {
+		return orderAttribute;
+	}
+
+	public void setOrderAttribute(String orderAttribute) {
+		this.orderAttribute = orderAttribute;
+	}
+
+	public String getOrderSort() {
+		return orderSort;
+	}
+
+	public void setOrderSort(String orderSort) {
+		this.orderSort = orderSort;
 	}
 
 	public List<E> getContentPage() {

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.model.Page;
 import com.excilys.cdb.service.PageService;
 
 public class PageController {
@@ -15,9 +16,9 @@ public class PageController {
 		pageService = new PageService();
 	}
 
-	public List<Computer> searchAllComputerPagination(int pageInt, int objectPerPage) {
+	public List<Computer> searchAllComputerPagination(Page<Computer> page) {
 
-		return pageService.searchAllComputerPagination(pageInt, objectPerPage);
+		return pageService.searchAllComputerPagination(page);
 	}
 
 	public List<Company> searchAllCompanyPagination(int pageInt) {

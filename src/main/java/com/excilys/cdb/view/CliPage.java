@@ -120,15 +120,13 @@ public class CliPage {
 
 			do {
 
-				pageComputer.setContentPage(pageController.searchAllComputerPagination(pageComputer.getPageInt(),
-						pageComputer.getObjetPerPage()));
+				pageComputer.setContentPage(pageController.searchAllComputerPagination(pageComputer));
 				if (pageComputer.getContentPage().isEmpty()) {
 					System.out.println("Page " + pageComputer.getPageInt() + " doesn't exist.");
 					pageComputer.setPageInt(pageComputer.getPageInitial());
 				}
 
-				pageComputer.setContentPage(pageController.searchAllComputerPagination(pageComputer.getPageInt(),
-						pageComputer.getObjetPerPage()));
+				pageComputer.setContentPage(pageController.searchAllComputerPagination(pageComputer));
 				System.out.println("Page " + pageComputer.getPageInt());
 				pageComputer.getContentPage().stream().forEach(c -> System.out.println(c.toString()));
 

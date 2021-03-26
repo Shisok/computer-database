@@ -10,6 +10,7 @@ import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.model.Page;
 import com.excilys.cdb.view.CliPage;
 
 public class PageService {
@@ -23,10 +24,10 @@ public class PageService {
 	 * @param pageInt the page searched
 	 * @return
 	 */
-	public List<Computer> searchAllComputerPagination(int pageInt, int objectPerPage) {
+	public List<Computer> searchAllComputerPagination(Page<Computer> page) {
 		try {
 			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl();
-			return computerDAOImpl.searchAllPagination(pageInt, objectPerPage);
+			return computerDAOImpl.searchAllPagination(page);
 		} catch (
 
 		DAOException e) {
