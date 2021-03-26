@@ -33,8 +33,11 @@
 	<!-- Pour modifier le niveau de log dans un package -->
 	<!-- <logger name="com.baeldung.logback.tests" level="WARN" /> -->
 
-	<root level="debug">
-		<appender-ref ref="STDOUT" />
+	<root level="DEBUG">
 		<appender-ref ref="FILE" />
 	</root>
+
+	<logger level="info" name="STDOUT">
+		<appender-ref ref="STDOUT" />
+	</logger>
 </configuration>

@@ -42,12 +42,13 @@
 					<a class="btn btn-success" id="addComputer"
 						href="${pageContext.request.contextPath}/AddComputer">Add
 						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
-						onclick="$.fn.toggleEditMode();">Edit</a>
+						onclick="$.fn.toggleEditMode();">Edit</a><a class="btn btn-default" id="orderComputer" href="#"
+						onclick="$.fn.toggleOrderComputer();">Order by Id</a>
 				</div>
 			</div>
 		</div>
 
-		<form id="deleteForm" action="#" method="POST">
+		<form id="deleteForm" action="DeleteComputer" method="POST">
 			<input type="hidden" name="selection" value="">
 		</form>
 
@@ -169,6 +170,6 @@
 	<script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
 	<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
 	<script src="${pageContext.request.contextPath}/js/dashboard.js"></script>
-
+	<script src="${pageContext.request.contextPath}/js/orderBy.js"></script>
 </body>
 </html>
