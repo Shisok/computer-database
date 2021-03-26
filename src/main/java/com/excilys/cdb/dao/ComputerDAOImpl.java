@@ -28,7 +28,7 @@ public class ComputerDAOImpl {
 	private static final String SQL_ALL_COMPUTER = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, company.id as company_id, company.name as companyName  FROM computer LEFT JOIN company ON computer.company_id=company.id ORDER BY id;";
 	private static final String SQL_ALL_COMPUTER_PAGINATION = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, company.id as company_id, company.name as companyName  FROM computer LEFT JOIN company ON computer.company_id=company.id ORDER BY ORDERATTRIBUTE ORDERSORT LIMIT ? OFFSET ?;";
 	private static final String SQL_COUNT_ALL_COMPUTER = "SELECT COUNT(computer.id) as nbComputer  FROM computer LEFT JOIN company ON computer.company_id=company.id;";
-	private static final String SQL_SEARCH_BY_NAME_COMPA_COMPU = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued ,company.id as company_id, company.name as companyName  FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.name LIKE ? OR company.name LIKE ? ORDER BY id LIMIT ? OFFSET ?;";
+	private static final String SQL_SEARCH_BY_NAME_COMPA_COMPU = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued ,company.id as company_id, company.name as companyName  FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.name LIKE ? OR company.name LIKE ? ORDER BY ORDERATTRIBUTE ORDERSORT LIMIT ? OFFSET ?;";
 	private static final String SQL_SEARCH_BY_NAME_COUNT = "SELECT COUNT(computer.id) as nbComputer FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.name LIKE ? OR company.name LIKE ? ;";
 
 	public ComputerDAOImpl() {
@@ -196,7 +196,7 @@ public class ComputerDAOImpl {
 
 		preparedStatement.setInt(1, page.getObjetPerPage());
 		preparedStatement.setInt(2, page.getObjetPerPage() * page.getPageInt());
-		LoggerCdb.logInfo(Computer.class, preparedStatement.toString() + "===========");
+
 		return preparedStatement;
 	}
 
@@ -248,11 +248,10 @@ public class ComputerDAOImpl {
 	}
 
 	// TO DO name pagination
-	public List<Computer> searchNamePagination(int offset, int objectPerPage, String name) throws DAOException {
+	public List<Computer> searchNamePagination(Page<Computer> page, String name) throws DAOException {
 		List<Computer> computers = new ArrayList<>();
 		try (Connection connexion = dbConnexion.getConnection();
-				PreparedStatement preparedStatement = createPrepaStateForPaginationSearchName(connexion, offset,
-						objectPerPage, name);
+				PreparedStatement preparedStatement = createPrepaStateForPaginationSearchName(connexion, page, name);
 				ResultSet resultSet = preparedStatement.executeQuery();) {
 
 			while (resultSet.next()) {
@@ -266,13 +265,14 @@ public class ComputerDAOImpl {
 		return computers;
 	}
 
-	private static PreparedStatement createPrepaStateForPaginationSearchName(Connection connexion, int offset,
-			int objectPerPage, String name) throws SQLException {
-		PreparedStatement preparedStatement = connexion.prepareStatement(SQL_SEARCH_BY_NAME_COMPA_COMPU);
+	private static PreparedStatement createPrepaStateForPaginationSearchName(Connection connexion, Page<Computer> page,
+			String name) throws SQLException {
+		PreparedStatement preparedStatement = connexion.prepareStatement(SQL_SEARCH_BY_NAME_COMPA_COMPU
+				.replace("ORDERATTRIBUTE", page.getOrderAttribute()).replace("ORDERSORT", page.getOrderSort()));
 		preparedStatement.setString(1, "%" + name + "%");
 		preparedStatement.setString(2, "%" + name + "%");
-		preparedStatement.setInt(3, objectPerPage);
-		preparedStatement.setInt(4, offset);
+		preparedStatement.setInt(3, page.getObjetPerPage());
+		preparedStatement.setInt(4, page.getObjetPerPage() * page.getPageInt());
 
 		return preparedStatement;
 	}

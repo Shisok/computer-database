@@ -9,8 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.excilys.cdb.logger.LoggerCdb;
-
 /**
  * Servlet implementation class OrderBy
  */
@@ -45,10 +43,7 @@ public class OrderBy extends HttpServlet {
 			throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		String orderAttribute = request.getParameter("orderByAttribute");
-		LoggerCdb.logInfo(getClass(), orderAttribute + "request");
-		LoggerCdb.logInfo(getClass(), session.getAttribute("orderAttribute") + "session");
 
-		LoggerCdb.logInfo(getClass(), session.getAttribute("orderSort") + "session");
 		String orderAttributeSession = (String) session.getAttribute("orderAttribute");
 		String sortOrderSession = (String) session.getAttribute("orderSort");
 		if (orderAttribute.equals(orderAttributeSession)) {
@@ -61,7 +56,12 @@ public class OrderBy extends HttpServlet {
 		} else {
 			session.setAttribute("orderAttribute", orderAttribute);
 		}
-		this.getServletContext().getRequestDispatcher("/ListComputer").forward(request, response);
+		if (request.getParameter("search") != null) {
+
+			this.getServletContext().getRequestDispatcher("/SearchComputer").forward(request, response);
+		} else {
+			this.getServletContext().getRequestDispatcher("/ListComputer").forward(request, response);
+		}
 	}
 
 }

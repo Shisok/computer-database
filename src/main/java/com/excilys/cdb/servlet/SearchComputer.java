@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.excilys.cdb.dto.ComputerDTOList;
+import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.mapper.MapperComputer;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
@@ -49,7 +50,9 @@ public class SearchComputer extends HttpServlet {
 		Page<Computer> page = new Page<Computer>();
 		String name = request.getParameter("search");
 		request.setAttribute("search", name);
+		LoggerCdb.logInfo(getClass(), request.getParameter("search"));
 		HttpSession session = request.getSession();
+		setOrderBy(page, session);
 		int nbComputer = countComputer(request, name);
 		setObjectPerPage(page, session);
 		int objectPerPage = page.getObjetPerPage();
@@ -57,11 +60,11 @@ public class SearchComputer extends HttpServlet {
 		if (nbComputer % objectPerPage != 0) {
 			pageMax += 1;
 		}
-		int numeroPage = setPageInt(request, page, session);
+		setPageInt(request, page, session);
 		setIndexDebutFin(page, session, pageMax);
 		request.setAttribute("pageMax", pageMax);
 		request.setAttribute("searchPage", true);
-		page.setContentPage(this.pageService.searchNamePagination(numeroPage - 1, objectPerPage, name));
+		page.setContentPage(this.pageService.searchNamePagination(page, name));
 		List<ComputerDTOList> listeComputers = page.getContentPage().stream()
 				.map(c -> mapperComputer.mapFromModelToDTOList(c)).collect(Collectors.toList());
 		request.setAttribute("listeComputers", listeComputers);
@@ -74,7 +77,7 @@ public class SearchComputer extends HttpServlet {
 		session.setAttribute("indexFin", page.getIndexFin());
 	}
 
-	private int setPageInt(HttpServletRequest request, Page<Computer> page, HttpSession session) {
+	private void setPageInt(HttpServletRequest request, Page<Computer> page, HttpSession session) {
 		String stringNumeroDePage = request.getParameter("pageno");
 		if (stringNumeroDePage == null) {
 			session.setAttribute("pageno", 1);
@@ -82,8 +85,7 @@ public class SearchComputer extends HttpServlet {
 		}
 		int numeroPage = Integer.parseInt(stringNumeroDePage);
 		request.setAttribute("numeroPage", numeroPage);
-		page.setPageInt(numeroPage);
-		return numeroPage;
+		page.setPageInt(numeroPage - 1);
 
 	}
 
@@ -99,6 +101,21 @@ public class SearchComputer extends HttpServlet {
 		int nbComputer = this.computerService.searchNameCount(name);
 		request.setAttribute("countComputer", nbComputer + "");
 		return nbComputer;
+	}
+
+	private void setOrderBy(Page<Computer> page, HttpSession session) {
+		if (session.getAttribute("orderAttribute") != null) {
+
+			page.setOrderAttribute((String) session.getAttribute("orderAttribute"));
+		} else {
+			session.setAttribute("orderAttribute", "id");
+		}
+		if (session.getAttribute("orderSort") != null) {
+			page.setOrderSort((String) session.getAttribute("orderSort"));
+		} else {
+			session.setAttribute("orderSort", "asc");
+		}
+
 	}
 
 	/**

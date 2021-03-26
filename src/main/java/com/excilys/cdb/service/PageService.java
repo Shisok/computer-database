@@ -38,10 +38,10 @@ public class PageService {
 		return new ArrayList<Computer>();
 	}
 
-	public List<Computer> searchNamePagination(int pageInt, int objectPerPage, String name) {
+	public List<Computer> searchNamePagination(Page<Computer> page, String name) {
 		try {
 			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl();
-			return computerDAOImpl.searchNamePagination(pageInt, objectPerPage, name);
+			return computerDAOImpl.searchNamePagination(page, name);
 		} catch (DAOException e) {
 			LoggerCdb.logError(getClass(), e);
 		} catch (DAOConfigurationException e) {

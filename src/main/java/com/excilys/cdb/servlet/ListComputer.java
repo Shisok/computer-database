@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.excilys.cdb.dto.ComputerDTOList;
-import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.mapper.MapperComputer;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
@@ -70,7 +69,7 @@ public class ListComputer extends HttpServlet {
 
 	private void setOrderBy(Page<Computer> page, HttpSession session) {
 		if (session.getAttribute("orderAttribute") != null) {
-			LoggerCdb.logInfo(getClass(), "=========================================");
+
 			page.setOrderAttribute((String) session.getAttribute("orderAttribute"));
 		} else {
 			session.setAttribute("orderAttribute", "id");
@@ -81,10 +80,6 @@ public class ListComputer extends HttpServlet {
 			session.setAttribute("orderSort", "asc");
 		}
 
-		LoggerCdb.logInfo(getClass(), session.getAttribute("orderAttribute") + "sessionList");
-		LoggerCdb.logInfo(getClass(), session.getAttribute("orderSort") + "sessionLiset");
-		LoggerCdb.logInfo(getClass(), page.getOrderAttribute() + "pageList");
-		LoggerCdb.logInfo(getClass(), page.getOrderSort() + "pageList");
 	}
 
 	private void setIndexDebutFin(Page<Computer> page, HttpSession session, int pageMax) {

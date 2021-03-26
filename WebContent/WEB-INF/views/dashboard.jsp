@@ -52,7 +52,8 @@
 		</form>
 		
 		<form id="orderForm" action="OrderBy" method="POST">
-			<input type="hidden" name="orderByAttribute" value="">
+			<input type="hidden"  name="orderByAttribute" value="">
+			<c:if test="${ !empty search }"> <input type="hidden"  name="search" value="${search}"> </c:if>
 		</form>
 
 		<div class="container" style="margin-top: 10px;">
