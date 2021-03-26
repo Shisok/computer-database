@@ -19,10 +19,11 @@ import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.service.PageService;
 
 /**
- * Servlet implementation class ListComputer
+ * Servlet implementation class SearchComputer
  */
-@WebServlet("/ListComputer")
-public class ListComputer extends HttpServlet {
+@WebServlet("/SearchComputer")
+public class SearchComputer extends HttpServlet {
+
 	private static final long serialVersionUID = 1L;
 	private ComputerService computerService;
 	private PageService pageService;
@@ -31,7 +32,7 @@ public class ListComputer extends HttpServlet {
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public ListComputer() {
+	public SearchComputer() {
 		super();
 		this.computerService = new ComputerService();
 		this.pageService = new PageService();
@@ -45,10 +46,11 @@ public class ListComputer extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
 		Page<Computer> page = new Page<Computer>();
+		String name = request.getParameter("search");
+		request.setAttribute("search", name);
 		HttpSession session = request.getSession();
-		int nbComputer = countComputer(request);
+		int nbComputer = countComputer(request, name);
 		setObjectPerPage(page, session);
 		int objectPerPage = page.getObjetPerPage();
 		int pageMax = nbComputer / objectPerPage;
@@ -58,12 +60,12 @@ public class ListComputer extends HttpServlet {
 		int numeroPage = setPageInt(request, page, session);
 		setIndexDebutFin(page, session, pageMax);
 		request.setAttribute("pageMax", pageMax);
-		page.setContentPage(this.pageService.searchAllComputerPagination(numeroPage - 1, objectPerPage));
+		request.setAttribute("searchPage", true);
+		page.setContentPage(this.pageService.searchNamePagination(numeroPage - 1, objectPerPage, name));
 		List<ComputerDTOList> listeComputers = page.getContentPage().stream()
 				.map(c -> mapperComputer.mapFromModelToDTOList(c)).collect(Collectors.toList());
 		request.setAttribute("listeComputers", listeComputers);
 		this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
-
 	}
 
 	private void setIndexDebutFin(Page<Computer> page, HttpSession session, int pageMax) {
@@ -93,8 +95,8 @@ public class ListComputer extends HttpServlet {
 		page.setObjetPerPage(Integer.parseInt(stringNombreObjet));
 	}
 
-	private int countComputer(HttpServletRequest request) {
-		int nbComputer = this.computerService.countComputer();
+	private int countComputer(HttpServletRequest request, String name) {
+		int nbComputer = this.computerService.searchNameCount(name);
 		request.setAttribute("countComputer", nbComputer + "");
 		return nbComputer;
 	}
@@ -107,10 +109,6 @@ public class ListComputer extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		HttpSession session = request.getSession();
-
-		String stringNombreObjet = request.getParameter("nbObject");
-		session.setAttribute("nbObject", stringNombreObjet);
 		doGet(request, response);
 	}
 

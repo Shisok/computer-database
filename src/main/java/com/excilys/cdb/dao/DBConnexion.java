@@ -46,7 +46,9 @@ public class DBConnexion {
 			ds.setJdbcUrl(url);
 			ds.setPassword(motDePasse);
 			ds.setUsername(nomUtilisateur);
-
+			ds.setConnectionTimeout(34000);
+			ds.setIdleTimeout(28740000);
+			ds.setMaxLifetime(28740000);
 		} catch (IOException e) {
 			throw new DAOConfigurationException("Impossible de charger le fichier properties " + FICHIER_PROPERTIES, e);
 		} catch (NullPointerException e) {

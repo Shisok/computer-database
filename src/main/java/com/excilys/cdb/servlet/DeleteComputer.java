@@ -19,11 +19,12 @@ import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.service.PageService;
 
 /**
- * Servlet implementation class ListComputer
+ * Servlet implementation class DeleteComputer
  */
-@WebServlet("/ListComputer")
-public class ListComputer extends HttpServlet {
+@WebServlet("/DeleteComputer")
+public class DeleteComputer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+
 	private ComputerService computerService;
 	private PageService pageService;
 	private MapperComputer mapperComputer;
@@ -31,7 +32,7 @@ public class ListComputer extends HttpServlet {
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public ListComputer() {
+	public DeleteComputer() {
 		super();
 		this.computerService = new ComputerService();
 		this.pageService = new PageService();
@@ -45,7 +46,7 @@ public class ListComputer extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		// TODO Auto-generated method stub
 		Page<Computer> page = new Page<Computer>();
 		HttpSession session = request.getSession();
 		int nbComputer = countComputer(request);
@@ -106,11 +107,7 @@ public class ListComputer extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
-		HttpSession session = request.getSession();
-
-		String stringNombreObjet = request.getParameter("nbObject");
-		session.setAttribute("nbObject", stringNombreObjet);
+		String selection = request.getParameter("selection");
 		doGet(request, response);
 	}
 

@@ -27,6 +27,8 @@ public class ComputerDAOImpl {
 	private static final String SQL_ALL_COMPUTER = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, company.id as company_id, company.name as companyName  FROM computer LEFT JOIN company ON computer.company_id=company.id;";
 	private static final String SQL_ALL_COMPUTER_PAGINATION = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, company.id as company_id, company.name as companyName  FROM computer LEFT JOIN company ON computer.company_id=company.id ORDER BY id LIMIT ? OFFSET ?;";
 	private static final String SQL_COUNT_ALL_COMPUTER = "SELECT COUNT(computer.id) as nbComputer  FROM computer LEFT JOIN company ON computer.company_id=company.id;";
+	private static final String SQL_SEARCH_BY_NAME_COMPA_COMPU = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued ,company.id as company_id, company.name as companyName  FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.name LIKE ? OR company.name LIKE ? ORDER BY id LIMIT ? OFFSET ?;";
+	private static final String SQL_SEARCH_BY_NAME_COUNT = "SELECT COUNT(computer.id) as nbComputer FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.name LIKE ? OR company.name LIKE ? ;";
 
 	public ComputerDAOImpl() {
 
@@ -189,8 +191,7 @@ public class ComputerDAOImpl {
 
 	private static PreparedStatement createPrepaStateForPagination(Connection connexion, int offset, int objectPerPage)
 			throws SQLException {
-		PreparedStatement preparedStatement = connexion.prepareStatement(SQL_ALL_COMPUTER_PAGINATION,
-				Statement.RETURN_GENERATED_KEYS);
+		PreparedStatement preparedStatement = connexion.prepareStatement(SQL_ALL_COMPUTER_PAGINATION);
 		preparedStatement.setInt(1, objectPerPage);
 		preparedStatement.setInt(2, offset);
 
@@ -214,6 +215,64 @@ public class ComputerDAOImpl {
 		}
 
 		return nbComputer;
+	}
+
+	public int searchNameCount(String name) throws DAOException {
+
+		int nbComputer = 0;
+		try (Connection connexion = dbConnexion.getConnection();
+				PreparedStatement preparedStatement = createPrepaStateSearchNameCount(connexion, name,
+						SQL_SEARCH_BY_NAME_COUNT);
+				ResultSet resultSet = preparedStatement.executeQuery();) {
+
+			while (resultSet.next()) {
+				nbComputer = resultSet.getInt("nbComputer");
+
+			}
+		} catch (SQLException e) {
+			LoggerCdb.logError(this.getClass(), e);
+
+		}
+
+		return nbComputer;
+	}
+
+	private static PreparedStatement createPrepaStateSearchNameCount(Connection connexion, String name, String sql)
+			throws SQLException {
+		PreparedStatement preparedStatement = connexion.prepareStatement(sql);
+		preparedStatement.setString(1, "%" + name + "%");
+		preparedStatement.setString(2, "%" + name + "%");
+		return preparedStatement;
+	}
+
+	// TO DO name pagination
+	public List<Computer> searchNamePagination(int offset, int objectPerPage, String name) throws DAOException {
+		List<Computer> computers = new ArrayList<>();
+		try (Connection connexion = dbConnexion.getConnection();
+				PreparedStatement preparedStatement = createPrepaStateForPaginationSearchName(connexion, offset,
+						objectPerPage, name);
+				ResultSet resultSet = preparedStatement.executeQuery();) {
+
+			while (resultSet.next()) {
+				Computer computer = mapperComputer.mapFromResultSet(resultSet);
+				computers.add(computer);
+			}
+		} catch (SQLException e) {
+			LoggerCdb.logError(this.getClass(), e);
+		}
+
+		return computers;
+	}
+
+	private static PreparedStatement createPrepaStateForPaginationSearchName(Connection connexion, int offset,
+			int objectPerPage, String name) throws SQLException {
+		PreparedStatement preparedStatement = connexion.prepareStatement(SQL_SEARCH_BY_NAME_COMPA_COMPU);
+		preparedStatement.setString(1, "%" + name + "%");
+		preparedStatement.setString(2, "%" + name + "%");
+		preparedStatement.setInt(3, objectPerPage);
+		preparedStatement.setInt(4, offset);
+
+		return preparedStatement;
 	}
 
 }

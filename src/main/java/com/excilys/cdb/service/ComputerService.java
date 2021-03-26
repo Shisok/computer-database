@@ -105,4 +105,19 @@ public class ComputerService {
 		return nbCompûter;
 	}
 
+	public int searchNameCount(String name) {
+		int nbCompûter = 0;
+		try {
+
+			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl();
+			nbCompûter = computerDAOImpl.searchNameCount(name);
+
+		} catch (DAOException e) {
+			LoggerCdb.logError(getClass(), e);
+		} catch (DAOConfigurationException e) {
+			LoggerCdb.logError(getClass(), e);
+		}
+		return nbCompûter;
+	}
+
 }

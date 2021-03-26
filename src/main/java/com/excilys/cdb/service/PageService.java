@@ -37,6 +37,18 @@ public class PageService {
 		return new ArrayList<Computer>();
 	}
 
+	public List<Computer> searchNamePagination(int pageInt, int objectPerPage, String name) {
+		try {
+			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl();
+			return computerDAOImpl.searchNamePagination(pageInt, objectPerPage, name);
+		} catch (DAOException e) {
+			LoggerCdb.logError(getClass(), e);
+		} catch (DAOConfigurationException e) {
+			LoggerCdb.logError(getClass(), e);
+		}
+		return new ArrayList<Computer>();
+	}
+
 	public List<Company> searchAllCompanyPage(int pageInt) {
 		try {
 			CompanyDAOImpl companyDAOImpl = new CompanyDAOImpl();

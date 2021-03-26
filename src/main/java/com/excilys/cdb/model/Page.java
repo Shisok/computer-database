@@ -56,15 +56,21 @@ public class Page<E> {
 
 	public void setIndex(int max) {
 
-		if (pageInt <= 3) {
-			indexDebut = 1;
-			indexFin = 5;
-		} else if (pageInt > max - 3) {
-			indexDebut = max - 4;
-			indexFin = max;
+		if (max > 5) {
+
+			if (pageInt <= 3) {
+				indexDebut = 1;
+				indexFin = 5;
+			} else if (pageInt > max - 3) {
+				indexDebut = max - 4;
+				indexFin = max;
+			} else {
+				indexDebut = pageInt - 2;
+				indexFin = pageInt + 2;
+			}
 		} else {
-			indexDebut = pageInt - 2;
-			indexFin = pageInt + 2;
+			indexDebut = 1;
+			indexFin = max;
 		}
 	}
 
