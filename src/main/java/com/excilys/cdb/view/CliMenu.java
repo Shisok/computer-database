@@ -29,10 +29,41 @@ public class CliMenu {
 	private static final Scanner USER_INPUT = new Scanner(System.in);
 
 	private ComputerController cliComputerMenuController;
-	private static final int OPTION_SEARCH_ALL_COMPANY = 1;
-	private static final int OPTION_SEARCH_ALL_PAGINATION_COMPANY = 2;
-	private static final int OPTION_BACK_COMPANY = 3;
-	private static final int OPTION_EXIT_COMPANY = 4;
+
+	public static enum MenuCompany {
+
+		OPTION_DEFAULT(0, ""), OPTION_SEARCH_ALL_COMPANY(1, "Search All Companies"),
+		OPTION_SEARCH_ALL_PAGINATION_COMPANY(2, "Search All Companies With Pagination"),
+		OPTION_DELETE_COMPANY(3, "Delete A Company"), OPTION_BACK_COMPANY(4, "Back to Main Menu"),
+		OPTION_EXIT_COMPANY(5, "Quit");
+
+		private final int option;
+		private final String description;
+
+		private MenuCompany(int option, String description) {
+			this.option = option;
+			this.description = description;
+		}
+
+		public int getOption() {
+			return this.option;
+		}
+
+		public String getDescription() {
+			return description;
+		}
+
+		public static MenuCompany getEnumMenuCompany(int choix) {
+			for (MenuCompany value : MenuCompany.values()) {
+				if (value.option == choix) {
+					return value;
+				}
+			}
+			return OPTION_DEFAULT;
+
+		}
+	}
+
 	private CompanyController cliCompanyMenuController;
 	private static final int OPTION_COMPANY_MAIN = 1;
 	private static final int OPTION_COMPUTER_MAIN = 2;
@@ -87,10 +118,16 @@ public class CliMenu {
 		lineSeparator();
 		System.out.println("Company Menu:");
 		lineSeparator();
-		System.out.println("1.Search All Companies");
-		System.out.println("2.Search All Companies With Pagination");
-		System.out.println("3.Back to Main Menu");
-		System.out.println("4.Quit");
+		System.out.println(MenuCompany.OPTION_SEARCH_ALL_COMPANY.getOption() + "."
+				+ MenuCompany.OPTION_SEARCH_ALL_COMPANY.getDescription());
+		System.out.println(MenuCompany.OPTION_SEARCH_ALL_PAGINATION_COMPANY.getOption() + "."
+				+ MenuCompany.OPTION_SEARCH_ALL_PAGINATION_COMPANY.getDescription());
+		System.out.println(MenuCompany.OPTION_DELETE_COMPANY.getOption() + "."
+				+ MenuCompany.OPTION_DELETE_COMPANY.getDescription());
+		System.out.println(
+				MenuCompany.OPTION_BACK_COMPANY.getOption() + "." + MenuCompany.OPTION_BACK_COMPANY.getDescription());
+		System.out.println(
+				MenuCompany.OPTION_EXIT_COMPANY.getOption() + "." + MenuCompany.OPTION_EXIT_COMPANY.getDescription());
 		lineSeparator();
 		enterChoice();
 
@@ -495,16 +532,21 @@ public class CliMenu {
 
 	public void companyMenu() {
 		int choix = 0;
-		companyLoop: while (choix != OPTION_EXIT_COMPANY) {
+		MenuCompany option = MenuCompany.OPTION_DEFAULT;
+		companyLoop: while (option != MenuCompany.OPTION_EXIT_COMPANY) {
 			showCompanyMenu();
 			choix = askCompanyMenuInput();
-			switch (choix) {
+			option = MenuCompany.getEnumMenuCompany(choix);
+			switch (option) {
 
 			case OPTION_SEARCH_ALL_COMPANY:
 				List<Company> listCompany = cliCompanyMenuController.searchAllCompany();
 				listCompany.stream().forEach(c -> System.out.println(c.toString()));
 				break;
 			case OPTION_SEARCH_ALL_PAGINATION_COMPANY:
+				cliPage.searchAllCompanyPage();
+				break;
+			case OPTION_DELETE_COMPANY:
 				cliPage.searchAllCompanyPage();
 				break;
 			case OPTION_BACK_COMPANY:

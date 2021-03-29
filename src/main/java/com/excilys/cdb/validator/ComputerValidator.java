@@ -52,7 +52,9 @@ public class ComputerValidator {
 			if (introduced != null && !introduced.isEmpty()) {
 
 				LocalDate introducedLD = LocalDate.parse(introduced);
+
 				if (introducedLD.isAfter(discontinuedLD) || introducedLD.equals(discontinuedLD)) {
+
 					throw new ValidatorException(ComputerValidatorError.INTROBEFOREDISCON.getMessage());
 				}
 			} else {

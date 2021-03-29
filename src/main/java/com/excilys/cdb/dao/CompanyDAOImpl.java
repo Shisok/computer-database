@@ -22,6 +22,7 @@ public class CompanyDAOImpl {
 	private static final String SQL_ALL_COMPANY = "SELECT id,name FROM company ORDER BY id";
 
 	private static final String SQL_ALL_COMPANY_PAGINATION = "SELECT id,name From company ORDER BY id LIMIT ? OFFSET ? ;";
+	private static final String SQL_DELETE = "DELETE FROM company WHERE id=?;";
 
 	public CompanyDAOImpl() {
 		this.dbConnexion = DBConnexion.getInstance();
@@ -75,6 +76,31 @@ public class CompanyDAOImpl {
 
 		preparedStatement.setInt(1, OBJECT_NUMBER_PER_PAGE);
 		preparedStatement.setInt(2, offset);
+		return preparedStatement;
+	}
+
+	public void delete(Long id) throws DAOException {
+
+		try (Connection connexion = dbConnexion.getConnection();
+				PreparedStatement preparedStatement = createPrepaStateWithCompId(connexion, id, SQL_DELETE);) {
+
+			int statut = preparedStatement.executeUpdate();
+
+			if (statut == 0) {
+				throw new DAOException("Échec de la suppression de l'ordinateur, aucune ligne ajoutée dans la table.");
+			}
+
+		} catch (SQLException e) {
+			LoggerCdb.logError(this.getClass(), e);
+
+		}
+
+	}
+
+	private static PreparedStatement createPrepaStateWithCompId(Connection connexion, Long id, String sql)
+			throws SQLException {
+		PreparedStatement preparedStatement = connexion.prepareStatement(sql);
+		preparedStatement.setLong(1, id);
 		return preparedStatement;
 	}
 

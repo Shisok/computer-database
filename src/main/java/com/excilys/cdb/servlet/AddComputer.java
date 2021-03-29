@@ -96,11 +96,9 @@ public class AddComputer extends HttpServlet {
 	private void showError(HttpServletRequest request, ValidatorException e) {
 		if (e.getMessage().equals(ComputerValidatorError.NONAME.getMessage())) {
 			request.setAttribute("erreurName", e.getMessage());
-		}
-		if (e.getMessage().equals(ComputerValidatorError.NOINTRO.getMessage())) {
+		} else if (e.getMessage().equals(ComputerValidatorError.INTROBEFOREDISCON.getMessage())) {
 			request.setAttribute("erreurNoIntro", e.getMessage());
-		}
-		if (e.getMessage().equals(ComputerValidatorError.NOINTRO.getMessage())) {
+		} else if (e.getMessage().equals(ComputerValidatorError.NOINTRO.getMessage())) {
 			request.setAttribute("erreurDiscoBeforeIntro", e.getMessage());
 		}
 	}

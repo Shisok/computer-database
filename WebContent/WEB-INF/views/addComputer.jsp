@@ -66,8 +66,11 @@
             </div>
         </div>
     </section>
-    <script src="${pageContext.request.contextPath}/js/addCompValidator.js"></script>  
-   
+     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	    <script src="${pageContext.request.contextPath}/js/addCompValidator.js"></script>  
+   <script type="text/javascript">
+   console.log(${ empty erreurDiscoBeforeIntro });
+   </script>
 
 </body>
 </html>
