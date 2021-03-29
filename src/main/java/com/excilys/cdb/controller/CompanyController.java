@@ -23,4 +23,7 @@ public class CompanyController {
 		return companyService.searchAllCompany();
 	}
 
+	public boolean deleteCompany(Long compToDeleteID) {
+		return companyService.deleteCompany(compToDeleteID);
+	}
 }

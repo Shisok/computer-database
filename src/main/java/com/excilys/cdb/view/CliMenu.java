@@ -363,6 +363,27 @@ public class CliMenu {
 		return id;
 	}
 
+	public static void showDeleteOneCompany() {
+		lineSeparator();
+		System.out.print("Company to delete id: ");
+
+	}
+
+	public static long deleteOneCompanyAskInput() {
+		long id = 0L;
+		try {
+
+			id = Long.parseLong(USER_INPUT.nextLine());
+
+		} catch (NumberFormatException e) {
+			LoggerCdb.logInfo(CliMenu.class, e);
+			System.out.println("You didn't enter a numerical value.");
+			id = deleteOneComputerAskInput();
+		}
+
+		return id;
+	}
+
 	public static void validateCreation(Computer compToCreate) {
 
 		lineSeparator();
@@ -467,12 +488,18 @@ public class CliMenu {
 					cliPage.searchAllComputerPagination();
 					break;
 				case OPTION_SEARCH_BY_ID_COMPUTER:
-					CliMenu.showSearchOneComputer();
-					Long idToSearch = CliMenu.searchOneComputerAskInput();
-					Optional<Computer> computer = cliComputerMenuController.searchByIdComputer(idToSearch);
-					System.out.println(computer
-							.orElseThrow(() -> new NoSuchElementException("The computer dosen't exist.")).toString());
-					break;
+					try {
+						CliMenu.showSearchOneComputer();
+						Long idToSearch = CliMenu.searchOneComputerAskInput();
+						Optional<Computer> computer = cliComputerMenuController.searchByIdComputer(idToSearch);
+						System.out.println(
+								computer.orElseThrow(() -> new NoSuchElementException("The computer dosen't exist."))
+										.toString());
+						break;
+					} catch (NoSuchElementException e) {
+						LoggerCdb.logError(this.getClass(), e);
+						break;
+					}
 				case OPTION_CREATE_COMPUTER:
 					try {
 						CliMenu.showCreateOneComputer();
@@ -486,7 +513,11 @@ public class CliMenu {
 						System.out.println(success ? "Computer created" : "Computer failed to create");
 						break;
 					} catch (NoSuchElementException e) {
+
 						LoggerCdb.logError(this.getClass(), e);
+						CliMenu.showComputerMenu();
+						CliMenu.computerMenuAskInput();
+						break;
 
 					}
 				case OPTION_UPDATE_COMPUTER:
@@ -523,7 +554,7 @@ public class CliMenu {
 				}
 			}
 		} catch (NoSuchElementException e) {
-			LoggerCdb.logError(this.getClass(), e);
+			LoggerCdb.logInfo(this.getClass(), e);
 			CliMenu.showComputerMenu();
 			CliMenu.computerMenuAskInput();
 		}
@@ -531,6 +562,7 @@ public class CliMenu {
 	}
 
 	public void companyMenu() {
+		boolean success = false;
 		int choix = 0;
 		MenuCompany option = MenuCompany.OPTION_DEFAULT;
 		companyLoop: while (option != MenuCompany.OPTION_EXIT_COMPANY) {
@@ -546,8 +578,18 @@ public class CliMenu {
 			case OPTION_SEARCH_ALL_PAGINATION_COMPANY:
 				cliPage.searchAllCompanyPage();
 				break;
+
 			case OPTION_DELETE_COMPANY:
-				cliPage.searchAllCompanyPage();
+				try {
+					CliMenu.showDeleteOneCompany();
+					Long compToDeleteID = CliMenu.deleteOneCompanyAskInput();
+					success = cliCompanyMenuController.deleteCompany(compToDeleteID);
+					System.out.println(success ? "Company deleted" : "Company failed to delete");
+				} catch (InputException e) {
+					LoggerCdb.logError(this.getClass(), e);
+					CliMenu.showDeleteOneCompany();
+					CliMenu.deleteOneCompanyAskInput();
+				}
 				break;
 			case OPTION_BACK_COMPANY:
 				break companyLoop;

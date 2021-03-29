@@ -17,12 +17,14 @@ public class CompanyDAOImpl {
 
 	private DBConnexion dbConnexion;
 	private MapperCompany mapperCompany;
+
 	private static final int OBJECT_NUMBER_PER_PAGE = 10;
 
 	private static final String SQL_ALL_COMPANY = "SELECT id,name FROM company ORDER BY id";
 
 	private static final String SQL_ALL_COMPANY_PAGINATION = "SELECT id,name From company ORDER BY id LIMIT ? OFFSET ? ;";
 	private static final String SQL_DELETE = "DELETE FROM company WHERE id=?;";
+	private static final String SQL_DELETE_COMPUTER = "DELETE FROM computer WHERE company_id=?;";
 
 	public CompanyDAOImpl() {
 		this.dbConnexion = DBConnexion.getInstance();
@@ -81,18 +83,27 @@ public class CompanyDAOImpl {
 
 	public void delete(Long id) throws DAOException {
 
-		try (Connection connexion = dbConnexion.getConnection();
-				PreparedStatement preparedStatement = createPrepaStateWithCompId(connexion, id, SQL_DELETE);) {
-
-			int statut = preparedStatement.executeUpdate();
-
-			if (statut == 0) {
-				throw new DAOException("Échec de la suppression de l'ordinateur, aucune ligne ajoutée dans la table.");
+		try (Connection connexion = dbConnexion.getConnection();) {
+			connexion.setAutoCommit(false);
+			try (PreparedStatement preparedStatement = createPrepaStateWithCompId(connexion, id, SQL_DELETE);
+					PreparedStatement preparedStatementComputer = createPrepaStateWithCompId(connexion, id,
+							SQL_DELETE_COMPUTER);) {
+				preparedStatementComputer.executeUpdate();
+				int statut = preparedStatement.executeUpdate();
+				if (statut == 0) {
+					throw new DAOException(
+							"Échec de la suppression de l'ordinateur, aucune ligne ajoutée dans la table.");
+				}
+			} catch (SQLException e) {
+				connexion.rollback();
+				LoggerCdb.logError(this.getClass(), e);
+				throw new DAOException(
+						"Une erreur est survenue lors de la suppression de la companie dans la base de donnée.");
+			} finally {
+				connexion.setAutoCommit(true);
 			}
-
-		} catch (SQLException e) {
-			LoggerCdb.logError(this.getClass(), e);
-
+		} catch (SQLException e1) {
+			LoggerCdb.logError(this.getClass(), e1);
 		}
 
 	}

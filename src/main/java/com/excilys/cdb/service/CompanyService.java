@@ -31,4 +31,20 @@ public class CompanyService {
 		return CliMenu.askCompanyMenuInput();
 
 	}
+
+	public boolean deleteCompany(Long compToDeleteID) {
+		boolean success = false;
+		try {
+
+			CompanyDAOImpl companyDAOImpl = new CompanyDAOImpl();
+			companyDAOImpl.delete(compToDeleteID);
+			success = true;
+
+		} catch (DAOException e) {
+			LoggerCdb.logError(getClass(), e);
+		} catch (DAOConfigurationException e) {
+			LoggerCdb.logError(getClass(), e);
+		}
+		return success;
+	}
 }
