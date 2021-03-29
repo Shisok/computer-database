@@ -78,7 +78,7 @@ local.properties
 
 # Log file
 *.log
-LogFile.[0-9]{4}-[0-9]{2}-[0-9]{2}.gz
+LogFile.*.gz
 # BlueJ files
 *.ctxt
 
