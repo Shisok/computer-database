@@ -30,7 +30,10 @@
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
                                 <input type="text" class="form-control" name="computerName" id="computerName" placeholder="Computer name" required="required">
-                                 <span class="error" id="nameError" style="color:red;<c:if test="${ empty erreurName }"> display:none;</c:if>">This field is required.</span>
+                                <c:if test="${ empty erreurName }"><div class="alert alert-danger" role="alert"
+                                    style="display: none;" id="nameError">The computer name
+                                    must not be empty.</div></c:if>
+                                 
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
@@ -39,8 +42,11 @@
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
                                 <input type="date" class="form-control" name="discontinued" id="discontinued" placeholder="Discontinued date" >
-                                <span class="error" id="discontinuedError"  style="color:red;<c:if test="${ empty erreurDiscoBeforeIntro }"> display:none;</c:if>">Discontinued is before introduced.</span>
-                                <span class="error" id="noIntroError"   style="color:red;<c:if test="${ empty erreurNoIntro }"> display:none;</c:if>" >Introduced is needed to input discontinued.</span>
+                                <c:if test="${ empty erreurDiscoBeforeIntro }"><div class="alert alert-danger" role="alert"
+                                    style="display: none;" id="discontinuedError">Discontinued is before introduced.</div></c:if>
+                               <c:if test="${ empty erreurNoIntro }"> <div class="alert alert-danger" role="alert"
+                                    style="display: none;" id="noIntroError">Introduced is needed to input discontinued.</div></c:if>
+                                
                             </div>
                             <div class="form-group">
                                 <label for="companyId">Company</label>
@@ -68,9 +74,7 @@
     </section>
      <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	    <script src="${pageContext.request.contextPath}/js/addCompValidator.js"></script>  
-   <script type="text/javascript">
-   console.log(${ empty erreurDiscoBeforeIntro });
-   </script>
+ 
 
 </body>
 </html>
