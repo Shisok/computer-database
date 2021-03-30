@@ -21,8 +21,8 @@ public class PageService {
 	}
 
 	/**
-	 * @param pageInt the page searched
-	 * @return
+	 * @param page the page searched
+	 * @return List<Computer> a list of computer
 	 */
 	public List<Computer> searchAllComputerPagination(Page<Computer> page) {
 		try {

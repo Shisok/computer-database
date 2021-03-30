@@ -91,33 +91,33 @@ public class ComputerService {
 	}
 
 	public int countComputer() {
-		int nbCompûter = 0;
+		int nbComputer = 0;
 		try {
 
 			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl();
-			nbCompûter = computerDAOImpl.searchAllCount();
+			nbComputer = computerDAOImpl.searchAllCount();
 
 		} catch (DAOException e) {
 			LoggerCdb.logError(getClass(), e);
 		} catch (DAOConfigurationException e) {
 			LoggerCdb.logError(getClass(), e);
 		}
-		return nbCompûter;
+		return nbComputer;
 	}
 
 	public int searchNameCount(String name) {
-		int nbCompûter = 0;
+		int nbComputer = 0;
 		try {
 
 			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl();
-			nbCompûter = computerDAOImpl.searchNameCount(name);
+			nbComputer = computerDAOImpl.searchNameCount(name);
 
 		} catch (DAOException e) {
 			LoggerCdb.logError(getClass(), e);
 		} catch (DAOConfigurationException e) {
 			LoggerCdb.logError(getClass(), e);
 		}
-		return nbCompûter;
+		return nbComputer;
 	}
 
 }

@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.excilys.cdb.service.ComputerService;
 
 /**
- * Servlet implementation class DeleteComputer
+ * Servlet implementation class DeleteComputer.
  */
 @WebServlet("/DeleteComputer")
 public class DeleteComputer extends HttpServlet {
@@ -32,6 +32,8 @@ public class DeleteComputer extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
+	 * @param request  http message
+	 * @param response http message
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -42,6 +44,8 @@ public class DeleteComputer extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
+	 * @param request  http message
+	 * @param response http message
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)

@@ -15,7 +15,7 @@ public class DBConnexion {
 		this.ds = ds;
 	}
 
-	public static DBConnexion getInstance() throws DAOConfigurationException {
+	public static synchronized DBConnexion getInstance() throws DAOConfigurationException {
 		if (instance == null) {
 			instance = new DBConnexion(
 					new HikariDataSource(new HikariConfig("/com/excilys/cdb/dao/datasource.properties")));

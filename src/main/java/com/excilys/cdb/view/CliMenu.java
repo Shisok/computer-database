@@ -30,7 +30,7 @@ public class CliMenu {
 
 	private ComputerController cliComputerMenuController;
 
-	public static enum MenuCompany {
+	public enum MenuCompany {
 
 		OPTION_DEFAULT(0, ""), OPTION_SEARCH_ALL_COMPANY(1, "Search All Companies"),
 		OPTION_SEARCH_ALL_PAGINATION_COMPANY(2, "Search All Companies With Pagination"),
@@ -40,7 +40,7 @@ public class CliMenu {
 		private final int option;
 		private final String description;
 
-		private MenuCompany(int option, String description) {
+		MenuCompany(int option, String description) {
 			this.option = option;
 			this.description = description;
 		}

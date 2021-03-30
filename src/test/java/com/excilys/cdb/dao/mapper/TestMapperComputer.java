@@ -20,7 +20,7 @@ import com.excilys.cdb.model.Computer;
 public class TestMapperComputer {
 
 	@Test
-	public void TestMapFromResultSet() {
+	public void testMapFromResultSet() {
 		try {
 			ResultSet rsMock = Mockito.mock(ResultSet.class);
 			MapperComputer mapperComputer = new MapperComputer();
@@ -43,7 +43,7 @@ public class TestMapperComputer {
 	}
 
 	@Test
-	public void TestMapFromResultSetWithNull() {
+	public void testMapFromResultSetWithNull() {
 		try {
 			ResultSet rsMock = Mockito.mock(ResultSet.class);
 			MapperComputer mapperComputer = new MapperComputer();
@@ -63,7 +63,7 @@ public class TestMapperComputer {
 	}
 
 	@Test
-	public void TestMapFromModelToDTOList() {
+	public void testMapFromModelToDTOList() {
 
 		MapperComputer mapperComputer = new MapperComputer();
 		Company company = new Company.CompanyBuilder(2L).name("testCompanyName").build();
@@ -81,7 +81,7 @@ public class TestMapperComputer {
 	}
 
 	@Test
-	public void TestMapFromModelToDTOListWithNull() {
+	public void testMapFromModelToDTOListWithNull() {
 
 		MapperComputer mapperComputer = new MapperComputer();
 		Company company = new Company.CompanyBuilder(null).build();
@@ -97,7 +97,7 @@ public class TestMapperComputer {
 	}
 
 	@Test
-	public void TestMapFromDTOAddToModel() {
+	public void testMapFromDTOAddToModel() {
 
 		MapperComputer mapperComputer = new MapperComputer();
 
@@ -117,7 +117,7 @@ public class TestMapperComputer {
 	}
 
 	@Test
-	public void TestMapFromDTOAddToModelWithNull() {
+	public void testMapFromDTOAddToModelWithNull() {
 
 		MapperComputer mapperComputer = new MapperComputer();
 

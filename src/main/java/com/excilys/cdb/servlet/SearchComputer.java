@@ -20,7 +20,7 @@ import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.service.PageService;
 
 /**
- * Servlet implementation class SearchComputer
+ * Servlet implementation class SearchComputer.
  */
 @WebServlet("/SearchComputer")
 public class SearchComputer extends HttpServlet {
@@ -43,6 +43,8 @@ public class SearchComputer extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
+	 * @param request  http message
+	 * @param response http message
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -121,6 +123,8 @@ public class SearchComputer extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
+	 * @param request  http message
+	 * @param response http message
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)

@@ -64,7 +64,7 @@ public class DataSourceDBUnitTest extends DataSourceBasedDBTestCase {
 			conn.createStatement().executeUpdate("INSERT INTO COMPANY (id,name) VALUES ( 42,'Research In Motion')");
 			ITable actualData = getConnection().createQueryTable("result_name",
 					"SELECT * FROM COMPANY WHERE name='Research In Motion'");
-			assertEqualsIgnoreCols(expectedTable, actualData, new String[] { "id" });
+			assertEqualsIgnoreCols(expectedTable, actualData, new String[] {"id"});
 		}
 
 	}

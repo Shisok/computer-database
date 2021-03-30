@@ -23,7 +23,7 @@ public class TestCompanyParameterizedValide {
 	@SuppressWarnings("rawtypes")
 	@Parameterized.Parameters
 	public static Collection input() {
-		return Arrays.asList(new Object[][] { { 1L, "test" }, { null, "test" }, });
+		return Arrays.asList(new Object[][] {{1L, "test" }, {null, "test"}, });
 	}
 
 	@Test

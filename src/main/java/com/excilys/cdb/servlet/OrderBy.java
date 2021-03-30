@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * Servlet implementation class OrderBy
+ * Servlet implementation class OrderBy.
  */
 @WebServlet("/OrderBy")
 public class OrderBy extends HttpServlet {
@@ -27,6 +27,8 @@ public class OrderBy extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
+	 * @param request  http message
+	 * @param response http message
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -37,6 +39,8 @@ public class OrderBy extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
+	 * @param request  http message
+	 * @param response http message
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)

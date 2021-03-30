@@ -19,7 +19,7 @@ import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.service.PageService;
 
 /**
- * Servlet implementation class ListComputer
+ * Servlet implementation class ListComputer.
  */
 @WebServlet("/ListComputer")
 public class ListComputer extends HttpServlet {
@@ -41,6 +41,8 @@ public class ListComputer extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
+	 * @param request  http message
+	 * @param response http message
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -117,6 +119,8 @@ public class ListComputer extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
+	 * @param request  http message
+	 * @param response http message
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)

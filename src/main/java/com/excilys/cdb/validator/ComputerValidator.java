@@ -12,13 +12,13 @@ public class ComputerValidator {
 	private ComputerValidator() {
 	}
 
-	private static ComputerValidator INSTANCE = null;
+	private static ComputerValidator instance = null;
 
 	public static ComputerValidator getInstance() {
-		if (INSTANCE == null) {
-			INSTANCE = new ComputerValidator();
+		if (instance == null) {
+			instance = new ComputerValidator();
 		}
-		return INSTANCE;
+		return instance;
 	}
 
 	public void validationComputerDTOAdd(ComputerDTOAdd computerDTOAdd) throws ValidatorException {

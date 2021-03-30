@@ -16,7 +16,7 @@ import com.excilys.cdb.model.Company;
 public class TestMapperCompany {
 
 	@Test
-	public void TestMapFromResultSet() {
+	public void testMapFromResultSet() {
 		try {
 			ResultSet rsMock = Mockito.mock(ResultSet.class);
 			MapperCompany mapperCompany = new MapperCompany();
@@ -31,7 +31,7 @@ public class TestMapperCompany {
 	}
 
 	@Test
-	public void TestMapFromModelToDTO() {
+	public void testMapFromModelToDTO() {
 
 		MapperCompany mapperCompany = new MapperCompany();
 		Company company = new Company.CompanyBuilder(1L).name("test").build();
