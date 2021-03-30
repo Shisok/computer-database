@@ -22,6 +22,7 @@
 		<dbUnit.version>2.7.0</dbUnit.version>
 		<h2database.version>1.4.200</h2database.version>
 		<javax.servlet.version>3.0.1 </javax.servlet.version>
+		<HikariCP.version>4.0.3</HikariCP.version>
 	</properties>
 
 	<build>
@@ -143,7 +144,20 @@
 		<dependency>
 			<groupId>com.zaxxer</groupId>
 			<artifactId>HikariCP</artifactId>
-			<version>4.0.3</version>
+			<version>${HikariCP.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-module-junit4</artifactId>
+			<version>1.6.4</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-api-mockito</artifactId>
+			<version>1.6.4</version>
+			<scope>test</scope>
 		</dependency>
 
 	</dependencies>

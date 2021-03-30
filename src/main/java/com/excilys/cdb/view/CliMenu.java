@@ -95,6 +95,7 @@ public class CliMenu {
 		int choix = 0;
 		try {
 			choix = Integer.parseInt(USER_INPUT.nextLine());
+			System.out.println(choix);
 		} catch (NumberFormatException e) {
 			LoggerCdb.logInfo(CliMenu.class, e);
 			System.out.println("You didn't enter a numerical value");
