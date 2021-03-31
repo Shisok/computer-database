@@ -25,6 +25,7 @@
 		<HikariCP.version>4.0.3</HikariCP.version>
 		<spring-webmvc.version>5.3.5</spring-webmvc.version>
 		<spring-test.version>5.3.5</spring-test.version>
+		<jcl.slf4j.version>1.7.30</jcl.slf4j.version>
 	</properties>
 
 	<build>
@@ -156,11 +157,24 @@
 			<version>${HikariCP.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>5.3.5</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 			<version>${spring-webmvc.version}</version>
+
 		</dependency>
 
 		<dependency>
@@ -175,6 +189,15 @@
 			<version>1.6.4</version>
 			<scope>test</scope>
 		</dependency>
+
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${jcl.slf4j.version}</version>
+		</dependency>
+
+
 
 	</dependencies>
 </project>

@@ -3,21 +3,16 @@ package com.excilys.cdb.controller;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.service.ComputerService;
 
+@Component
 public class ComputerController {
-
+	@Autowired
 	ComputerService computerService;
-
-	/**
-	 * Default Constructor.
-	 */
-	public ComputerController() {
-		super();
-		this.computerService = new ComputerService();
-
-	}
 
 	public List<Computer> searchAllComputer() {
 

@@ -8,6 +8,9 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Scanner;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.excilys.cdb.controller.CompanyController;
 import com.excilys.cdb.controller.ComputerController;
 import com.excilys.cdb.exception.InputException;
@@ -15,6 +18,7 @@ import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 
+@Component
 public class CliMenu {
 
 	private static final int OPTION_SEARCH_ALL_COMPUTER = 1;
@@ -27,7 +31,7 @@ public class CliMenu {
 	private static final int OPTION_EXIT_COMPUTER = 8;
 	private static final String SCANNER_DELIMITER = "\\s*,\\s*";
 	private static final Scanner USER_INPUT = new Scanner(System.in);
-
+	@Autowired
 	private ComputerController cliComputerMenuController;
 
 	public enum MenuCompany {
@@ -64,20 +68,13 @@ public class CliMenu {
 		}
 	}
 
+	@Autowired
 	private CompanyController cliCompanyMenuController;
 	private static final int OPTION_COMPANY_MAIN = 1;
 	private static final int OPTION_COMPUTER_MAIN = 2;
 	private static final int OPTION_EXIT_MAIN = 3;
-
+	@Autowired
 	private CliPage cliPage;
-
-	public CliMenu() {
-		super();
-
-		this.cliPage = new CliPage();
-		this.cliComputerMenuController = new ComputerController();
-		this.cliCompanyMenuController = new CompanyController();
-	}
 
 	public static void showMainMenu() {
 		lineSeparator();

@@ -2,6 +2,9 @@ package com.excilys.cdb.view;
 
 import java.util.ArrayList;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.excilys.cdb.controller.PageController;
 import com.excilys.cdb.exception.DAOConfigurationException;
 import com.excilys.cdb.exception.InputException;
@@ -10,21 +13,19 @@ import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 
+@Component
 public class CliPage {
 	private static final int OPTION_BACK = 1;
 	private static final int OPTION_NEXT = 2;
 	private static final int OPTION_PAGE = 3;
 	private static final int OPTION_BACK_TO_MENU = 4;
 	private static final int OPTION_EXIT_PAGINATION = 5;
+	@Autowired
 	private Page<Computer> pageComputer;
+	@Autowired
 	private Page<Company> pageCompany;
+	@Autowired
 	private PageController pageController;
-
-	public CliPage() {
-		this.pageComputer = new Page<Computer>();
-		this.pageCompany = new Page<Company>();
-		this.pageController = new PageController();
-	}
 
 	public int pageComputerVerifyChoice(int page) {
 		int choix = 0;

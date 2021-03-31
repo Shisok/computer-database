@@ -25,10 +25,6 @@ public class PageService {
 	@Autowired
 	CompanyDAOImpl companyDAOImpl;
 
-	public PageService() {
-
-	}
-
 	/**
 	 * @param page the page searched
 	 * @return List<Computer> a list of computer

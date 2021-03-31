@@ -8,17 +8,13 @@ import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Logger;
 
 public class LoggerCdb {
+
 	private static Map<String, Logger> loggers = new HashMap<>();
 
 	public static void logError(Class<?> c, Exception exception) {
 		Logger logger = getLogger(c);
 		logger.error(exception.getClass() + " : " + exception.getMessage());
 	}
-
-//	public static void logError(String message, Throwable throwable, Class<?> c) {
-//		Logger logger = getLogger(c);
-//		logger.error(message, throwable);
-//	}
 
 	public static void logInfo(Class<?> c, Exception exception) {
 		Logger logger = getLogger(c);

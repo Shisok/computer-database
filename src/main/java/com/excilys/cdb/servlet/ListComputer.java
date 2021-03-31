@@ -11,12 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.excilys.cdb.dto.ComputerDTOList;
+import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.mapper.MapperComputer;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
@@ -26,7 +27,7 @@ import com.excilys.cdb.service.PageService;
 /**
  * Servlet implementation class ListComputer.
  */
-@Component
+@Controller
 @RequestMapping("/ListComputer")
 public class ListComputer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -51,7 +52,7 @@ public class ListComputer extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		LoggerCdb.logInfo(getClass(), "*****************************");
 		Page<Computer> page = new Page<Computer>();
 		HttpSession session = request.getSession();
 		setOrderBy(page, session);
