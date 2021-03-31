@@ -3,9 +3,12 @@ package com.excilys.cdb.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.springframework.stereotype.Component;
+
 import com.excilys.cdb.dto.CompanyDTO;
 import com.excilys.cdb.model.Company;
 
+@Component
 public class MapperCompany {
 
 	public Company mapFromResultSet(ResultSet resultSet) throws SQLException {

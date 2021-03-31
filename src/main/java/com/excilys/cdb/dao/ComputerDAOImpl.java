@@ -10,15 +10,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.mapper.MapperComputer;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
+import com.zaxxer.hikari.HikariDataSource;
 
+@Component
 public class ComputerDAOImpl {
-	private DBConnexion dbConnexion;
+	@Autowired
+	private HikariDataSource dataSource;
+	@Autowired
 	private MapperComputer mapperComputer;
 
 	private static final String SQL_INSERT = "INSERT INTO computer ( name, introduced, discontinued, company_id) VALUES ( ?, ?, ?, ?);";
@@ -32,19 +39,15 @@ public class ComputerDAOImpl {
 	private static final String SQL_SEARCH_BY_NAME_COMPA_COMPU = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued ,company.id as company_id, company.name as companyName  FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.name LIKE ? OR company.name LIKE ? ORDER BY ORDERATTRIBUTE ORDERSORT LIMIT ? OFFSET ?;";
 	private static final String SQL_SEARCH_BY_NAME_COUNT = "SELECT COUNT(computer.id) as nbComputer FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.name LIKE ? OR company.name LIKE ? ;";
 
-	public ComputerDAOImpl() {
-
-		this.dbConnexion = DBConnexion.getInstance();
-		this.mapperComputer = new MapperComputer();
-	}
-
 	public void create(Computer computer) throws DAOException {
 
 		ResultSet valeursAutoGenerees = null;
 
-		try (Connection connexion = dbConnexion.getConnection();
+		try (Connection connexion = dataSource.getConnection();
 				PreparedStatement preparedStatement = createPrepaStateForCreate(connexion, computer);) {
-
+			LoggerCdb.logInfo(getClass(), connexion.toString());
+			LoggerCdb.logInfo(getClass(), dataSource.toString());
+			LoggerCdb.logInfo(getClass(), mapperComputer.toString());
 			int statut = preparedStatement.executeUpdate();
 
 			if (statut == 0) {
@@ -83,7 +86,7 @@ public class ComputerDAOImpl {
 
 	public void update(Computer computer) throws DAOException {
 
-		try (Connection connexion = dbConnexion.getConnection();
+		try (Connection connexion = dataSource.getConnection();
 				PreparedStatement preparedStatement = createPrepaStateForUpdate(connexion, computer);) {
 
 			int statut = preparedStatement.executeUpdate();
@@ -112,7 +115,7 @@ public class ComputerDAOImpl {
 
 	public void delete(Long id) throws DAOException {
 
-		try (Connection connexion = dbConnexion.getConnection();
+		try (Connection connexion = dataSource.getConnection();
 				PreparedStatement preparedStatement = createPrepaStateWithCompId(connexion, id, SQL_DELETE);) {
 
 			int statut = preparedStatement.executeUpdate();
@@ -130,7 +133,7 @@ public class ComputerDAOImpl {
 
 	public Optional<Computer> search(Long id) throws DAOException {
 		Optional<Computer> computer = Optional.empty();
-		try (Connection connexion = dbConnexion.getConnection();
+		try (Connection connexion = dataSource.getConnection();
 				PreparedStatement preparedStatement = createPrepaStateWithCompId(connexion, id, SQL_SELECT);
 				ResultSet resultSet = preparedStatement.executeQuery();) {
 
@@ -154,7 +157,7 @@ public class ComputerDAOImpl {
 	public List<Computer> searchAll() throws DAOException {
 		List<Computer> computers = new ArrayList<>();
 
-		try (Connection connexion = dbConnexion.getConnection();
+		try (Connection connexion = dataSource.getConnection();
 				Statement statement = connexion.createStatement();
 				ResultSet resultSet = statement.executeQuery(SQL_ALL_COMPUTER)) {
 
@@ -174,7 +177,7 @@ public class ComputerDAOImpl {
 	public List<Computer> searchAllPagination(Page<Computer> page) {
 		List<Computer> computers = new ArrayList<>();
 
-		try (Connection connexion = dbConnexion.getConnection();
+		try (Connection connexion = dataSource.getConnection();
 				PreparedStatement preparedStatement = createPrepaStateForPagination(connexion, page);
 				ResultSet resultSet = preparedStatement.executeQuery();) {
 
@@ -204,7 +207,7 @@ public class ComputerDAOImpl {
 	public int searchAllCount() throws DAOException {
 
 		int nbComputer = 0;
-		try (Connection connexion = dbConnexion.getConnection();
+		try (Connection connexion = dataSource.getConnection();
 				Statement statement = connexion.createStatement();
 				ResultSet resultSet = statement.executeQuery(SQL_COUNT_ALL_COMPUTER)) {
 
@@ -223,7 +226,7 @@ public class ComputerDAOImpl {
 	public int searchNameCount(String name) throws DAOException {
 
 		int nbComputer = 0;
-		try (Connection connexion = dbConnexion.getConnection();
+		try (Connection connexion = dataSource.getConnection();
 				PreparedStatement preparedStatement = createPrepaStateSearchNameCount(connexion, name,
 						SQL_SEARCH_BY_NAME_COUNT);
 				ResultSet resultSet = preparedStatement.executeQuery();) {
@@ -251,7 +254,7 @@ public class ComputerDAOImpl {
 	// TO DO name pagination
 	public List<Computer> searchNamePagination(Page<Computer> page, String name) throws DAOException {
 		List<Computer> computers = new ArrayList<>();
-		try (Connection connexion = dbConnexion.getConnection();
+		try (Connection connexion = dataSource.getConnection();
 				PreparedStatement preparedStatement = createPrepaStateForPaginationSearchName(connexion, page, name);
 				ResultSet resultSet = preparedStatement.executeQuery();) {
 

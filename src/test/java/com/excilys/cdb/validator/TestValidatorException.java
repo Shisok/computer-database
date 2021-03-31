@@ -4,12 +4,23 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import com.excilys.cdb.dto.ComputerDTOAdd;
 import com.excilys.cdb.exception.ValidatorException;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration
+@TestExecutionListeners(DependencyInjectionTestExecutionListener.class)
 public class TestValidatorException {
 
+	@Autowired
+	private ComputerValidator computerValidator;
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 
@@ -18,7 +29,7 @@ public class TestValidatorException {
 		thrown.expect(ValidatorException.class);
 		thrown.expectMessage(CoreMatchers.equalTo(ComputerValidatorError.NONAME.getMessage()));
 		ComputerDTOAdd computerDTOAdd = new ComputerDTOAdd.ComputerDTOAddBuilder(null).build();
-		ComputerValidator computerValidator = ComputerValidator.getInstance();
+
 		computerValidator.validationComputerDTOAdd(computerDTOAdd);
 
 	}
@@ -28,7 +39,7 @@ public class TestValidatorException {
 		thrown.expect(ValidatorException.class);
 		thrown.expectMessage(CoreMatchers.equalTo(ComputerValidatorError.NONAME.getMessage()));
 		ComputerDTOAdd computerDTOAdd = new ComputerDTOAdd.ComputerDTOAddBuilder("").build();
-		ComputerValidator computerValidator = ComputerValidator.getInstance();
+
 		computerValidator.validationComputerDTOAdd(computerDTOAdd);
 
 	}
@@ -38,7 +49,7 @@ public class TestValidatorException {
 		thrown.expect(ValidatorException.class);
 		thrown.expectMessage(CoreMatchers.equalTo(ComputerValidatorError.NONAME.getMessage()));
 		ComputerDTOAdd computerDTOAdd = new ComputerDTOAdd.ComputerDTOAddBuilder("    ").build();
-		ComputerValidator computerValidator = ComputerValidator.getInstance();
+
 		computerValidator.validationComputerDTOAdd(computerDTOAdd);
 	}
 
@@ -48,7 +59,7 @@ public class TestValidatorException {
 		thrown.expectMessage(CoreMatchers.equalTo(ComputerValidatorError.NOINTRO.getMessage()));
 		ComputerDTOAdd computerDTOAdd = new ComputerDTOAdd.ComputerDTOAddBuilder("test").discontinued("2020-02-20")
 				.build();
-		ComputerValidator computerValidator = ComputerValidator.getInstance();
+
 		computerValidator.validationComputerDTOAdd(computerDTOAdd);
 	}
 
@@ -58,7 +69,7 @@ public class TestValidatorException {
 		thrown.expectMessage(CoreMatchers.equalTo(ComputerValidatorError.INTROBEFOREDISCON.getMessage()));
 		ComputerDTOAdd computerDTOAdd = new ComputerDTOAdd.ComputerDTOAddBuilder("test").introduced("2020-04-20")
 				.discontinued("2020-02-20").build();
-		ComputerValidator computerValidator = ComputerValidator.getInstance();
+
 		computerValidator.validationComputerDTOAdd(computerDTOAdd);
 	}
 
@@ -66,7 +77,7 @@ public class TestValidatorException {
 	public void testValidatorComputerCorrect() {
 		ComputerDTOAdd computerDTOAdd = new ComputerDTOAdd.ComputerDTOAddBuilder("test").introduced("2020-01-20")
 				.discontinued("2020-02-20").build();
-		ComputerValidator computerValidator = ComputerValidator.getInstance();
+
 		computerValidator.validationComputerDTOAdd(computerDTOAdd);
 	}
 }

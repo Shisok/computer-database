@@ -5,10 +5,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.excilys.cdb.dto.CompanyDTO;
 import com.excilys.cdb.dto.ComputerDTOEdit;
@@ -26,26 +31,20 @@ import com.excilys.cdb.validator.ComputerValidatorError;
 /**
  * Servlet implementation class EditComputer.
  */
-@WebServlet("/EditComputer")
+@Component
+@RequestMapping("/EditComputer")
 public class EditComputer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	@Autowired
 	private MapperCompany mapperCompany;
+	@Autowired
 	private MapperComputer mapperComputer;
+	@Autowired
 	private CompanyService companyService;
+	@Autowired
 	private ComputerService computerService;
-
+	@Autowired
 	private ComputerValidator computerValidator;
-
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public EditComputer() {
-		mapperCompany = new MapperCompany();
-		companyService = new CompanyService();
-		mapperComputer = new MapperComputer();
-		computerService = new ComputerService();
-		computerValidator = ComputerValidator.getInstance();
-	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -53,6 +52,7 @@ public class EditComputer extends HttpServlet {
 	 * @param request  http message
 	 * @param response http message
 	 */
+	@GetMapping
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -64,7 +64,7 @@ public class EditComputer extends HttpServlet {
 		request.setAttribute("id", id);
 		String name = request.getParameter("name");
 		request.setAttribute("name", name);
-		this.getServletContext().getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request, response);
 	}
 
 	/**
@@ -73,6 +73,7 @@ public class EditComputer extends HttpServlet {
 	 * @param request  http message
 	 * @param response http message
 	 */
+	@PostMapping
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {

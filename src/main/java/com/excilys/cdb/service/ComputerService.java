@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.excilys.cdb.dao.ComputerDAOImpl;
 import com.excilys.cdb.exception.DAOConfigurationException;
 import com.excilys.cdb.exception.DAOException;
@@ -11,12 +14,14 @@ import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.view.CliMenu;
 
+@Component
 public class ComputerService {
+	@Autowired
+	ComputerDAOImpl computerDAOImpl;
 
 	public List<Computer> searchAllComputer() {
 		try {
 
-			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl();
 			return computerDAOImpl.searchAll();
 		} catch (DAOConfigurationException e) {
 			LoggerCdb.logError(getClass(), e);
@@ -29,7 +34,6 @@ public class ComputerService {
 	public Optional<Computer> searchByIdComputer(Long idToSearch) {
 		try {
 
-			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl();
 			Optional<Computer> compSearched = computerDAOImpl.search(idToSearch);
 			return compSearched;
 		} catch (DAOException e) {
@@ -43,8 +47,6 @@ public class ComputerService {
 	public boolean createComputer(Computer compToCreate) {
 		boolean success = false;
 		try {
-
-			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl();
 
 			computerDAOImpl.create(compToCreate);
 			success = true;
@@ -61,7 +63,6 @@ public class ComputerService {
 		boolean success = false;
 		try {
 
-			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl();
 			CliMenu.showUpdateOneComputer();
 			computerDAOImpl.update(compToUpdate);
 			success = true;
@@ -78,7 +79,6 @@ public class ComputerService {
 		boolean success = false;
 		try {
 
-			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl();
 			computerDAOImpl.delete(compToDeleteID);
 			success = true;
 
@@ -93,8 +93,7 @@ public class ComputerService {
 	public int countComputer() {
 		int nbComputer = 0;
 		try {
-
-			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl();
+			LoggerCdb.logInfo(getClass(), computerDAOImpl.toString());
 			nbComputer = computerDAOImpl.searchAllCount();
 
 		} catch (DAOException e) {
@@ -109,7 +108,6 @@ public class ComputerService {
 		int nbComputer = 0;
 		try {
 
-			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl();
 			nbComputer = computerDAOImpl.searchNameCount(name);
 
 		} catch (DAOException e) {

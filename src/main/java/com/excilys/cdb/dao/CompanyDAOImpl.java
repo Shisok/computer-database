@@ -8,14 +8,21 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.mapper.MapperCompany;
 import com.excilys.cdb.model.Company;
+import com.zaxxer.hikari.HikariDataSource;
 
+@Component
 public class CompanyDAOImpl {
 
-	private DBConnexion dbConnexion;
+	@Autowired
+	private HikariDataSource dataSource;
+	@Autowired
 	private MapperCompany mapperCompany;
 
 	private static final int OBJECT_NUMBER_PER_PAGE = 10;
@@ -26,16 +33,10 @@ public class CompanyDAOImpl {
 	private static final String SQL_DELETE = "DELETE FROM company WHERE id=?;";
 	private static final String SQL_DELETE_COMPUTER = "DELETE FROM computer WHERE company_id=?;";
 
-	public CompanyDAOImpl() {
-		this.dbConnexion = DBConnexion.getInstance();
-		this.mapperCompany = new MapperCompany();
-
-	}
-
 	public List<Company> searchAll() {
 		List<Company> companies = new ArrayList<>();
 
-		try (Connection connexion = dbConnexion.getConnection();
+		try (Connection connexion = dataSource.getConnection();
 				Statement statement = connexion.createStatement();
 				ResultSet resultSet = statement.executeQuery(SQL_ALL_COMPANY)) {
 
@@ -55,7 +56,7 @@ public class CompanyDAOImpl {
 		List<Company> companys = new ArrayList<>();
 
 		int offset = page * OBJECT_NUMBER_PER_PAGE;
-		try (Connection connexion = dbConnexion.getConnection();
+		try (Connection connexion = dataSource.getConnection();
 				PreparedStatement preparedStatement = createPrepaStateForPagination(connexion, offset);
 				ResultSet resultSet = preparedStatement.executeQuery();) {
 
@@ -83,7 +84,7 @@ public class CompanyDAOImpl {
 
 	public void delete(Long id) throws DAOException {
 
-		try (Connection connexion = dbConnexion.getConnection();) {
+		try (Connection connexion = dataSource.getConnection();) {
 			connexion.setAutoCommit(false);
 			try (PreparedStatement preparedStatement = createPrepaStateWithCompId(connexion, id, SQL_DELETE);
 					PreparedStatement preparedStatementComputer = createPrepaStateWithCompId(connexion, id,

@@ -3,18 +3,23 @@ package com.excilys.cdb.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.excilys.cdb.dao.CompanyDAOImpl;
 import com.excilys.cdb.exception.DAOConfigurationException;
 import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.model.Company;
-import com.excilys.cdb.view.CliMenu;
 
+@Component
 public class CompanyService {
+	@Autowired
+	CompanyDAOImpl companyDAOImpl;
+
 	public List<Company> searchAllCompany() {
 		try {
 
-			CompanyDAOImpl companyDAOImpl = new CompanyDAOImpl();
 			return companyDAOImpl.searchAll();
 
 		} catch (DAOException e) {
@@ -26,17 +31,10 @@ public class CompanyService {
 
 	}
 
-	public int showCompanyMenuAndAskInput() {
-		CliMenu.showCompanyMenu();
-		return CliMenu.askCompanyMenuInput();
-
-	}
-
 	public boolean deleteCompany(Long compToDeleteID) {
 		boolean success = false;
 		try {
 
-			CompanyDAOImpl companyDAOImpl = new CompanyDAOImpl();
 			companyDAOImpl.delete(compToDeleteID);
 			success = true;
 

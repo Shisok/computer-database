@@ -3,6 +3,9 @@ package com.excilys.cdb.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.excilys.cdb.dao.CompanyDAOImpl;
 import com.excilys.cdb.dao.ComputerDAOImpl;
 import com.excilys.cdb.exception.DAOConfigurationException;
@@ -13,8 +16,14 @@ import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.view.CliPage;
 
+@Service
 public class PageService {
+
 	CliPage cliPage;
+	@Autowired
+	ComputerDAOImpl computerDAOImpl;
+	@Autowired
+	CompanyDAOImpl companyDAOImpl;
 
 	public PageService() {
 
@@ -26,7 +35,7 @@ public class PageService {
 	 */
 	public List<Computer> searchAllComputerPagination(Page<Computer> page) {
 		try {
-			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl();
+
 			return computerDAOImpl.searchAllPagination(page);
 		} catch (
 
@@ -40,7 +49,7 @@ public class PageService {
 
 	public List<Computer> searchNamePagination(Page<Computer> page, String name) {
 		try {
-			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl();
+
 			return computerDAOImpl.searchNamePagination(page, name);
 		} catch (DAOException e) {
 			LoggerCdb.logError(getClass(), e);
@@ -52,7 +61,7 @@ public class PageService {
 
 	public List<Company> searchAllCompanyPage(int pageInt) {
 		try {
-			CompanyDAOImpl companyDAOImpl = new CompanyDAOImpl();
+
 			return companyDAOImpl.searchAllPagination(pageInt);
 		} catch (
 

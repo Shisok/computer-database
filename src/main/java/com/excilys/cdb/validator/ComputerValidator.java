@@ -2,24 +2,14 @@ package com.excilys.cdb.validator;
 
 import java.time.LocalDate;
 
+import org.springframework.stereotype.Component;
+
 import com.excilys.cdb.dto.ComputerDTOAdd;
 import com.excilys.cdb.dto.ComputerDTOEdit;
 import com.excilys.cdb.exception.ValidatorException;
 
+@Component
 public class ComputerValidator {
-
-	// TODO pas pour les objets metier
-	private ComputerValidator() {
-	}
-
-	private static ComputerValidator instance = null;
-
-	public static ComputerValidator getInstance() {
-		if (instance == null) {
-			instance = new ComputerValidator();
-		}
-		return instance;
-	}
 
 	public void validationComputerDTOAdd(ComputerDTOAdd computerDTOAdd) throws ValidatorException {
 

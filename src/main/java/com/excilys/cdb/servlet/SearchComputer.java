@@ -5,11 +5,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.excilys.cdb.dto.ComputerDTOList;
 import com.excilys.cdb.logger.LoggerCdb;
@@ -22,23 +27,17 @@ import com.excilys.cdb.service.PageService;
 /**
  * Servlet implementation class SearchComputer.
  */
-@WebServlet("/SearchComputer")
+@Component
+@RequestMapping("/SearchComputer")
 public class SearchComputer extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
+	@Autowired
 	private ComputerService computerService;
+	@Autowired
 	private PageService pageService;
+	@Autowired
 	private MapperComputer mapperComputer;
-
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public SearchComputer() {
-		super();
-		this.computerService = new ComputerService();
-		this.pageService = new PageService();
-		this.mapperComputer = new MapperComputer();
-	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -46,6 +45,7 @@ public class SearchComputer extends HttpServlet {
 	 * @param request  http message
 	 * @param response http message
 	 */
+	@GetMapping
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -70,7 +70,7 @@ public class SearchComputer extends HttpServlet {
 		List<ComputerDTOList> listeComputers = page.getContentPage().stream()
 				.map(c -> mapperComputer.mapFromModelToDTOList(c)).collect(Collectors.toList());
 		request.setAttribute("listeComputers", listeComputers);
-		this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
 	}
 
 	private void setIndexDebutFin(Page<Computer> page, HttpSession session, int pageMax) {
@@ -126,6 +126,7 @@ public class SearchComputer extends HttpServlet {
 	 * @param request  http message
 	 * @param response http message
 	 */
+	@PostMapping
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {

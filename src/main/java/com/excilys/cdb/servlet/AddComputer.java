@@ -5,10 +5,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.excilys.cdb.dto.CompanyDTO;
 import com.excilys.cdb.dto.ComputerDTOAdd;
@@ -26,27 +31,20 @@ import com.excilys.cdb.validator.ComputerValidatorError;
 /**
  * Servlet implementation class AddComputer.
  */
-@WebServlet("/AddComputer")
+@Component
+@RequestMapping("/AddComputer")
 public class AddComputer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	@Autowired
 	private MapperCompany mapperCompany;
+	@Autowired
 	private MapperComputer mapperComputer;
+	@Autowired
 	private CompanyService companyService;
+	@Autowired
 	private ComputerService computerService;
-
+	@Autowired
 	private ComputerValidator computerValidator;
-
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public AddComputer() {
-
-		mapperCompany = new MapperCompany();
-		companyService = new CompanyService();
-		mapperComputer = new MapperComputer();
-		computerService = new ComputerService();
-		computerValidator = ComputerValidator.getInstance();
-	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -55,6 +53,7 @@ public class AddComputer extends HttpServlet {
 	 * @param response http message
 	 * 
 	 */
+	@GetMapping
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -63,7 +62,7 @@ public class AddComputer extends HttpServlet {
 		List<CompanyDTO> listCompaniesDTO = listCompanies.stream().map(c -> mapperCompany.mapFromModelToDTO(c))
 				.collect(Collectors.toList());
 		request.setAttribute("listCompanies", listCompaniesDTO);
-		this.getServletContext().getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request, response);
 
 	}
 
@@ -73,6 +72,7 @@ public class AddComputer extends HttpServlet {
 	 * @param request  http message
 	 * @param response http message
 	 */
+	@PostMapping
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {

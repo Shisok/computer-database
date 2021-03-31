@@ -4,12 +4,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
+import org.springframework.stereotype.Component;
+
 import com.excilys.cdb.dto.ComputerDTOAdd;
 import com.excilys.cdb.dto.ComputerDTOEdit;
 import com.excilys.cdb.dto.ComputerDTOList;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 
+@Component
 public class MapperComputer {
 
 	public Computer mapFromResultSet(ResultSet resultSet) throws SQLException {
