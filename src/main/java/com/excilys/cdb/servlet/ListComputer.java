@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.excilys.cdb.dto.ComputerDTOList;
-import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.mapper.MapperComputer;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
@@ -39,10 +38,6 @@ public class ListComputer extends HttpServlet {
 	private MapperComputer mapperComputer;
 
 	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-
-	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 * @param request  http message
@@ -52,7 +47,7 @@ public class ListComputer extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		LoggerCdb.logInfo(getClass(), "*****************************");
+
 		Page<Computer> page = new Page<Computer>();
 		HttpSession session = request.getSession();
 		setOrderBy(page, session);
