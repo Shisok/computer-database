@@ -14,8 +14,7 @@ import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 @ComponentScan({ "com.excilys.cdb.service", "com.excilys.cdb.controller", "com.excilys.cdb.dao",
-		"com.excilys.cdb.mapper", "com.excilys.cdb.model", "com.excilys.cdb.validator", "com.excilys.cdb.logger",
-		"com.excilys.cdb.view" })
+		"com.excilys.cdb.mapper", "com.excilys.cdb.model", "com.excilys.cdb.validator", "com.excilys.cdb.view" })
 public class MyWebApplicationInitializerCli implements WebApplicationInitializer {
 
 	@Override
