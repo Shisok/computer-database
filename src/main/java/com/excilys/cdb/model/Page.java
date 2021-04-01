@@ -80,18 +80,18 @@ public class Page<E> {
 	}
 
 	public void setIndex(int max) {
-
+		int pageIndex = this.pageInt + 1;
 		if (max > 5) {
 
-			if (pageInt <= 3) {
+			if (pageIndex <= 3) {
 				indexDebut = 1;
 				indexFin = 5;
-			} else if (pageInt > max - 3) {
+			} else if (pageIndex > max - 3) {
 				indexDebut = max - 4;
 				indexFin = max;
 			} else {
-				indexDebut = pageInt - 2;
-				indexFin = pageInt + 2;
+				indexDebut = pageIndex - 2;
+				indexFin = pageIndex + 2;
 			}
 		} else {
 			indexDebut = 1;
