@@ -135,4 +135,10 @@ public class ListComputer extends HttpServlet {
 		doGet(request, response);
 	}
 
+//	@Override
+//	public void init(ServletConfig config) throws ServletException {
+//		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+//		super.init(config);
+//	}
+
 }

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.excilys.cdb.dao.ComputerDAOImpl;
 import com.excilys.cdb.exception.DAOConfigurationException;
@@ -14,7 +14,7 @@ import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.view.CliMenu;
 
-@Component
+@Service
 public class ComputerService {
 	@Autowired
 	ComputerDAOImpl computerDAOImpl;

@@ -8,14 +8,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * Servlet implementation class OrderBy.
  */
-@Component
+@Controller
 @RequestMapping("/OrderBy")
 public class OrderBy extends HttpServlet {
 	private static final long serialVersionUID = 1L;

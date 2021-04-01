@@ -16,7 +16,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @ComponentScan({ "com.excilys.cdb.service", "com.excilys.cdb.controller", "com.excilys.cdb.dao",
 		"com.excilys.cdb.mapper", "com.excilys.cdb.model", "com.excilys.cdb.validator", "com.excilys.cdb.logger",
 		"com.excilys.cdb.view" })
-public class MyWebApplicationInitializer implements WebApplicationInitializer {
+public class MyWebApplicationInitializerCli implements WebApplicationInitializer {
 
 	@Override
 	public void onStartup(ServletContext container) throws ServletException {

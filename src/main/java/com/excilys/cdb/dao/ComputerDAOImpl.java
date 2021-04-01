@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.logger.LoggerCdb;
@@ -21,7 +21,7 @@ import com.excilys.cdb.model.Page;
 import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 import com.zaxxer.hikari.HikariDataSource;
 
-@Component
+@Repository
 public class ComputerDAOImpl {
 	@Autowired
 	private HikariDataSource dataSource;
@@ -251,7 +251,6 @@ public class ComputerDAOImpl {
 		return preparedStatement;
 	}
 
-	// TO DO name pagination
 	public List<Computer> searchNamePagination(Page<Computer> page, String name) throws DAOException {
 		List<Computer> computers = new ArrayList<>();
 		try (Connection connexion = dataSource.getConnection();

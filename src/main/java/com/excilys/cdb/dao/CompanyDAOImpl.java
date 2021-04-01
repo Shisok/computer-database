@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.logger.LoggerCdb;
@@ -17,7 +17,7 @@ import com.excilys.cdb.mapper.MapperCompany;
 import com.excilys.cdb.model.Company;
 import com.zaxxer.hikari.HikariDataSource;
 
-@Component
+@Repository
 public class CompanyDAOImpl {
 
 	@Autowired

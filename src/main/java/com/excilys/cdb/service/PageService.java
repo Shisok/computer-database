@@ -14,12 +14,10 @@ import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
-import com.excilys.cdb.view.CliPage;
 
 @Service
 public class PageService {
 
-	CliPage cliPage;
 	@Autowired
 	ComputerDAOImpl computerDAOImpl;
 	@Autowired
