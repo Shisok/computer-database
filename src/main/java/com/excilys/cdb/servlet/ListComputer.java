@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,9 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.cdb.dto.ComputerDTOList;
 import com.excilys.cdb.mapper.MapperComputer;
@@ -27,7 +27,7 @@ import com.excilys.cdb.service.PageService;
  * Servlet implementation class ListComputer.
  */
 @Controller
-@RequestMapping("/ListComputer")
+@WebServlet("/ListComputer")
 public class ListComputer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	@Autowired
@@ -43,7 +43,7 @@ public class ListComputer extends HttpServlet {
 	 * @param request  http message
 	 * @param response http message
 	 */
-	@GetMapping
+	// @GetMapping
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -123,7 +123,7 @@ public class ListComputer extends HttpServlet {
 	 * @param request  http message
 	 * @param response http message
 	 */
-	@PostMapping
+//	@PostMapping
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -135,10 +135,10 @@ public class ListComputer extends HttpServlet {
 		doGet(request, response);
 	}
 
-//	@Override
-//	public void init(ServletConfig config) throws ServletException {
-//		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
-//		super.init(config);
-//	}
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+		super.init(config);
+	}
 
 }
