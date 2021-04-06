@@ -1,4 +1,4 @@
-package com.excilys.cdb.config;
+package com.excilys.cdb.configTest;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -19,7 +19,7 @@ import com.zaxxer.hikari.HikariDataSource;
 		"com.excilys.cdb.mapper", "com.excilys.cdb.servlet", "com.excilys.cdb.validator", "com.excilys.cdb.view",
 		"com.excilys.cdb.model" })
 
-public class MyWebConfig implements WebMvcConfigurer {
+public class MyWebConfigTest implements WebMvcConfigurer {
 	@Bean
 	public InternalResourceViewResolver viewResolver() {
 		InternalResourceViewResolver bean = new InternalResourceViewResolver();
@@ -31,7 +31,7 @@ public class MyWebConfig implements WebMvcConfigurer {
 		return bean;
 	}
 
-	@Bean
+	@Bean(name = "dataSource")
 	public HikariDataSource getDataSource() {
 		return new HikariDataSource(new HikariConfig("/com/excilys/cdb/dao/datasource.properties"));
 	}

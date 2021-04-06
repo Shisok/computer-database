@@ -14,6 +14,7 @@ import com.excilys.cdb.dto.ComputerDTOAdd;
 import com.excilys.cdb.dto.ComputerDTOList;
 import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.mapper.MapperComputer;
+import com.excilys.cdb.mapper.RowMapperComputer;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 
@@ -23,7 +24,8 @@ public class TestMapperComputer {
 	public void testMapFromResultSet() {
 		try {
 			ResultSet rsMock = Mockito.mock(ResultSet.class);
-			MapperComputer mapperComputer = new MapperComputer();
+
+			RowMapperComputer rowMpMapperComputer = new RowMapperComputer();
 			Mockito.when(rsMock.getLong("id")).thenReturn(1L);
 			Mockito.when(rsMock.getString("name")).thenReturn("testComputerName");
 			Mockito.when(rsMock.getDate("introduced")).thenReturn(Date.valueOf(LocalDate.parse("2020-08-06")));
@@ -31,7 +33,7 @@ public class TestMapperComputer {
 			Mockito.when(rsMock.getLong("company_id")).thenReturn(2L);
 			Mockito.when(rsMock.getString("companyName")).thenReturn("testCompanyName");
 			Mockito.when(rsMock.getObject("company_id")).thenReturn(2L);
-			Computer computer = mapperComputer.mapFromResultSet(rsMock);
+			Computer computer = rowMpMapperComputer.mapRow(rsMock, 0);
 			Company companyExpected = new Company.CompanyBuilder(2L).name("testCompanyName").build();
 			Computer computerExpected = new Computer.ComputerBuilder(1L).name("testComputerName")
 					.introduced(LocalDate.parse("2020-08-06")).discontinued(LocalDate.parse("2020-08-07"))
@@ -46,13 +48,13 @@ public class TestMapperComputer {
 	public void testMapFromResultSetWithNull() {
 		try {
 			ResultSet rsMock = Mockito.mock(ResultSet.class);
-			MapperComputer mapperComputer = new MapperComputer();
+			RowMapperComputer rowMpMapperComputer = new RowMapperComputer();
 			Mockito.when(rsMock.getLong("id")).thenReturn(1L);
 			Mockito.when(rsMock.getString("name")).thenReturn("testComputerName");
 			Mockito.when(rsMock.getDate("introduced")).thenReturn(null);
 			Mockito.when(rsMock.getDate("discontinued")).thenReturn(null);
 			Mockito.when(rsMock.getObject("company_id")).thenReturn(null);
-			Computer computer = mapperComputer.mapFromResultSet(rsMock);
+			Computer computer = rowMpMapperComputer.mapRow(rsMock, 0);
 			Company companyExpected = new Company.CompanyBuilder(null).build();
 			Computer computerExpected = new Computer.ComputerBuilder(1L).name("testComputerName").introduced(null)
 					.discontinued(null).company(companyExpected).build();

@@ -1,10 +1,10 @@
-package com.excilys.cdb.config;
+package com.excilys.cdb.configTest;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 @Configuration
-public class MyWebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+public class MyWebInitializeTest extends AbstractAnnotationConfigDispatcherServletInitializer {
 
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
@@ -13,7 +13,7 @@ public class MyWebAppInitializer extends AbstractAnnotationConfigDispatcherServl
 
 	@Override
 	protected Class<?>[] getServletConfigClasses() {
-		return new Class<?>[] { MyWebConfig.class };
+		return new Class<?>[] { MyWebConfigTest.class };
 	}
 
 	@Override

@@ -14,7 +14,25 @@ import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
+import org.springframework.test.context.web.AnnotationConfigWebContextLoader;
+import org.springframework.test.context.web.WebAppConfiguration;
 
+import com.excilys.cdb.configTest.MyWebConfigTest;
+import com.github.springtestdbunit.DbUnitTestExecutionListener;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration
+@ContextConfiguration(loader = AnnotationConfigWebContextLoader.class, classes = { MyWebConfigTest.class })
+@TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
+		TransactionalTestExecutionListener.class, DbUnitTestExecutionListener.class })
 public class DataSourceDBUnitTest extends DataSourceBasedDBTestCase {
 	@Override
 	protected DataSource getDataSource() {
@@ -42,6 +60,7 @@ public class DataSourceDBUnitTest extends DataSourceBasedDBTestCase {
 		return DatabaseOperation.DELETE_ALL;
 	}
 
+	@DatabaseSetup("/com/excilys/cdb/dao/data.xml")
 	@Test
 	public void testDbUnitInitDataCorrespondance() throws Exception {
 
@@ -64,7 +83,7 @@ public class DataSourceDBUnitTest extends DataSourceBasedDBTestCase {
 			conn.createStatement().executeUpdate("INSERT INTO COMPANY (id,name) VALUES ( 42,'Research In Motion')");
 			ITable actualData = getConnection().createQueryTable("result_name",
 					"SELECT * FROM COMPANY WHERE name='Research In Motion'");
-			assertEqualsIgnoreCols(expectedTable, actualData, new String[] {"id"});
+			assertEqualsIgnoreCols(expectedTable, actualData, new String[] { "id" });
 		}
 
 	}

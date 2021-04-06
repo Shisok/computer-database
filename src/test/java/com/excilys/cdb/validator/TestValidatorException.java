@@ -13,13 +13,14 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.web.AnnotationConfigWebContextLoader;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.excilys.cdb.config.MyWebConfig;
+import com.excilys.cdb.config.MyWebApplicationInitializerCli;
 import com.excilys.cdb.dto.ComputerDTOAdd;
 import com.excilys.cdb.exception.ValidatorException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(loader = AnnotationConfigWebContextLoader.class, classes = { MyWebConfig.class })
+@ContextConfiguration(loader = AnnotationConfigWebContextLoader.class, classes = {
+		MyWebApplicationInitializerCli.class })
 @TestExecutionListeners(DependencyInjectionTestExecutionListener.class)
 public class TestValidatorException {
 

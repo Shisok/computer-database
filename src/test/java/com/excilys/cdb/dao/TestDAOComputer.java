@@ -11,19 +11,22 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 
+@DatabaseSetup("/com/excilys/cdb/dao/data.xml")
 public class TestDAOComputer extends DataSourceDBUnitTest {
+	@Autowired
+	CompanyDAOImpl companyDAOImpl;
+	@Autowired
+	ComputerDAOImpl computerDAOImpl;
 
 	@Test
 	public void testSearchAllPaginationCompanyDAO() throws Exception {
-
-//		Connection conn = getDataSource().getConnection();
-
-		CompanyDAOImpl companyDAOImpl = new CompanyDAOImpl();
 
 		List<Company> companiesPagination = companyDAOImpl.searchAllPagination(0);
 		assertEquals(10, companiesPagination.size());
@@ -32,10 +35,6 @@ public class TestDAOComputer extends DataSourceDBUnitTest {
 	@Test
 	public void testSearchAllComputerDAO() throws Exception {
 
-//		Connection conn = getDataSource().getConnection();
-
-		ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl();
-
 		List<Computer> computers = computerDAOImpl.searchAll();
 		assertEquals(13, computers.size());
 	}
@@ -43,9 +42,6 @@ public class TestDAOComputer extends DataSourceDBUnitTest {
 	@Test
 	public void testSearchAllPaginationComputerDAO() throws Exception {
 
-//		Connection conn = getDataSource().getConnection();
-
-		ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl();
 		Page<Computer> pageComputer = new Page<Computer>();
 		pageComputer.setPageInt(0);
 		pageComputer.setObjetPerPage(10);
@@ -61,8 +57,6 @@ public class TestDAOComputer extends DataSourceDBUnitTest {
 			ITable expectedTable = expectedDataSet.getTable("COMPUTER");
 
 			// Connection conn = getDataSource().getConnection();
-
-			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl();
 
 			Company company = new Company.CompanyBuilder(12L).build();
 			Computer computer = new Computer.ComputerBuilder(null).name("testComputerName")
@@ -81,7 +75,7 @@ public class TestDAOComputer extends DataSourceDBUnitTest {
 			IDataSet expectedDataSet = new FlatXmlDataSetBuilder().build(is);
 			ITable expectedTable = expectedDataSet.getTable("COMPUTER");
 			// Connection conn = getDataSource().getConnection();
-			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl();
+
 			computerDAOImpl.delete(4L);
 			ITable actualData = getConnection().createQueryTable("result_name", "SELECT * FROM COMPUTER ");
 			assertEqualsIgnoreCols(expectedTable, actualData, new String[] { "id" });
@@ -90,10 +84,6 @@ public class TestDAOComputer extends DataSourceDBUnitTest {
 
 	@Test
 	public void testSearchComputerDAO() throws Exception {
-
-//		Connection conn = getDataSource().getConnection();
-
-		ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl();
 
 		Optional<Computer> computer = computerDAOImpl.search(5L);
 		Company companyExpected = new Company.CompanyBuilder(5L).name("RCA3").build();
@@ -110,11 +100,6 @@ public class TestDAOComputer extends DataSourceDBUnitTest {
 				.getResourceAsStream("com/excilys/cdb/dao/dataExpectedUpdateComputer.xml")) {
 			IDataSet expectedDataSet = new FlatXmlDataSetBuilder().build(is);
 			ITable expectedTable = expectedDataSet.getTable("COMPUTER");
-//			DBConnexion dbConnexionMock = Mockito.mock(DBConnexion.class);
-//			Connection conn = getDataSource().getConnection();
-//			Mockito.when(dbConnexionMock.getConnection()).thenReturn(conn);
-			ComputerDAOImpl computerDAOImpl = new ComputerDAOImpl();
-//			computerDAOImpl.setDbConnexion(dbConnexionMock);
 			Company company = new Company.CompanyBuilder(12L).name("RCA10").build();
 			Computer computer = new Computer.ComputerBuilder(5L).name("testUpdate")
 					.introduced(LocalDate.parse("2000-04-01")).discontinued(LocalDate.parse("2000-05-02"))
