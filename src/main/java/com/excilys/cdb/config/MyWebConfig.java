@@ -3,6 +3,8 @@ package com.excilys.cdb.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -34,6 +36,16 @@ public class MyWebConfig implements WebMvcConfigurer {
 	@Bean
 	public HikariDataSource getDataSource() {
 		return new HikariDataSource(new HikariConfig("/com/excilys/cdb/dao/datasource.properties"));
+	}
+
+	@Bean
+	public JdbcTemplate getJdbcTemplate(HikariDataSource dataSource) {
+		return new JdbcTemplate(dataSource);
+	}
+
+	@Bean
+	public NamedParameterJdbcTemplate getNamedParameterJdbcTemplate(HikariDataSource dataSource) {
+		return new NamedParameterJdbcTemplate(dataSource);
 	}
 
 	@Override

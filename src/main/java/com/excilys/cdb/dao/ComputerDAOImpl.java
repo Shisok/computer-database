@@ -20,14 +20,16 @@ import com.excilys.cdb.mapper.RowMapperComputer;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
-import com.zaxxer.hikari.HikariDataSource;
 
 @Repository
 public class ComputerDAOImpl {
 	@Autowired
-	private HikariDataSource dataSource;
+	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
 	@Autowired
 	RowMapperComputer rowMapperComputer;
+
 	private static final String SQL_UPDATE = "UPDATE computer SET name=:name, introduced=:introduced, discontinued=:discontinued, company_id=:company_id WHERE id=:id;";
 	private static final String SQL_DELETE = "DELETE FROM computer WHERE id=:id;";
 	private static final String SQL_SELECT = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued ,company.id as company_id, company.name as companyName  FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.id = :id;";
@@ -40,7 +42,7 @@ public class ComputerDAOImpl {
 
 	public void create(Computer computer) throws DAOException {
 		try {
-			JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+
 			SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
 			simpleJdbcInsert.withTableName("computer").usingGeneratedKeyColumns("id");
 			MapSqlParameterSource params = new MapSqlParameterSource();
@@ -76,14 +78,14 @@ public class ComputerDAOImpl {
 	public void update(Computer computer) throws DAOException {
 
 		try {
-			NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+
 			MapSqlParameterSource params = new MapSqlParameterSource();
 			params.addValue("name", computer.getName());
 			params.addValue("introduced", computer.getIntroduced());
 			params.addValue("discontinued", computer.getDiscontinued());
 			params.addValue("company_id", computer.getCompany().getId());
 			params.addValue("id", computer.getId());
-			int statut = jdbcTemplate.update(SQL_UPDATE, params);
+			int statut = namedParameterJdbcTemplate.update(SQL_UPDATE, params);
 			if (statut == 0) {
 				throw new DAOException("Échec de la modification de l'ordinateur.");
 			}
@@ -98,10 +100,10 @@ public class ComputerDAOImpl {
 	public void delete(Long id) throws DAOException {
 
 		try {
-			NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+
 			MapSqlParameterSource params = new MapSqlParameterSource();
 			params.addValue("id", id);
-			int statut = jdbcTemplate.update(SQL_DELETE, params);
+			int statut = namedParameterJdbcTemplate.update(SQL_DELETE, params);
 			if (statut == 0) {
 				throw new DAOException("Échec de la suppression de l'ordinateur, aucune ligne ajoutée dans la table.");
 			}
@@ -115,10 +117,11 @@ public class ComputerDAOImpl {
 		Optional<Computer> computer = Optional.empty();
 
 		try {
-			NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+
 			MapSqlParameterSource params = new MapSqlParameterSource();
 			params.addValue("id", id);
-			computer = Optional.ofNullable(jdbcTemplate.queryForObject(SQL_SELECT, params, rowMapperComputer));
+			computer = Optional
+					.ofNullable(namedParameterJdbcTemplate.queryForObject(SQL_SELECT, params, rowMapperComputer));
 
 		} catch (DataAccessException e) {
 			LoggerCdb.logError(this.getClass(), e);
@@ -130,7 +133,6 @@ public class ComputerDAOImpl {
 	public List<Computer> searchAll() {
 		List<Computer> computers = new ArrayList<>();
 		try {
-			JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
 			computers = jdbcTemplate.query(SQL_ALL_COMPUTER, rowMapperComputer);
 		} catch (DataAccessException e) {
@@ -142,13 +144,12 @@ public class ComputerDAOImpl {
 	public List<Computer> searchAllPagination(Page<Computer> page) {
 		List<Computer> computers = new ArrayList<>();
 		try {
-			NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 
 			MapSqlParameterSource params = new MapSqlParameterSource();
 			params.addValue("limit", page.getObjetPerPage());
 			params.addValue("offset", page.getObjetPerPage() * page.getPageInt());
 
-			computers = jdbcTemplate.query(SQL_ALL_COMPUTER_PAGINATION
+			computers = namedParameterJdbcTemplate.query(SQL_ALL_COMPUTER_PAGINATION
 					.replace("ORDERATTRIBUTE", page.getOrderAttribute()).replace("ORDERSORT", page.getOrderSort()),
 					params, rowMapperComputer);
 		} catch (DataAccessException e) {
@@ -161,7 +162,6 @@ public class ComputerDAOImpl {
 	public int searchAllCount() {
 		int nbComputer = 0;
 		try {
-			JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
 			nbComputer = jdbcTemplate.queryForObject(SQL_COUNT_ALL_COMPUTER, Integer.class);
 		} catch (DataAccessException e) {
@@ -173,11 +173,11 @@ public class ComputerDAOImpl {
 	public int searchNameCount(String name) throws DAOException {
 		int nbComputer = 0;
 		try {
-			NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+
 			MapSqlParameterSource params = new MapSqlParameterSource();
 			params.addValue("nameComputer", "%" + name + "%");
 			params.addValue("nameCompany", "%" + name + "%");
-			nbComputer = jdbcTemplate.queryForObject(SQL_SEARCH_BY_NAME_COUNT, params, Integer.class);
+			nbComputer = namedParameterJdbcTemplate.queryForObject(SQL_SEARCH_BY_NAME_COUNT, params, Integer.class);
 		} catch (DataAccessException e) {
 			LoggerCdb.logError(this.getClass(), e);
 		}
@@ -187,14 +187,14 @@ public class ComputerDAOImpl {
 	public List<Computer> searchNamePagination(Page<Computer> page, String name) throws DAOException {
 		List<Computer> computers = new ArrayList<>();
 		try {
-			NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+
 			MapSqlParameterSource params = new MapSqlParameterSource();
 			params.addValue("limit", page.getObjetPerPage());
 			params.addValue("offset", page.getObjetPerPage() * page.getPageInt());
 			params.addValue("nameComputer", "%" + name + "%");
 			params.addValue("nameCompany", "%" + name + "%");
 
-			computers = jdbcTemplate.query(SQL_SEARCH_BY_NAME_COMPA_COMPU
+			computers = namedParameterJdbcTemplate.query(SQL_SEARCH_BY_NAME_COMPA_COMPU
 					.replace("ORDERATTRIBUTE", page.getOrderAttribute()).replace("ORDERSORT", page.getOrderSort()),
 					params, rowMapperComputer);
 		} catch (DataAccessException e) {

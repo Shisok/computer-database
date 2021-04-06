@@ -6,6 +6,8 @@ import javax.servlet.ServletException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
@@ -29,4 +31,15 @@ public class MyWebApplicationInitializerCli implements WebApplicationInitializer
 	public HikariDataSource getDataSource() {
 		return new HikariDataSource(new HikariConfig("/com/excilys/cdb/dao/datasource.properties"));
 	}
+
+	@Bean
+	public JdbcTemplate getJdbcTemplate(HikariDataSource dataSource) {
+		return new JdbcTemplate(dataSource);
+	}
+
+	@Bean
+	public NamedParameterJdbcTemplate getNamedParameterJdbcTemplate(HikariDataSource dataSource) {
+		return new NamedParameterJdbcTemplate(dataSource);
+	}
+
 }
