@@ -95,6 +95,14 @@ public class Computer {
 		this.company = company;
 	}
 
+	public Long getCompanyId() {
+		if (company != null && company.getId() != 0) {
+			return company.getId();
+		}
+
+		return null;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

@@ -8,8 +8,10 @@ import java.util.Optional;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
@@ -37,7 +39,7 @@ public class ComputerDAOImpl {
 		this.rowMapperComputer = rowMapperComputer;
 	}
 
-	private static final String SQL_UPDATE = "UPDATE computer SET name=:name, introduced=:introduced, discontinued=:discontinued, company_id=:company_id WHERE id=:id;";
+	private static final String SQL_UPDATE = "UPDATE computer SET name=:name, introduced=:introduced, discontinued=:discontinued, company_id=:companyId WHERE id=:id;";
 	private static final String SQL_DELETE = "DELETE FROM computer WHERE id=:id;";
 	private static final String SQL_SELECT = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued ,company.id as company_id, company.name as companyName  FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.id = :id;";
 
@@ -52,7 +54,6 @@ public class ComputerDAOImpl {
 
 			SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
 			simpleJdbcInsert.withTableName("computer").usingGeneratedKeyColumns("id");
-
 			MapSqlParameterSource params = new MapSqlParameterSource();
 			params.addValue("name", computer.getName());
 			params.addValue("introduced", computer.getIntroduced());
@@ -86,14 +87,8 @@ public class ComputerDAOImpl {
 	public void update(Computer computer) throws DAOException {
 
 		try {
-//			SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(computer);
-			MapSqlParameterSource params = new MapSqlParameterSource();
-			params.addValue("name", computer.getName());
-			params.addValue("introduced", computer.getIntroduced());
-			params.addValue("discontinued", computer.getDiscontinued());
-			params.addValue("company_id", computer.getCompany().getId());
-			params.addValue("id", computer.getId());
-			int statut = namedParameterJdbcTemplate.update(SQL_UPDATE, params);
+			SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(computer);
+			int statut = namedParameterJdbcTemplate.update(SQL_UPDATE, namedParameters);
 			if (statut == 0) {
 				throw new DAOException("Échec de la modification de l'ordinateur.");
 			}
