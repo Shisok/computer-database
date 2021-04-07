@@ -19,6 +19,24 @@ public class Page<E> {
 	private int indexFin;
 	private String orderAttribute;
 	private String orderSort;
+	int nbComputer;
+	int pageMax;
+
+	public int getPageMax() {
+		return pageMax;
+	}
+
+	public void setPageMax(int pageMax) {
+		this.pageMax = pageMax;
+	}
+
+	public int getNbComputer() {
+		return nbComputer;
+	}
+
+	public void setNbComputer(int nbComputer) {
+		this.nbComputer = nbComputer;
+	}
 
 	public Page() {
 		this.pageInt = 0;
@@ -79,23 +97,31 @@ public class Page<E> {
 		this.objetPerPage = objetPerPage;
 	}
 
-	public void setIndex(int max) {
+	public void setIndex() {
 		int pageIndex = this.pageInt + 1;
-		if (max > 5) {
+		if (pageMax > 5) {
 
 			if (pageIndex <= 3) {
 				indexDebut = 1;
 				indexFin = 5;
-			} else if (pageIndex > max - 3) {
-				indexDebut = max - 4;
-				indexFin = max;
+			} else if (pageIndex > pageMax - 3) {
+				indexDebut = pageMax - 4;
+				indexFin = pageMax;
 			} else {
 				indexDebut = pageIndex - 2;
 				indexFin = pageIndex + 2;
 			}
 		} else {
 			indexDebut = 1;
-			indexFin = max;
+			indexFin = pageMax;
+		}
+	}
+
+	public void setPageMax() {
+
+		pageMax = nbComputer / objetPerPage;
+		if (nbComputer % objetPerPage != 0) {
+			pageMax += 1;
 		}
 	}
 

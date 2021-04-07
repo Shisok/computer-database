@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.cdb.exception.DAOException;
@@ -15,6 +16,7 @@ import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.mapper.RowMapperCompany;
 import com.excilys.cdb.model.Company;
 
+@EnableTransactionManagement
 @Repository
 public class CompanyDAOImpl {
 
@@ -66,7 +68,7 @@ public class CompanyDAOImpl {
 
 	}
 
-	@Transactional(rollbackFor = { Exception.class })
+	@Transactional
 	public void delete(Long id) throws DAOException {
 
 		try {
@@ -74,9 +76,9 @@ public class CompanyDAOImpl {
 			MapSqlParameterSource params = new MapSqlParameterSource();
 			params.addValue("id", id);
 			jdbcTemplate.update(SQL_DELETE_COMPUTER, params);
-//			MapSqlParameterSource paramsBug = new MapSqlParameterSource();
-//			paramsBug.addValue("id", 4);
-//			jdbcTemplate.update(SQL_DELETE, paramsBug);
+			MapSqlParameterSource paramsBug = new MapSqlParameterSource();
+			paramsBug.addValue("id", 4);
+			jdbcTemplate.update(SQL_DELETE, paramsBug);
 			int statut = jdbcTemplate.update(SQL_DELETE, params);
 
 			if (statut == 0) {

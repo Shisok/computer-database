@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.excilys.cdb.dto.ComputerDTOList;
-import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.mapper.MapperComputer;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
@@ -52,7 +51,6 @@ public class SearchComputer extends HttpServlet {
 		Page<Computer> page = new Page<Computer>();
 		String name = request.getParameter("search");
 		request.setAttribute("search", name);
-		LoggerCdb.logInfo(getClass(), request.getParameter("search"));
 		HttpSession session = request.getSession();
 		setOrderBy(page, session);
 		int nbComputer = countComputer(request, name);
@@ -74,7 +72,8 @@ public class SearchComputer extends HttpServlet {
 	}
 
 	private void setIndexDebutFin(Page<Computer> page, HttpSession session, int pageMax) {
-		page.setIndex(pageMax);
+		page.setPageMax();
+		page.setIndex();
 		session.setAttribute("indexDebut", page.getIndexDebut());
 		session.setAttribute("indexFin", page.getIndexFin());
 	}

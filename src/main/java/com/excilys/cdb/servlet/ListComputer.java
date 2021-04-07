@@ -1,20 +1,15 @@
 package com.excilys.cdb.servlet;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.excilys.cdb.dto.ComputerDTOList;
 import com.excilys.cdb.mapper.MapperComputer;
@@ -27,112 +22,95 @@ import com.excilys.cdb.service.PageService;
  * Servlet implementation class ListComputer.
  */
 @Controller
-@RequestMapping("/ListComputer")
-public class ListComputer extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+public class ListComputer {
 	@Autowired
 	private ComputerService computerService;
 	@Autowired
 	private PageService pageService;
 	@Autowired
 	private MapperComputer mapperComputer;
+	@Autowired
+	private SessionAttributes sessionAttributes;
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 * @param request  http message
-	 * @param response http message
-	 */
-	@GetMapping
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	@GetMapping(value = "/ListComputer")
+	protected ModelAndView viewDashboard(@RequestParam(required = false) String pageno,
+			@RequestParam(required = false) String search) {
 
+		Page<Computer> page = dashboardPageHandler(pageno, search);
+		return dashboardModelAndViewHandler(search, page);
+	}
+
+	private Page<Computer> dashboardPageHandler(String pageno, String search) {
 		Page<Computer> page = new Page<Computer>();
-		HttpSession session = request.getSession();
-		setOrderBy(page, session);
-		int nbComputer = countComputer(request);
-		setObjectPerPage(page, session);
-		int objectPerPage = page.getObjetPerPage();
-		int pageMax = nbComputer / objectPerPage;
-		if (nbComputer % objectPerPage != 0) {
-			pageMax += 1;
+		setOrderBy(page);
+		setPageInt(page, pageno);
+		setObjectPerPage(page);
+		if (search != null) {
+			page.setNbComputer(this.computerService.searchNameCount(search));
+			page.setContentPage(this.pageService.searchNamePagination(page, search));
+
+		} else {
+			page.setNbComputer(this.computerService.countComputer());
+			page.setContentPage(this.pageService.searchAllComputerPagination(page));
 		}
-		setPageInt(request, page, session);
-		setIndexDebutFin(page, session, pageMax);
-		request.setAttribute("pageMax", pageMax);
-		page.setContentPage(this.pageService.searchAllComputerPagination(page));
+		page.setPageMax();
+		page.setIndex();
+		return page;
+	}
+
+	private ModelAndView dashboardModelAndViewHandler(String search, Page<Computer> page) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("pageMax", page.getPageMax());
 		List<ComputerDTOList> listeComputers = page.getContentPage().stream()
 				.map(c -> mapperComputer.mapFromModelToDTOList(c)).collect(Collectors.toList());
-		request.setAttribute("listeComputers", listeComputers);
-
-		request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
-
+		modelAndView.addObject("listeComputers", listeComputers);
+		modelAndView.setViewName("dashboard");
+		modelAndView.addObject("numeroPage", page.getPageInt() + 1);
+		modelAndView.addObject("countComputer", page.getNbComputer());
+		if (search != null) {
+			modelAndView.addObject("search", search);
+		}
+		modelAndView.addObject("indexDebut", page.getIndexDebut());
+		modelAndView.addObject("indexFin", page.getIndexFin());
+		return modelAndView;
 	}
 
-	private void setOrderBy(Page<Computer> page, HttpSession session) {
-		if (session.getAttribute("orderAttribute") != null) {
-
-			page.setOrderAttribute((String) session.getAttribute("orderAttribute"));
+	private void setOrderBy(Page<Computer> page) {
+		if (sessionAttributes.getOrderAttribute() != null) {
+			page.setOrderAttribute(sessionAttributes.getOrderAttribute());
 		} else {
-			session.setAttribute("orderAttribute", "id");
+			sessionAttributes.setOrderAttribute("id");
 		}
-		if (session.getAttribute("orderSort") != null) {
-			page.setOrderSort((String) session.getAttribute("orderSort"));
+		if (sessionAttributes.getOrderSort() != null) {
+			page.setOrderSort(sessionAttributes.getOrderSort());
 		} else {
-			session.setAttribute("orderSort", "asc");
+			sessionAttributes.setOrderSort("asc");
 		}
 
 	}
 
-	private void setIndexDebutFin(Page<Computer> page, HttpSession session, int pageMax) {
-		page.setIndex(pageMax);
-		session.setAttribute("indexDebut", page.getIndexDebut());
-		session.setAttribute("indexFin", page.getIndexFin());
-	}
-
-	private void setPageInt(HttpServletRequest request, Page<Computer> page, HttpSession session) {
-		String stringNumeroDePage = request.getParameter("pageno");
-		if (stringNumeroDePage == null) {
-			session.setAttribute("pageno", 1);
-			stringNumeroDePage = "1";
+	private void setPageInt(Page<Computer> page, String pageno) {
+		if (pageno == null) {
+			sessionAttributes.setPageno("1");
+			pageno = "1";
 		}
-		int numeroPage = Integer.parseInt(stringNumeroDePage);
-		request.setAttribute("numeroPage", numeroPage);
+		int numeroPage = Integer.parseInt(pageno);
 		page.setPageInt(numeroPage - 1);
 
 	}
 
-	private void setObjectPerPage(Page<Computer> page, HttpSession session) {
-		String stringNombreObjet = (String) session.getAttribute("nbObject");
+	private void setObjectPerPage(Page<Computer> page) {
+		String stringNombreObjet = sessionAttributes.getNbObject();
 		if (stringNombreObjet == null) {
 			stringNombreObjet = "10";
 		}
 		page.setObjetPerPage(Integer.parseInt(stringNombreObjet));
 	}
 
-	private int countComputer(HttpServletRequest request) {
-		int nbComputer = this.computerService.countComputer();
-		request.setAttribute("countComputer", nbComputer + "");
-		return nbComputer;
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 * @param request  http message
-	 * @param response http message
-	 */
-	@PostMapping
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		HttpSession session = request.getSession();
-
-		String stringNombreObjet = request.getParameter("nbObject");
-		session.setAttribute("nbObject", stringNombreObjet);
-		doGet(request, response);
+	@PostMapping(value = "/ListComputer")
+	protected RedirectView changeNumberObject(@RequestParam(required = false) String nbObject) {
+		sessionAttributes.setNbObject(nbObject);
+		return new RedirectView("/ListComputer", true);
 	}
 
 }

@@ -29,7 +29,7 @@
 			<h1 id="homeTitle">${countComputer} Computers found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
-					<form id="searchForm" action="SearchComputer" method="GET"
+					<form id="searchForm" action="ListComputer" method="GET"
 						class="form-inline">
 
 						<input type="search" id="searchbox" name="search"
@@ -121,25 +121,25 @@
 		<div class="container text-center">
 			<ul class="pagination">
 				<c:choose>
-					<c:when test="${!empty searchPage}">
-					<li><a id="firstPage" href="SearchComputer?pageno=1&search=${search}"
+					<c:when test="${!empty search}">
+					<li><a id="firstPage" href="ListComputer?pageno=1&search=${search}"
 							aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 						</a></li>
 						<c:if test="${ numeroPage!=1}">
 							<li><a id="previousPage"
-								href="SearchComputer?pageno=${numeroPage - 1}&search=${search}">Previous</a></li>
+								href="ListComputer?pageno=${numeroPage - 1}&search=${search}">Previous</a></li>
 						</c:if>
 						<c:forEach var="entry" begin="${indexDebut}" end="${indexFin}"
 							step="1">
 
-							<li><a id="page${entry}" href="SearchComputer?pageno=${entry}&search=${search}">${entry}</a></li>
+							<li><a id="page${entry}" href="ListComputer?pageno=${entry}&search=${search}">${entry}</a></li>
 
 						</c:forEach>
 						<c:if test="${ (numeroPage!=pageMax) and (pageMax!=0)}">
 							<li><a id="nextPage"
-								href="SearchComputer?pageno=${numeroPage + 1}&search=${search}">Next</a></li>
+								href="ListComputer?pageno=${numeroPage + 1}&search=${search}">Next</a></li>
 						</c:if>
-						<li><a id="lastPage" href="SearchComputer?pageno=${pageMax}&search=${search}"
+						<li><a id="lastPage" href="ListComputer?pageno=${pageMax}&search=${search}"
 							aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 						</a></li>
 					</c:when>
