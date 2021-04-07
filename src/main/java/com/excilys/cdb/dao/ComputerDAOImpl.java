@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -23,12 +22,20 @@ import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 
 @Repository
 public class ComputerDAOImpl {
-	@Autowired
+
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-	@Autowired
+
 	private JdbcTemplate jdbcTemplate;
-	@Autowired
-	RowMapperComputer rowMapperComputer;
+
+	private RowMapperComputer rowMapperComputer;
+
+	public ComputerDAOImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate, JdbcTemplate jdbcTemplate,
+			RowMapperComputer rowMapperComputer) {
+		super();
+		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+		this.jdbcTemplate = jdbcTemplate;
+		this.rowMapperComputer = rowMapperComputer;
+	}
 
 	private static final String SQL_UPDATE = "UPDATE computer SET name=:name, introduced=:introduced, discontinued=:discontinued, company_id=:company_id WHERE id=:id;";
 	private static final String SQL_DELETE = "DELETE FROM computer WHERE id=:id;";
@@ -45,6 +52,7 @@ public class ComputerDAOImpl {
 
 			SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
 			simpleJdbcInsert.withTableName("computer").usingGeneratedKeyColumns("id");
+
 			MapSqlParameterSource params = new MapSqlParameterSource();
 			params.addValue("name", computer.getName());
 			params.addValue("introduced", computer.getIntroduced());
@@ -78,7 +86,7 @@ public class ComputerDAOImpl {
 	public void update(Computer computer) throws DAOException {
 
 		try {
-
+//			SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(computer);
 			MapSqlParameterSource params = new MapSqlParameterSource();
 			params.addValue("name", computer.getName());
 			params.addValue("introduced", computer.getIntroduced());

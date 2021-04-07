@@ -3,7 +3,6 @@ package com.excilys.cdb.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.excilys.cdb.dao.CompanyDAOImpl;
@@ -18,10 +17,15 @@ import com.excilys.cdb.model.Page;
 @Service
 public class PageService {
 
-	@Autowired
 	ComputerDAOImpl computerDAOImpl;
-	@Autowired
+
 	CompanyDAOImpl companyDAOImpl;
+
+	public PageService(ComputerDAOImpl computerDAOImpl, CompanyDAOImpl companyDAOImpl) {
+
+		this.computerDAOImpl = computerDAOImpl;
+		this.companyDAOImpl = companyDAOImpl;
+	}
 
 	/**
 	 * @param page the page searched

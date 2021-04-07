@@ -2,7 +2,6 @@ package com.excilys.cdb.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.excilys.cdb.model.Company;
@@ -12,8 +11,13 @@ import com.excilys.cdb.service.PageService;
 
 @Component
 public class PageController {
-	@Autowired
+
 	private PageService pageService;
+
+	public PageController(PageService pageService) {
+
+		this.pageService = pageService;
+	}
 
 	public List<Computer> searchAllComputerPagination(Page<Computer> page) {
 

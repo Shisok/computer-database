@@ -2,7 +2,6 @@ package com.excilys.cdb.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.excilys.cdb.model.Company;
@@ -14,13 +13,12 @@ public class CompanyController {
 	/**
 	 * Default Constructor.
 	 */
-	@Autowired
+
 	CompanyService companyService;
 
-	public CompanyController() {
-		super();
-		this.companyService = new CompanyService();
+	public CompanyController(CompanyService companyService) {
 
+		this.companyService = companyService;
 	}
 
 	public List<Company> searchAllCompany() {

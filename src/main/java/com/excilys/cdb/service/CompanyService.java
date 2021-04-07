@@ -3,7 +3,6 @@ package com.excilys.cdb.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.excilys.cdb.dao.CompanyDAOImpl;
@@ -14,8 +13,13 @@ import com.excilys.cdb.model.Company;
 
 @Service
 public class CompanyService {
-	@Autowired
+
 	CompanyDAOImpl companyDAOImpl;
+
+	public CompanyService(CompanyDAOImpl companyDAOImpl) {
+
+		this.companyDAOImpl = companyDAOImpl;
+	}
 
 	public List<Company> searchAllCompany() {
 		try {

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.excilys.cdb.dao.ComputerDAOImpl;
@@ -16,8 +15,13 @@ import com.excilys.cdb.view.CliMenu;
 
 @Service
 public class ComputerService {
-	@Autowired
+
 	ComputerDAOImpl computerDAOImpl;
+
+	public ComputerService(ComputerDAOImpl computerDAOImpl) {
+
+		this.computerDAOImpl = computerDAOImpl;
+	}
 
 	public List<Computer> searchAllComputer() {
 		try {

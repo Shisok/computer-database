@@ -2,7 +2,6 @@ package com.excilys.cdb.view;
 
 import java.util.ArrayList;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.excilys.cdb.controller.PageController;
@@ -20,12 +19,19 @@ public class CliPage {
 	private static final int OPTION_PAGE = 3;
 	private static final int OPTION_BACK_TO_MENU = 4;
 	private static final int OPTION_EXIT_PAGINATION = 5;
-	@Autowired
+
 	private Page<Computer> pageComputer;
-	@Autowired
+
 	private Page<Company> pageCompany;
-	@Autowired
+
 	private PageController pageController;
+
+	public CliPage(Page<Computer> pageComputer, Page<Company> pageCompany, PageController pageController) {
+		super();
+		this.pageComputer = pageComputer;
+		this.pageCompany = pageCompany;
+		this.pageController = pageController;
+	}
 
 	public int pageComputerVerifyChoice(int page) {
 		int choix = 0;

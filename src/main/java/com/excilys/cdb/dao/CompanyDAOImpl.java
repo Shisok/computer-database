@@ -3,7 +3,6 @@ package com.excilys.cdb.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -19,12 +18,18 @@ import com.excilys.cdb.model.Company;
 @Repository
 public class CompanyDAOImpl {
 
-	@Autowired
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-	@Autowired
+
 	private JdbcTemplate jdbcTemplate;
-	@Autowired
-	RowMapperCompany rowMapperCompany;
+
+	private RowMapperCompany rowMapperCompany;
+
+	public CompanyDAOImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate, JdbcTemplate jdbcTemplate,
+			RowMapperCompany rowMapperCompany) {
+		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+		this.jdbcTemplate = jdbcTemplate;
+		this.rowMapperCompany = rowMapperCompany;
+	}
 
 	private static final int OBJECT_NUMBER_PER_PAGE = 10;
 

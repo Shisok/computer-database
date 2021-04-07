@@ -1,10 +1,15 @@
 package com.excilys.cdb.config;
 
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.web.WebApplicationInitializer;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -21,15 +26,24 @@ import com.zaxxer.hikari.HikariDataSource;
 		"com.excilys.cdb.mapper", "com.excilys.cdb.servlet", "com.excilys.cdb.validator", "com.excilys.cdb.view",
 		"com.excilys.cdb.model" })
 
-public class MyWebConfig implements WebMvcConfigurer {
+public class MyWebConfig implements WebMvcConfigurer, WebApplicationInitializer {
+
+	@Override
+	public void onStartup(ServletContext container) throws ServletException {
+		AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
+		context.register(MyWebConfig.class);
+//		ServletRegistration.Dynamic registration = container.addServlet("rootDispatcher",
+//				new DispatcherServlet(context));
+//		registration.setLoadOnStartup(1);
+		context.close();
+	}
+
 	@Bean
 	public InternalResourceViewResolver viewResolver() {
 		InternalResourceViewResolver bean = new InternalResourceViewResolver();
-
 		bean.setViewClass(JstlView.class);
 		bean.setPrefix("/WEB-INF/views/");
 		bean.setSuffix(".jsp");
-
 		return bean;
 	}
 

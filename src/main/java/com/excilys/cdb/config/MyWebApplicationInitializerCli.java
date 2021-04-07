@@ -24,7 +24,7 @@ public class MyWebApplicationInitializerCli implements WebApplicationInitializer
 		AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
 		context.register(MyWebConfig.class);
 		context.setServletContext(container);
-
+		context.close();
 	}
 
 	@Bean

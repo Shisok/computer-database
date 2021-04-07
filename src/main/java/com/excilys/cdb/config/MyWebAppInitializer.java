@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 @Configuration
+
 public class MyWebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
 	@Override

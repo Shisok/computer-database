@@ -14,7 +14,7 @@ public class TestCli {
 	public void testCliCompanyList() throws Exception {
 
 		PowerMockito.spy(CliMenu.class);
-		CliMenu mockCli = new CliMenu();
+		CliMenu mockCli = new CliMenu(null, null, null);
 //		PowerMockito.when(CliMenu.askInputMainMenu()).thenReturn(1);
 //		PowerMockito.when(CliMenu.askCompanyMenuInput()).thenReturn(1).thenReturn(5);
 		PowerMockito.doReturn(1).when(CliMenu.class, "askInputMainMenu");
