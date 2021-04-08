@@ -7,6 +7,9 @@ public class ComputerDTOEdit {
 	private String companyId;
 	private String id;
 
+	public ComputerDTOEdit() {
+	}
+
 	public ComputerDTOEdit(ComputerDTOEditBuilder computerDTOAddBuilder) {
 		this.computerName = computerDTOAddBuilder.computerName;
 		this.introduced = computerDTOAddBuilder.introduced;
@@ -72,5 +75,25 @@ public class ComputerDTOEdit {
 
 	public String getId() {
 		return id;
+	}
+
+	public void setComputerName(String computerName) {
+		this.computerName = computerName;
+	}
+
+	public void setIntroduced(String introduced) {
+		this.introduced = introduced;
+	}
+
+	public void setDiscontinued(String discontinued) {
+		this.discontinued = discontinued;
+	}
+
+	public void setCompanyId(String companyId) {
+		this.companyId = companyId;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 }

@@ -40,18 +40,18 @@
 				</div>
 				<div class="pull-right">
 					<a class="btn btn-success" id="addComputer"
-						href="${pageContext.request.contextPath}/AddComputer">Add
+						href="AddComputer">Add
 						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
 						onclick="$.fn.toggleEditMode();">Edit</a>
 				</div>
 			</div>
 		</div>
 
-		<form id="deleteForm" action="DeleteComputer" method="POST">
+		<form id="deleteForm" action="ListComputer" method="POST">
 			<input type="hidden" name="selection" value="">
 		</form>
 		
-		<form id="orderForm" action="OrderBy" method="POST">
+		<form id="orderForm" action="ListComputer" method="POST">
 			<input type="hidden"  name="orderByAttribute" value="">
 			<c:if test="${ !empty search }"> <input type="hidden"  name="search" value="${search}"> </c:if>
 		</form>

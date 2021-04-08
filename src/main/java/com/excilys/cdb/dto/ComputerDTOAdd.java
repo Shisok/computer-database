@@ -7,6 +7,17 @@ public class ComputerDTOAdd {
 	private String discontinued;
 	private String companyId;
 
+	public ComputerDTOAdd() {
+	}
+
+	public ComputerDTOAdd(String computerName, String introduced, String discontinued, String companyId) {
+		super();
+		this.computerName = computerName;
+		this.introduced = introduced;
+		this.discontinued = discontinued;
+		this.companyId = companyId;
+	}
+
 	public ComputerDTOAdd(ComputerDTOAddBuilder computerDTOAddBuilder) {
 		this.computerName = computerDTOAddBuilder.computerName;
 		this.introduced = computerDTOAddBuilder.introduced;
@@ -63,4 +74,19 @@ public class ComputerDTOAdd {
 		return companyId;
 	}
 
+	public void setComputerName(String computerName) {
+		this.computerName = computerName;
+	}
+
+	public void setIntroduced(String introduced) {
+		this.introduced = introduced;
+	}
+
+	public void setDiscontinued(String discontinued) {
+		this.discontinued = discontinued;
+	}
+
+	public void setCompanyId(String companyId) {
+		this.companyId = companyId;
+	}
 }

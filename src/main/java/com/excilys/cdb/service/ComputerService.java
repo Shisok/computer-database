@@ -11,7 +11,6 @@ import com.excilys.cdb.exception.DAOConfigurationException;
 import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.view.CliMenu;
 
 @Service
 public class ComputerService {
@@ -66,8 +65,8 @@ public class ComputerService {
 	public boolean updateComputer(Computer compToUpdate) {
 		boolean success = false;
 		try {
-
-			CliMenu.showUpdateOneComputer();
+//
+//			CliMenu.showUpdateOneComputer();
 			computerDAOImpl.update(compToUpdate);
 			success = true;
 
@@ -97,7 +96,7 @@ public class ComputerService {
 	public int countComputer() {
 		int nbComputer = 0;
 		try {
-			LoggerCdb.logInfo(getClass(), computerDAOImpl.toString());
+
 			nbComputer = computerDAOImpl.searchAllCount();
 
 		} catch (DAOException e) {

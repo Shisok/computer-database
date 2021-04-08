@@ -96,10 +96,11 @@ public class Computer {
 	}
 
 	public Long getCompanyId() {
-		if (company != null && company.getId() != 0) {
+
+		System.out.println(company);
+		if (company != null && company.getId() != null) {
 			return company.getId();
 		}
-
 		return null;
 	}
 

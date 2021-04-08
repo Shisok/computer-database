@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,51 +29,50 @@
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<h1 id="addTitle">Add Computer</h1>
 
-					<form action="AddComputer" id="addComputerFrom" method="POST">
+					<form:form action="AddComputer" id="addComputerFrom" method="POST"
+						modelAttribute="ComputerDTOAdd">
 						<fieldset>
 							<div class="form-group">
-								<label for="computerName">Computer name</label> <input
-									type="text" class="form-control" name="computerName"
+								<form:label path="computerName">Computer name</form:label>
+								<form:input type="text" class="form-control" path="computerName"
 									id="computerName" placeholder="Computer name"
-									required="required">
-								<c:if test="${ empty erreurName }">
+									required="required" />
+								<c:if test="${! empty erreurName }">
 									<div class="alert alert-danger" role="alert"
-										style="display: none;" id="nameError">The computer name
+										 id="nameError">The computer name
 										must not be empty.</div>
 								</c:if>
 
 							</div>
 							<div class="form-group">
-								<label for="introduced">Introduced date</label> <input
-									type="date" class="form-control" name="introduced"
-									id="introduced" placeholder="Introduced date">
+								<form:label path="introduced">Introduced date</form:label>
+								<form:input type="date" class="form-control" path="introduced"
+									id="introduced" placeholder="Introduced date" />
 							</div>
 							<div class="form-group">
-								<label for="discontinued">Discontinued date</label> <input
-									type="date" class="form-control" name="discontinued"
-									id="discontinued" placeholder="Discontinued date">
-								<c:if test="${ empty erreurDiscoBeforeIntro }">
+								<form:label path="discontinued">Discontinued date</form:label>
+								<form:input type="date" class="form-control" path="discontinued"
+									id="discontinued" placeholder="Discontinued date" />
+								<c:if test="${ !empty erreurDiscoBeforeIntro }">
 									<div class="alert alert-danger" role="alert"
-										style="display: none;" id="discontinuedError">Discontinued
+										 id="discontinuedError">Discontinued
 										is before introduced.</div>
 								</c:if>
-								<c:if test="${ empty erreurNoIntro }">
+								<c:if test="${ !empty erreurNoIntro }">
 									<div class="alert alert-danger" role="alert"
-										style="display: none;" id="noIntroError">Introduced is
+										 id="noIntroError">Introduced is
 										needed to input discontinued.</div>
 								</c:if>
 
 							</div>
 							<div class="form-group">
-								<label for="companyId">Company</label> <select
-									class="form-control" id="companyId" name="companyId">
-									<option value="0">...</option>
-									<c:forEach items="${listCompanies}" var="c">
-										<option value="${c.getId()}"><c:out
-												value="${c.getName()}"></c:out></option>
-									</c:forEach>
+								<form:label path="companyId">Company</form:label>
+								<form:select path="companyId" class="form-control"
+									id="companyId">
+									<form:option value="0">...</form:option>
+									<form:options items="${listCompanies}" itemLabel="name" itemValue="id" />
 
-								</select>
+								</form:select>
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
@@ -81,7 +80,7 @@
 							or <a href="${pageContext.request.contextPath}/ListComputer"
 								class="btn btn-default">Cancel</a>
 						</div>
-					</form>
+					</form:form>
 					<c:if test="${ !empty computerAdded }">
 						<span id="computerAdded"><c:out value="${computerAdded}"></c:out>
 						</span>
@@ -92,7 +91,7 @@
 	</section>
 	<script type="text/javascript"
 		src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-	<script src="${pageContext.request.contextPath}/js/addCompValidator.js"></script>
+ 	<script src="${pageContext.request.contextPath}/js/addCompValidator.js"></script> 
 
 
 </body>

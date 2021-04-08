@@ -1,10 +1,12 @@
 package com.excilys.cdb.servlet;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,9 +20,6 @@ import com.excilys.cdb.model.Page;
 import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.service.PageService;
 
-/**
- * Servlet implementation class ListComputer.
- */
 @Controller
 public class ListComputer {
 	@Autowired
@@ -35,7 +34,6 @@ public class ListComputer {
 	@GetMapping(value = "/ListComputer")
 	protected ModelAndView viewDashboard(@RequestParam(required = false) String pageno,
 			@RequestParam(required = false) String search) {
-
 		Page<Computer> page = dashboardPageHandler(pageno, search);
 		return dashboardModelAndViewHandler(search, page);
 	}
@@ -108,9 +106,45 @@ public class ListComputer {
 	}
 
 	@PostMapping(value = "/ListComputer")
-	protected RedirectView changeNumberObject(@RequestParam(required = false) String nbObject) {
-		sessionAttributes.setNbObject(nbObject);
+	protected RedirectView changeNumberObject(@RequestParam(required = false) String nbObject,
+			@RequestParam(required = false) String selection, @RequestParam(required = false) String orderByAttribute,
+			@RequestParam(required = false) String search, Model model) {
+		setNbObject(nbObject);
+		deleteComputerSelected(selection);
+		setOrderBy(orderByAttribute, model, search);
 		return new RedirectView("/ListComputer", true);
+	}
+
+	private void setNbObject(String nbObject) {
+		if (nbObject != null) {
+			sessionAttributes.setNbObject(nbObject);
+		}
+	}
+
+	private void deleteComputerSelected(String selection) {
+		if (selection != null) {
+			Arrays.asList(selection.split(",")).stream()
+					.forEach(id -> computerService.deleteComputer(Long.valueOf(id)));
+		}
+	}
+
+	private void setOrderBy(String orderByAttribute, Model model, String search) {
+		if (orderByAttribute != null) {
+			model.addAttribute("search", search);
+			String orderAttributeSession = sessionAttributes.getOrderAttribute();
+			String sortOrderSession = sessionAttributes.getOrderSort();
+			if (orderByAttribute.equals(orderAttributeSession)) {
+
+				if ("asc".equals(sortOrderSession)) {
+					sessionAttributes.setOrderSort("desc");
+				} else {
+					sessionAttributes.setOrderSort("asc");
+				}
+			} else {
+				sessionAttributes.setOrderAttribute(orderByAttribute);
+			}
+
+		}
 	}
 
 }

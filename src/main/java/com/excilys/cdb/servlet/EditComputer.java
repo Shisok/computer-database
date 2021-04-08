@@ -1,19 +1,17 @@
 package com.excilys.cdb.servlet;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.excilys.cdb.dto.CompanyDTO;
 import com.excilys.cdb.dto.ComputerDTOEdit;
@@ -32,9 +30,8 @@ import com.excilys.cdb.validator.ComputerValidatorError;
  * Servlet implementation class EditComputer.
  */
 @Controller
-@RequestMapping("/EditComputer")
-public class EditComputer extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+public class EditComputer {
+
 	@Autowired
 	private MapperCompany mapperCompany;
 	@Autowired
@@ -46,70 +43,52 @@ public class EditComputer extends HttpServlet {
 	@Autowired
 	private ComputerValidator computerValidator;
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 * @param request  http message
-	 * @param response http message
-	 */
-	@GetMapping
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	@GetMapping(value = "/EditComputer")
+	protected ModelAndView showEditComputer(@RequestParam(required = false) String id,
+			@RequestParam(required = false) String name, @ModelAttribute("computerEdited") String computerEdited,
+			@ModelAttribute("erreurName") String erreurName, @ModelAttribute("erreurNoIntro") String erreurNoIntro,
+			@ModelAttribute("erreurDiscoBeforeIntro") String erreurDiscoBeforeIntro) {
+		ModelAndView modelAndView = new ModelAndView("editComputer", "ComputerDTOEdit", new ComputerDTOEdit());
 		List<Company> listCompanies = this.companyService.searchAllCompany();
 		List<CompanyDTO> listCompaniesDTO = listCompanies.stream().map(c -> mapperCompany.mapFromModelToDTO(c))
 				.collect(Collectors.toList());
-		request.setAttribute("listCompanies", listCompaniesDTO);
-		String id = request.getParameter("id");
-		request.setAttribute("id", id);
-		String name = request.getParameter("name");
-		request.setAttribute("name", name);
-		request.getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(request, response);
+		modelAndView.addObject("computerEdited", computerEdited);
+		modelAndView.addObject("erreurName", erreurName);
+		modelAndView.addObject("erreurNoIntro", erreurNoIntro);
+		modelAndView.addObject("erreurDiscoBeforeIntro", erreurDiscoBeforeIntro);
+		modelAndView.addObject("id", id);
+		modelAndView.addObject("name", name);
+		modelAndView.addObject("listCompanies", listCompaniesDTO);
+		return modelAndView;
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 * @param request  http message
-	 * @param response http message
-	 */
-	@PostMapping
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	@PostMapping(value = "/EditComputer")
+	protected RedirectView editComputer(@ModelAttribute("ComputerDTOEdit") ComputerDTOEdit computerDTOEdit,
+			RedirectAttributes redir) {
 
 		try {
-			String computerName = request.getParameter("computerName");
-			String stringIntroduced = request.getParameter("introduced");
-
-			String stringDiscontinued = request.getParameter("discontinued");
-			String stringCompanyId = request.getParameter("companyId");
-			String stringComputerId = request.getParameter("id");
-			ComputerDTOEdit computerDTOEdit = new ComputerDTOEdit.ComputerDTOEditBuilder(computerName)
-					.introduced(stringIntroduced).discontinued(stringDiscontinued).company(stringCompanyId)
-					.id(stringComputerId).build();
 			computerValidator.validationComputerDTOEdit(computerDTOEdit);
 			Computer computer = mapperComputer.mapFromDTOEditToModel(computerDTOEdit);
 			computerService.updateComputer(computer);
-			request.setAttribute("computerEdited", "The computer was successfully updated");
-			doGet(request, response);
+			redir.addFlashAttribute("computerEdited", "The computer was successfully updated");
+			redir.addAttribute("computerName", computerDTOEdit.getComputerName());
+			redir.addAttribute("id", computerDTOEdit.getId());
+			return new RedirectView("/EditComputer", true);
 		} catch (ValidatorException e) {
 			LoggerCdb.logError(getClass(), e);
-			showError(request, e);
-			doGet(request, response);
+			showError(redir, e);
+			return new RedirectView("/EditComputer", true);
 		}
 
 	}
 
-	private void showError(HttpServletRequest request, ValidatorException e) {
+	private void showError(RedirectAttributes redir, ValidatorException e) {
 		if (e.getMessage().equals(ComputerValidatorError.NONAME.getMessage())) {
-			request.setAttribute("erreurName", e.getMessage());
-		}
-		if (e.getMessage().equals(ComputerValidatorError.NOINTRO.getMessage())) {
-			request.setAttribute("erreurNoIntro", e.getMessage());
-		}
-		if (e.getMessage().equals(ComputerValidatorError.NOINTRO.getMessage())) {
-			request.setAttribute("erreurDiscoBeforeIntro", e.getMessage());
+			redir.addFlashAttribute("erreurName", e.getMessage());
+		} else if (e.getMessage().equals(ComputerValidatorError.INTROBEFOREDISCON.getMessage())) {
+			redir.addFlashAttribute("erreurDiscoBeforeIntro", e.getMessage());
+		} else if (e.getMessage().equals(ComputerValidatorError.NOINTRO.getMessage())) {
+			redir.addFlashAttribute("erreurNoIntro", e.getMessage());
 		}
 	}
 }
