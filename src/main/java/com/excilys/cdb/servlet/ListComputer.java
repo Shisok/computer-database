@@ -2,9 +2,11 @@ package com.excilys.cdb.servlet;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -70,6 +72,8 @@ public class ListComputer {
 		}
 		modelAndView.addObject("indexDebut", page.getIndexDebut());
 		modelAndView.addObject("indexFin", page.getIndexFin());
+		Locale locale = LocaleContextHolder.getLocale();
+		modelAndView.addObject("lang", locale.getLanguage());
 		return modelAndView;
 	}
 

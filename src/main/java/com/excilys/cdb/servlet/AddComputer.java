@@ -52,6 +52,7 @@ public class AddComputer {
 		modelAndView.addObject("erreurNoIntro", erreurNoIntro);
 		modelAndView.addObject("erreurDiscoBeforeIntro", erreurDiscoBeforeIntro);
 		modelAndView.addObject("listCompanies", listCompaniesDTO);
+
 		return modelAndView;
 	}
 

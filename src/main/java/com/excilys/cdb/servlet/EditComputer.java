@@ -59,6 +59,7 @@ public class EditComputer {
 		modelAndView.addObject("id", id);
 		modelAndView.addObject("name", name);
 		modelAndView.addObject("listCompanies", listCompaniesDTO);
+
 		return modelAndView;
 	}
 

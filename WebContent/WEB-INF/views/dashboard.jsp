@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt"%>
 <!DOCTYPE html>
-<html>
+<html lang="${lang}">
 <head>
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -126,8 +126,8 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="btn-group btn-group-sm pull-left" role="group">
 
-			<a href="?lang=fr" title="fr"><span class="flag-icon reset fr"></span></a>
-			<a href="?lang=en" title="en"><span
+			<a href="?lang=fr" title="fr" ><span class="flag-icon reset fr"></span></a>
+			<a href="?lang=en" title="en" ><span
 				class="flag-icon reset england"></span></a>
 		</div>
 		<div class="container text-center">
@@ -202,9 +202,5 @@
 	<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
 	<script src="${pageContext.request.contextPath}/js/dashboard.js"></script>
 	<script src="${pageContext.request.contextPath}/js/orderBy.js"></script>
-	<script type="text/javascript">
-		var view = "<fmt:message key="label.view" />";
-		var edit = "<fmt:message key="label.edit" />";
-	</script>
 </body>
 </html>

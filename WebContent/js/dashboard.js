@@ -2,6 +2,7 @@
 //On load
 $(function() {
 	// Default: hide edit mode
+    
 	$(".editMode").hide();
 
 	// Click on "selectall" box
@@ -48,11 +49,19 @@ $(function() {
 	$.fn.toggleEditMode = function() {
 		if ($(".editMode").is(":visible")) {
 			$(".editMode").hide();
-			$("#editComputer").text(edit);
+			if($('html').attr('lang')=="en"){
+			$("#editComputer").text("Edit");
+			}else{
+			$("#editComputer").text("Editer");
+			}
 		}
 		else {
 			$(".editMode").show();
-			$("#editComputer").text(view);
+			if($('html').attr('lang')=="en"){
+			$("#editComputer").text("View");
+			}else{
+			$("#editComputer").text("Vue");
+			}
 		}
 		return this;
 	};
