@@ -1,23 +1,24 @@
 package com.excilys.cdb.config;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
+import java.util.Locale;
 
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.web.WebApplicationInitializer;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
-import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
@@ -30,17 +31,27 @@ import com.zaxxer.hikari.HikariDataSource;
 		"com.excilys.cdb.mapper", "com.excilys.cdb.servlet", "com.excilys.cdb.validator", "com.excilys.cdb.view",
 		"com.excilys.cdb.model" })
 
-public class MyWebConfig implements WebMvcConfigurer, WebApplicationInitializer {
+public class MyWebConfig implements WebMvcConfigurer {
+//, WebApplicationInitializer {
 
-	@Override
-	public void onStartup(ServletContext container) throws ServletException {
-		AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
-		context.register(MyWebConfig.class);
-		ServletRegistration.Dynamic registration = container.addServlet("rootDispatcher",
-				new DispatcherServlet(context));
-		registration.setLoadOnStartup(1);
-		context.close();
-	}
+//	@Override
+//	public void onStartup(ServletContext container) throws ServletException {
+//		AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
+//		context.register(MyWebConfig.class);
+////		container.addListener(new ContextLoaderListener(context));
+////		AnnotationConfigWebApplicationContext dispatcherServlet = new AnnotationConfigWebApplicationContext();
+////		ServletRegistration.Dynamic dispatcher = container.addServlet("dispatcher",
+////				(Servlet) new DispatcherServlet(dispatcherServlet));
+////		dispatcher.setLoadOnStartup(1);
+////		dispatcher.addMapping("/");
+//
+////		ServletRegistration.Dynamic registration = container.addServlet("rootDispatcher",
+////				new DispatcherServlet(context));
+////		context.setServletContext(container);
+////		registration.setLoadOnStartup(1);
+////		registration.addMapping("/");
+//		context.close();
+//	}
 
 	@Bean
 	public InternalResourceViewResolver viewResolver() {
@@ -72,6 +83,33 @@ public class MyWebConfig implements WebMvcConfigurer, WebApplicationInitializer 
 		return new NamedParameterJdbcTemplate(dataSource);
 	}
 
+	@Bean
+	public PlatformTransactionManager txManager() {
+		return new DataSourceTransactionManager(getDataSource());
+	}
+
+	@Bean("messageSource")
+	public MessageSource messageSource() {
+		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+		messageSource.setBasenames("languages/message");
+		messageSource.setDefaultEncoding("UTF-8");
+		return messageSource;
+	}
+
+	@Bean
+	public LocaleResolver localeResolver() {
+		SessionLocaleResolver localeResolver = new SessionLocaleResolver();
+		localeResolver.setDefaultLocale(new Locale("en"));
+		return localeResolver;
+	}
+
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
+		localeChangeInterceptor.setParamName("lang");
+		registry.addInterceptor(localeChangeInterceptor);
+	}
+
 	@Override
 	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
 		configurer.enable();
@@ -80,11 +118,6 @@ public class MyWebConfig implements WebMvcConfigurer, WebApplicationInitializer 
 	@Override
 	public void addResourceHandlers(final ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
-	}
-
-	@Bean
-	public PlatformTransactionManager txManager() {
-		return new DataSourceTransactionManager(getDataSource());
 	}
 
 }

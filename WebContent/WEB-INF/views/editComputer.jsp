@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,44 +31,46 @@
 						id:
 						<c:out value="${id}"></c:out>
 					</div>
-					<h1>Edit Computer</h1>
+					<h1><fmt:message key="label.editComputer" /></h1>
 
 					<form:form action="EditComputer" method="POST"
 						id="editComputerForm" modelAttribute="ComputerDTOEdit">
 						<form:input type="hidden" value="${id}" id="id" path="id" />
 						<fieldset>
 							<div class="form-group">
-								<form:label path="computerName">Computer name</form:label>
+								<form:label path="computerName"><fmt:message key="label.computerName" /></form:label>
 								<form:input type="text" class="form-control" id="computerName"
 									path="computerName" value="${name}" placeholder="${name}" />
-								<c:if test="${! empty erreurName }">
-									<div class="alert alert-danger" role="alert" id="nameError">The
-										computer name must not be empty.</div>
-								</c:if>
+
+								<div class="alert alert-danger" role="alert" id="nameError"
+									<c:if test="${ empty erreurName }">style="display: none;" </c:if>>The
+									computer name must not be empty.</div>
+
 							</div>
 
 							<div class="form-group">
-								<form:label path="introduced">Introduced date</form:label>
+								<form:label path="introduced"><fmt:message key="label.introduced" /></form:label>
 								<form:input type="date" class="form-control" id="introduced"
 									path="introduced" placeholder="Introduced date" />
 							</div>
 							<div class="form-group">
-								<form:label path="discontinued">Discontinued date</form:label>
+								<form:label path="discontinued"><fmt:message key="label.discontinued" /></form:label>
 								<form:input type="date" class="form-control" path="discontinued"
 									id="discontinued" placeholder="Discontinued date" />
 
-								<c:if test="${ !empty erreurDiscoBeforeIntro }">
-									<div class="alert alert-danger" role="alert"
-										id="discontinuedError">Discontinued is before
-										introduced.</div>
-								</c:if>
-								<c:if test="${ !empty erreurNoIntro }">
-									<div class="alert alert-danger" role="alert" id="noIntroError">Introduced
+
+								<div class="alert alert-danger" role="alert"
+									id="discontinuedError"
+									<c:if test="${ empty erreurDiscoBeforeIntro }">style="display: none;" </c:if>>Discontinued
+									is before introduced.</div>
+
+								
+									<div <c:if test="${ empty erreurNoIntro }"> style="display: none;" </c:if>class="alert alert-danger" role="alert" id="noIntroError">Introduced
 										is needed to input discontinued.</div>
-								</c:if>
+								
 							</div>
 							<div class="form-group">
-								<form:label path="companyId">Company</form:label>
+								<form:label path="companyId"><fmt:message key="label.company" /></form:label>
 								<form:select class="form-control" path="companyId"
 									id="companyId">
 									<form:option value="0"> ... </form:option>
@@ -78,8 +81,8 @@
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-							<input type="submit" value="Edit" class="btn btn-primary">
-							or <a href="ListComputer" class="btn btn-default">Cancel</a>
+							<input type="submit" value="<fmt:message key="label.edit" />" class="btn btn-primary">
+							<fmt:message key="label.or" /> <a href="ListComputer" class="btn btn-default"><fmt:message key="label.cancel" /></a>
 						</div>
 					</form:form>
 					<c:if test="${ !empty computerEdited }">
@@ -90,6 +93,8 @@
 			</div>
 		</div>
 	</section>
+	<script type="text/javascript"
+		src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script src="${pageContext.request.contextPath}/js/addCompValidator.js"></script>
 </body>
 </html>

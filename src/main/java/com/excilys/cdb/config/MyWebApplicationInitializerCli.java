@@ -27,6 +27,14 @@ public class MyWebApplicationInitializerCli implements WebApplicationInitializer
 		context.register(MyWebConfig.class);
 		context.setServletContext(container);
 		context.close();
+//		AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
+//		rootContext.register(MyWebConfig.class);
+//		container.addListener(new ContextLoaderListener(rootContext));
+//		AnnotationConfigWebApplicationContext dispatcherServlet = new AnnotationConfigWebApplicationContext();
+//		ServletRegistration.Dynamic dispatcher = container.addServlet("dispatcher",
+//				new DispatcherServlet(dispatcherServlet));
+//		dispatcher.setLoadOnStartup(1);
+//		dispatcher.addMapping("/");
 	}
 
 	@Bean

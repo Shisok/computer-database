@@ -1,3 +1,4 @@
+
 //On load
 $(function() {
 	// Default: hide edit mode
@@ -47,11 +48,11 @@ $(function() {
 	$.fn.toggleEditMode = function() {
 		if ($(".editMode").is(":visible")) {
 			$(".editMode").hide();
-			$("#editComputer").text("Edit");
+			$("#editComputer").text(edit);
 		}
 		else {
 			$(".editMode").show();
-			$("#editComputer").text("View");
+			$("#editComputer").text(view);
 		}
 		return this;
 	};
@@ -71,6 +72,8 @@ $(function() {
 		}
 	};
 }(jQuery));
+
+
 
 
 
