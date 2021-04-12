@@ -2,6 +2,8 @@ package com.excilys.cdb.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
@@ -24,6 +26,14 @@ public class MapperCompany {
 				.build();
 
 		return companyDTO;
+	}
+
+	public List<CompanyDTO> mapFromModelListToDTOList(List<Company> listCompanies) {
+
+		List<CompanyDTO> listCompaniesDTO = listCompanies.stream().map(c -> mapFromModelToDTO(c))
+				.collect(Collectors.toList());
+
+		return listCompaniesDTO;
 	}
 
 }

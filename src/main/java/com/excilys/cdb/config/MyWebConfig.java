@@ -88,7 +88,7 @@ public class MyWebConfig implements WebMvcConfigurer {
 		return new DataSourceTransactionManager(getDataSource());
 	}
 
-	@Bean("messageSource")
+	@Bean
 	public MessageSource messageSource() {
 		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
 		messageSource.setBasenames("languages/message");

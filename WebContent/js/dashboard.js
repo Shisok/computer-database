@@ -45,7 +45,6 @@ $(function() {
 
 // Function toggleEditMode
 (function($) {
-
 	$.fn.toggleEditMode = function() {
 		if ($(".editMode").is(":visible")) {
 			$(".editMode").hide();
@@ -65,7 +64,6 @@ $(function() {
 		}
 		return this;
 	};
-
 }(jQuery));
 
 

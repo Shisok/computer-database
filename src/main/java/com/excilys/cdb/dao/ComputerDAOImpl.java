@@ -61,7 +61,7 @@ public class ComputerDAOImpl {
 			params.addValue("company_id", computer.getCompany().getId());
 			params.addValue("id", computer.getId());
 			Number id = simpleJdbcInsert.executeAndReturnKey(params);
-			System.out.println(id);
+
 			if (id != null) {
 				computer.setId(id.longValue());
 			} else {

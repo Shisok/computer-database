@@ -4,7 +4,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt"%>
 <!DOCTYPE html>
-<html >
+<html>
 <head>
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,19 +34,22 @@
 					</h1>
 
 					<form:form action="AddComputer" id="addComputerFrom" method="POST"
-						modelAttribute="ComputerDTOAdd">
+						modelAttribute="computerDTOAdd">
 						<fieldset>
 							<div class="form-group">
 								<form:label path="computerName">
+									<fmt:message key="label.computerName" var="computerNameVar" />
 									<fmt:message key="label.computerName" />
 								</form:label>
-								<form:input type="text" class="form-control" path="computerName"
-									id="computerName" placeholder="<fmt:message key="label.computerName" />"
-									required="required" />
 
+								<form:input type="text" class="form-control" path="computerName"
+									id="computerName" placeholder="${computerNameVar}"
+									required="required" />
+								<form:errors path="computerName" cssClass="errorPerso" />
 								<div class="alert alert-danger" role="alert" id="nameError"
-									<c:if test="${ empty erreurName }">style="display: none;"</c:if>>The
-									computer name must not be empty.</div>
+									style="display: none;">
+									<fmt:message key="computerDTOAdd.computerName.empty" />
+								</div>
 
 
 							</div>
@@ -63,16 +66,17 @@
 								</form:label>
 								<form:input type="date" class="form-control" path="discontinued"
 									id="discontinued" placeholder="Discontinued date" />
+								<form:errors path="discontinued" cssClass="errorPerso" />
 								<div class="alert alert-danger" role="alert"
-									id="discontinuedError"
-									<c:if test="${ empty erreurDiscoBeforeIntro }">style="display: none;" </c:if>>Discontinued
-									is before introduced.</div>
+									id="discontinuedError" style="display: none;">
+									<fmt:message
+										key="computerDTOAdd.discontinued.disconBeforeIntro" />
+								</div>
 
 
-								<div
-									<c:if test="${ empty erreurNoIntro }"> style="display: none;" </c:if>
-									class="alert alert-danger" role="alert" id="noIntroError">Introduced
-									is needed to input discontinued.</div>
+								<div style="display: none;" class="alert alert-danger"
+									role="alert" id="noIntroError"><fmt:message
+										key="computerDTOAdd.discontinued.noIntro" /></div>
 
 							</div>
 							<div class="form-group">
@@ -106,8 +110,8 @@
 	</section>
 	<script type="text/javascript"
 		src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-	<script src="${pageContext.request.contextPath}/js/addCompValidator.js"></script>
-
+	 	<script src="${pageContext.request.contextPath}/js/addCompValidator.js"></script> 
+ 
 
 </body>
 </html>

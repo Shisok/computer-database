@@ -24,8 +24,9 @@
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<a class="navbar-brand" href="ListComputer" id="applicationTitle">
-				Application - Computer Database </a>
+				Application - Computer Database </a> 
 		</div>
+
 	</header>
 
 	<section id="main">
@@ -109,8 +110,7 @@
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="${c.getId()}"></td>
-							<td><a
-								href="EditComputer?id=${c.getId()}&name=${c.getName()}"><c:out
+							<td><a href="EditComputer?id=${c.getId()}"><c:out
 										value="${c.getName()}"></c:out></a></td>
 							<td><c:out value="${c.getIntroduced()}"></c:out></td>
 							<td><c:out value="${c.getDiscontinued()}"></c:out></td>
@@ -126,9 +126,8 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="btn-group btn-group-sm pull-left" role="group">
 
-			<a href="?lang=fr" title="fr" ><span class="flag-icon reset fr"></span></a>
-			<a href="?lang=en" title="en" ><span
-				class="flag-icon reset england"></span></a>
+			<a href="?lang=fr" title="fr"><span class="flag-icon reset fr"></span></a>
+			<a href="?lang=en" title="en"><span class="flag-icon reset gb"></span></a>
 		</div>
 		<div class="container text-center">
 			<ul class="pagination">
@@ -164,7 +163,8 @@
 						</a></li>
 						<c:if test="${ numeroPage!=1}">
 							<li><a id="previousPage"
-								href="ListComputer?pageno=${numeroPage - 1}"><fmt:message key="label.previous" /></a></li>
+								href="ListComputer?pageno=${numeroPage - 1}"><fmt:message
+										key="label.previous" /></a></li>
 						</c:if>
 						<c:forEach var="entry" begin="${indexDebut}" end="${indexFin}"
 							step="1">
@@ -174,7 +174,8 @@
 						</c:forEach>
 						<c:if test="${ (numeroPage!=pageMax) and (pageMax!=0)}">
 							<li><a id="nextPage"
-								href="ListComputer?pageno=${numeroPage + 1}"><fmt:message key="label.next" /></a></li>
+								href="ListComputer?pageno=${numeroPage + 1}"><fmt:message
+										key="label.next" /></a></li>
 						</c:if>
 						<li><a id="lastPage" href="ListComputer?pageno=${pageMax}"
 							aria-label="Next"> <span aria-hidden="true">&raquo;</span>

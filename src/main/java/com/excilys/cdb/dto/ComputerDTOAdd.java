@@ -89,4 +89,11 @@ public class ComputerDTOAdd {
 	public void setCompanyId(String companyId) {
 		this.companyId = companyId;
 	}
+
+	@Override
+	public String toString() {
+		return "ComputerDTOAdd [computerName=" + computerName + ", introduced=" + introduced + ", discontinued="
+				+ discontinued + ", companyId=" + companyId + "]";
+	}
+
 }

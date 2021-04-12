@@ -30,7 +30,10 @@ formAdd.addEventListener("submit", function(event) {
 	}
 });*/
 
+
+
 $(function() {
+ 
 	$("#addComputerFrom").submit(function(event) {
 		if ($("#discontinuedError").is(":visible")) {
 			$("#discontinuedError").hide();

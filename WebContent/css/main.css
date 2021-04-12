@@ -27,3 +27,8 @@ input[type='checkbox'] {
     border-radius: 5px;
     white-space: nowrap;
 }
+
+span.errorPerso {
+color: red;
+display: inline-block;
+}

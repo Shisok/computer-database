@@ -97,7 +97,6 @@ public class Computer {
 
 	public Long getCompanyId() {
 
-		System.out.println(company);
 		if (company != null && company.getId() != null) {
 			return company.getId();
 		}
