@@ -33,7 +33,7 @@ public class ListComputer {
 	@Autowired
 	private SessionAttributes sessionAttributes;
 
-	@GetMapping(value = "/ListComputer")
+	@GetMapping(value = "/ListComputer", produces = "application/json")
 	protected ModelAndView viewDashboard(@RequestParam(required = false) String pageno,
 			@RequestParam(required = false) String search) {
 		Page<Computer> page = dashboardPageHandler(pageno, search);
