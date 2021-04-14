@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -25,7 +27,6 @@ import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
-import com.excilys.cdb.validator.ComputerValidatorEdit;
 
 /**
  * Servlet implementation class EditComputer.
@@ -41,24 +42,17 @@ public class EditComputer {
 	private CompanyService companyService;
 	@Autowired
 	private ComputerService computerService;
-	@Autowired
-	private ComputerValidatorEdit computerValidatorEdit;
 
 	@GetMapping(value = "/EditComputer")
-	protected ModelAndView showEditComputer(@RequestParam(required = false) String id,
-			@ModelAttribute("computerEdited") String computerEdited, ModelMap modelMap) {
+	protected ModelAndView showEditComputer(@RequestParam(required = true) String id, ModelMap modelMap) {
 		ModelAndView modelAndView = new ModelAndView("editComputer", "computerDTOEdit", new ComputerDTOEdit());
-		if (modelMap.containsKey("computerDTOBindingResult")) {
-			modelAndView.addObject("org.springframework.validation.BindingResult.computerDTOEdit",
-					modelMap.get("computerDTOBindingResult"));
-		}
+		modelAndView.addAllObjects(modelMap);
 		List<Company> listCompanies = this.companyService.searchAllCompany();
 		Map<String, String> mapCompanies = mapperCompany.mapFromModelListToDTOList(listCompanies).stream()
 				.collect(Collectors.toMap(CompanyDTO::getId, companyDTO -> companyDTO.getName()));
 		Computer computer = computerService.searchByIdComputer(Long.parseLong(id))
 				.orElseGet(() -> new Computer.ComputerBuilder(Long.parseLong(id)).build());
 		ComputerDTOList computerDTO = mapperComputer.mapFromModelToDTOList(computer);
-		modelAndView.addObject("computerEdited", computerEdited);
 		modelAndView.addObject("id", id);
 		modelAndView.addObject("name", computerDTO.getName());
 		modelAndView.addObject("introduced", computerDTO.getIntroduced());
@@ -69,12 +63,12 @@ public class EditComputer {
 	}
 
 	@PostMapping(value = "/EditComputer")
-	protected RedirectView editComputer(@ModelAttribute("computerDTOEdit") ComputerDTOEdit computerDTOEdit,
+	protected RedirectView editComputer(@Valid @ModelAttribute("computerDTOEdit") ComputerDTOEdit computerDTOEdit,
 			BindingResult bindingResult, RedirectAttributes redir) {
-		computerValidatorEdit.validate(computerDTOEdit, bindingResult);
+
 		if (bindingResult.hasErrors()) {
 			redir.addAttribute("id", computerDTOEdit.getId());
-			redir.addFlashAttribute("computerDTOBindingResult", bindingResult);
+			redir.addFlashAttribute("org.springframework.validation.BindingResult.computerDTOEdit", bindingResult);
 			return new RedirectView("/EditComputer", true);
 		}
 		Computer computer = mapperComputer.mapFromDTOEditToModel(computerDTOEdit);

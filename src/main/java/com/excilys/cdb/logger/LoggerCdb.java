@@ -16,6 +16,11 @@ public class LoggerCdb {
 		logger.error(exception.getClass() + " : " + exception.getMessage());
 	}
 
+	public static void logError(Class<?> c, Exception exception, String message) {
+		Logger logger = getLogger(c);
+		logger.error(exception.getClass() + " : " + message);
+	}
+
 	public static void logInfo(Class<?> c, Exception exception) {
 		Logger logger = getLogger(c);
 		logger.info(exception.getClass() + " : " + exception.getMessage());

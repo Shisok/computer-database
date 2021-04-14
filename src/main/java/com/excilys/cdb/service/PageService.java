@@ -9,6 +9,7 @@ import com.excilys.cdb.dao.CompanyDAOImpl;
 import com.excilys.cdb.dao.ComputerDAOImpl;
 import com.excilys.cdb.exception.DAOConfigurationException;
 import com.excilys.cdb.exception.DAOException;
+import com.excilys.cdb.exception.InputException;
 import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
@@ -47,8 +48,11 @@ public class PageService {
 
 	public List<Computer> searchNamePagination(Page<Computer> page, String name) {
 		try {
-
-			return computerDAOImpl.searchNamePagination(page, name);
+			List<Computer> computers = computerDAOImpl.searchNamePagination(page, name);
+			if (computers.size() == 0) {
+				throw new InputException(name);
+			}
+			return computers;
 		} catch (DAOException e) {
 			LoggerCdb.logError(getClass(), e);
 		} catch (DAOConfigurationException e) {

@@ -6,16 +6,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
+import java.util.HashMap;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.Matchers.equalTo;
 
 import javax.servlet.ServletContext;
-
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -25,6 +30,7 @@ import org.springframework.test.context.web.AnnotationConfigWebContextLoader;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import static org.springframework.test.web.servlet.setup.SharedHttpSessionConfigurer.sharedHttpSession;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.excilys.cdb.config.MyWebConfig;
@@ -43,9 +49,13 @@ public class TestListComputerControllerMVCWithDbUnit extends DataSourceDBUnitTes
 
 	private MockMvc mockMvc;
 
+	@Autowired
+	SessionAttributes sessionAttributes;
+
 	@Before
 	public void setup() throws Exception {
-		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
+		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).apply(sharedHttpSession())
+				.build();
 	}
 
 	/**
@@ -75,13 +85,28 @@ public class TestListComputerControllerMVCWithDbUnit extends DataSourceDBUnitTes
 				.andExpect(model().attributeDoesNotExist("search"));
 	}
 
-//	@Test
-//	public void testPost() throws Exception {
-//		this.mockMvc.perform(post("/ListComputer")).andExpect(status().isOk())
+	@Test
+	public void testGetModelPage2() throws Exception {
+		this.mockMvc.perform(get("/ListComputer?pageno=2")).andExpect(status().isOk())
+				.andExpect(model().attribute("numeroPage", 2)).andExpect(model().attribute("indexDebut", 1))
+				.andExpect(model().attribute("indexFin", 2)).andExpect(model().attribute("lang", "en"))
+				.andExpect(model().attribute("countComputer", 13)).andExpect(model().attribute("pageMax", 2))
+				.andExpect(model().attribute("listeComputers", hasSize(3)))
+				.andExpect(model().attributeDoesNotExist("search"));
+	}
+
+	@Test
+	public void testPost() throws Exception {
+//		HashMap<String, Object> sessionattr = new HashMap<String, Object>();
+//		sessionattr.put("test", "test");
+
+		this.mockMvc.perform(post("/ListComputer").param("nbObject", "50")).andDo(print())
+				.andExpect(status().is3xxRedirection()).andExpect(request().sessionAttribute("nbObject", equalTo(50)));
 //				.andExpect(model().attribute("numeroPage", 1)).andExpect(model().attribute("indexDebut", 1))
-//				.andExpect(model().attribute("indexFin", 2)).andExpect(model().attribute("lang", "en"))
-//				.andExpect(model().attribute("countComputer", 13)).andExpect(model().attribute("pageMax", 2))
-//				.andExpect(model().attributeExists("listeComputers"))
+//				.andExpect(model().attribute("indexFin", 1)).andExpect(model().attribute("lang", "en"))
+//				.andExpect(model().attribute("countComputer", 13)).andExpect(model().attribute("pageMax", 1))
+//				.andExpect(model().attribute("listeComputers", hasSize(13)))
 //				.andExpect(model().attributeDoesNotExist("search"));
-//	}
+
+	}
 }

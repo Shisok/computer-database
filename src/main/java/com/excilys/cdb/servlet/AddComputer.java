@@ -3,6 +3,8 @@ package com.excilys.cdb.servlet;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -22,7 +24,6 @@ import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
-import com.excilys.cdb.validator.ComputerValidatorAdd;
 
 @Controller
 public class AddComputer {
@@ -35,40 +36,34 @@ public class AddComputer {
 	private CompanyService companyService;
 	@Autowired
 	private ComputerService computerService;
-	@Autowired
-	private ComputerValidatorAdd computerValidatorAdd;
 
 	@GetMapping(value = "/AddComputer")
 	protected ModelAndView showAddComputer(ModelMap modelMap) {
 
 		ModelAndView modelAndView = new ModelAndView("addComputer", "computerDTOAdd", new ComputerDTOAdd());
-		if (modelMap.containsKey("computerDTOBindingResult")) {
-			modelAndView.addObject("org.springframework.validation.BindingResult.computerDTOAdd",
-					modelMap.get("computerDTOBindingResult"));
-		}
+
+		modelAndView.addAllObjects(modelMap);
 
 		List<Company> listCompanies = this.companyService.searchAllCompany();
 		List<CompanyDTO> listCompaniesDTO = listCompanies.stream().map(c -> mapperCompany.mapFromModelToDTO(c))
 				.collect(Collectors.toList());
-		modelAndView.addObject("computerAdded", modelMap.get("computerAdded"));
+
 		modelAndView.addObject("listCompanies", listCompaniesDTO);
 
 		return modelAndView;
 	}
 
 	@PostMapping("/AddComputer")
-	protected RedirectView addComputer(@ModelAttribute("computerDTOAdd") final ComputerDTOAdd computerDTOAdd,
+	protected RedirectView addComputer(@Valid @ModelAttribute("computerDTOAdd") final ComputerDTOAdd computerDTOAdd,
 			BindingResult bindingResult, RedirectAttributes redir) {
-		computerValidatorAdd.validate(computerDTOAdd, bindingResult);
 		if (bindingResult.hasErrors()) {
-			redir.addFlashAttribute("computerDTOBindingResult", bindingResult);
+			redir.addFlashAttribute("org.springframework.validation.BindingResult.computerDTOAdd", bindingResult);
 			return new RedirectView("/AddComputer", true);
 		}
 		Computer computer = mapperComputer.mapFromDTOAddToModel(computerDTOAdd);
 		computerService.createComputer(computer);
 		redir.addFlashAttribute("computerAdded", "The computer was successfully added");
 		return new RedirectView("/AddComputer", true);
-
 	}
 
 }

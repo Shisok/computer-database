@@ -113,6 +113,7 @@ public class ListComputer {
 	protected RedirectView changeNumberObject(@RequestParam(required = false) String nbObject,
 			@RequestParam(required = false) String selection, @RequestParam(required = false) String orderByAttribute,
 			@RequestParam(required = false) String search, Model model) {
+
 		setNbObject(nbObject);
 		deleteComputerSelected(selection);
 		setOrderBy(orderByAttribute, model, search);

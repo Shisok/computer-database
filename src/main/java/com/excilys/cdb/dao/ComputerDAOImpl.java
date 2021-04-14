@@ -200,6 +200,7 @@ public class ComputerDAOImpl {
 			computers = namedParameterJdbcTemplate.query(SQL_SEARCH_BY_NAME_COMPA_COMPU
 					.replace("ORDERATTRIBUTE", page.getOrderAttribute()).replace("ORDERSORT", page.getOrderSort()),
 					params, rowMapperComputer);
+
 		} catch (DataAccessException e) {
 			LoggerCdb.logError(this.getClass(), e);
 		}

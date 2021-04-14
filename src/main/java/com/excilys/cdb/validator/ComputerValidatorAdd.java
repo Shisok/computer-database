@@ -41,11 +41,14 @@ public class ComputerValidatorAdd implements Validator {
 
 				if (introducedLD.isAfter(discontinuedLD) || introducedLD.equals(discontinuedLD)) {
 
-					errors.rejectValue("discontinued", "computerDTOAdd.discontinued.disconBeforeIntro");
+//					errors.rejectValue("discontinued", "computerDTOAdd.discontinued.disconBeforeIntro");
+					errors.rejectValue("discontinued", "computerDTOAdd.discontinued.disconBeforeIntro",
+							new Object[] { introduced, discontinued }, "Discontinued is before Introduced.");
 				}
 			} else {
 
-				errors.rejectValue("discontinued", "computerDTOAdd.discontinued.noIntro");
+				errors.rejectValue("discontinued", "computerDTOAdd.discontinued.noIntro", new Object[] { discontinued },
+						"Introduced is needed to input Discontinued");
 			}
 		}
 	}
