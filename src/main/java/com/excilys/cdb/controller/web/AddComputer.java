@@ -1,4 +1,4 @@
-package com.excilys.cdb.servlet;
+package com.excilys.cdb.controller.web;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -56,6 +56,7 @@ public class AddComputer {
 	@PostMapping("/AddComputer")
 	protected RedirectView addComputer(@Valid @ModelAttribute("computerDTOAdd") final ComputerDTOAdd computerDTOAdd,
 			BindingResult bindingResult, RedirectAttributes redir) {
+
 		if (bindingResult.hasErrors()) {
 			redir.addFlashAttribute("org.springframework.validation.BindingResult.computerDTOAdd", bindingResult);
 			return new RedirectView("/AddComputer", true);

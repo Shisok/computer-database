@@ -361,6 +361,7 @@ public class CliMenu {
 		} catch (NumberFormatException e) {
 			LoggerCdb.logInfo(CliMenu.class, e);
 			System.out.println("You didn't enter a numerical value.");
+			CliMenu.showDeleteOneComputer();
 			id = deleteOneComputerAskInput();
 		}
 
@@ -418,8 +419,8 @@ public class CliMenu {
 		} catch (NumberFormatException e) {
 			LoggerCdb.logInfo(CliMenu.class, e);
 			System.out.println("You didn't enter a numerical value");
-			showComputerMenu();
-			choix = computerMenuAskInput();
+//			showComputerMenu();
+//			choix = computerMenuAskInput();
 		}
 
 		return validate;

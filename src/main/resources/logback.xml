@@ -31,14 +31,10 @@
 		</encoder>
 	</appender>
 	
-
 	<!-- Pour modifier le niveau de log dans un package -->
 	<!-- <logger name="com.baeldung.logback.tests" level="WARN" /> -->
 	<root level="info">
 		<appender-ref ref="FILE" />
 		<appender-ref ref="STDOUT" />
 	</root>
-
-	
-
 </configuration>

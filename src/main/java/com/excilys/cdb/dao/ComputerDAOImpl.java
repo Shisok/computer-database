@@ -1,82 +1,65 @@
 package com.excilys.cdb.dao;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.dao.DataAccessException;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
+import com.excilys.cdb.dto.ComputerDTOPersistance;
 import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.logger.LoggerCdb;
-import com.excilys.cdb.mapper.RowMapperComputer;
+import com.excilys.cdb.mapper.MapperComputer;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
-import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 
 @Repository
 public class ComputerDAOImpl {
 
-	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+	private SessionFactory sessionFactory;
 
-	private JdbcTemplate jdbcTemplate;
+	private MapperComputer mapperComputer;
 
-	private RowMapperComputer rowMapperComputer;
+	public ComputerDAOImpl(SessionFactory sessionFactory, MapperComputer mapperComputer) {
+		this.mapperComputer = mapperComputer;
 
-	public ComputerDAOImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate, JdbcTemplate jdbcTemplate,
-			RowMapperComputer rowMapperComputer) {
-		super();
-		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
-		this.jdbcTemplate = jdbcTemplate;
-		this.rowMapperComputer = rowMapperComputer;
+		this.sessionFactory = sessionFactory;
 	}
 
-	private static final String SQL_UPDATE = "UPDATE computer SET name=:name, introduced=:introduced, discontinued=:discontinued, company_id=:companyId WHERE id=:id;";
-	private static final String SQL_DELETE = "DELETE FROM computer WHERE id=:id;";
-	private static final String SQL_SELECT = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued ,company.id as company_id, company.name as companyName  FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.id = :id;";
-
-	private static final String SQL_ALL_COMPUTER = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, company.id as company_id, company.name as companyName  FROM computer LEFT JOIN company ON computer.company_id=company.id ORDER BY id;";
-	private static final String SQL_ALL_COMPUTER_PAGINATION = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, company.id as company_id, company.name as companyName  FROM computer LEFT JOIN company ON computer.company_id=company.id ORDER BY ORDERATTRIBUTE ORDERSORT LIMIT :limit OFFSET :offset ;";
-	private static final String SQL_COUNT_ALL_COMPUTER = "SELECT COUNT(computer.id) as nbComputer  FROM computer LEFT JOIN company ON computer.company_id=company.id;";
-	private static final String SQL_SEARCH_BY_NAME_COMPA_COMPU = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued ,company.id as company_id, company.name as companyName  FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.name LIKE :nameComputer OR company.name LIKE :nameCompany ORDER BY ORDERATTRIBUTE ORDERSORT LIMIT :limit OFFSET :offset;";
-	private static final String SQL_SEARCH_BY_NAME_COUNT = "SELECT COUNT(computer.id) as nbComputer FROM computer LEFT JOIN company ON computer.company_id=company.id WHERE computer.name LIKE :nameComputer OR company.name LIKE :nameCompany ;";
+	private static final String SQL_UPDATE = "UPDATE ComputerDTOPersistance SET name=:name, introduced=:introduced, discontinued=:discontinued, companyDTOPersistance.id=:companyId WHERE id=:id";
+//	private static final String SQL_UPDATE = "UPDATE computer SET name=:name, introduced=:introduced, discontinued=:discontinued, company_id=:companyId WHERE id=:id";
+	private static final String SQL_DELETE = "DELETE FROM ComputerDTOPersistance WHERE id=:id";
+	private static final String SQL_SELECT = "FROM ComputerDTOPersistance computer left join fetch computer.companyDTOPersistance as company WHERE computer.id = :id";
+	private static final String SQL_ALL_COMPUTER = "FROM ComputerDTOPersistance ORDER BY id";
+	private static final String SQL_ALL_COMPUTER_PAGINATION = "FROM ComputerDTOPersistance as computer ORDER BY ORDERATTRIBUTE ORDERSORT  ";
+	private static final String SQL_COUNT_ALL_COMPUTER = "SELECT COUNT(id) FROM ComputerDTOPersistance ";
+//	private static final String SQL_SEARCH_BY_NAME_COMPA_COMPU = "SELECT New com.excilys.cdb.dto.ComputerDTOPersistance(computer.id, computer.name, computer.introduced, computer.discontinued, computer.companyDTOPersistance)  FROM ComputerDTOPersistance computer left join computer.companyDTOPersistance as company WHERE lower(computer.name) LIKE :nameComputer OR lower(company.name) LIKE :nameCompany ORDER BY ORDERATTRIBUTE ORDERSORT ";
+	private static final String SQL_SEARCH_BY_NAME_COMPA_COMPU = "FROM ComputerDTOPersistance computer left join fetch computer.companyDTOPersistance as company WHERE lower(computer.name) LIKE :nameComputer OR lower(company.name) LIKE :nameCompany ORDER BY ORDERATTRIBUTE ORDERSORT ";
+	private static final String SQL_SEARCH_BY_NAME_COUNT = "SELECT COUNT(computer.id) FROM ComputerDTOPersistance computer left join computer.companyDTOPersistance  company WHERE lower(computer.name) LIKE :nameComputer OR lower(company.name) LIKE :nameCompany ";
 
 	public void create(Computer computer) throws DAOException {
 		try {
-
-			SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
-			simpleJdbcInsert.withTableName("computer").usingGeneratedKeyColumns("id");
-			MapSqlParameterSource params = new MapSqlParameterSource();
-			params.addValue("name", computer.getName());
-			params.addValue("introduced", computer.getIntroduced());
-			params.addValue("discontinued", computer.getDiscontinued());
-			params.addValue("company_id", computer.getCompany().getId());
-			params.addValue("id", computer.getId());
-			Number id = simpleJdbcInsert.executeAndReturnKey(params);
-
+			Number id = (Number) sessionFactory.getCurrentSession()
+					.save(mapperComputer.mapFromModelToDTOPersistance(computer));
 			if (id != null) {
 				computer.setId(id.longValue());
 			} else {
 				throw new DAOException("Échec de la création de l'ordinateur en base, aucun ID auto-généré retourné.");
 			}
 
-		} catch (DataIntegrityViolationException e) {
-			if (SQLIntegrityConstraintViolationException.class == e.getCause().getClass()) {
-				throw new DAOException("An error occured because the company doesn't exist.");
-			} else if (MysqlDataTruncation.class == e.getCause().getClass()) {
-				throw new DAOException("An error occured because date cannot be bellow 1970-01-01.");
-			} else {
-				LoggerCdb.logError(this.getClass(), e);
-			}
-		} catch (DataAccessException e) {
+//		} catch (HibernateException e) {
+//			if (SQLIntegrityConstraintViolationException.class == e.getCause().getClass()) {
+//				throw new DAOException("An error occured because the company doesn't exist.");
+//			} else if (MysqlDataTruncation.class == e.getCause().getClass()) {
+//				throw new DAOException("An error occured because date cannot be bellow 1970-01-01.");
+//			} else {
+//				LoggerCdb.logError(this.getClass(), e);
+//			}
+		} catch (HibernateException e) {
 			LoggerCdb.logError(this.getClass(), e);
 		} catch (DAOException e) {
 			LoggerCdb.logError(this.getClass(), e);
@@ -85,14 +68,19 @@ public class ComputerDAOImpl {
 	}
 
 	public void update(Computer computer) throws DAOException {
-
 		try {
-			SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(computer);
-			int statut = namedParameterJdbcTemplate.update(SQL_UPDATE, namedParameters);
+			Session session = sessionFactory.getCurrentSession();
+			Query<?> query = session.createQuery(SQL_UPDATE);
+			query.setParameter("id", computer.getId());
+			query.setParameter("introduced", computer.getIntroduced());
+			query.setParameter("discontinued", computer.getDiscontinued());
+			query.setParameter("name", computer.getName());
+			query.setParameter("companyId", computer.getCompany().getId());
+			int statut = query.executeUpdate();
 			if (statut == 0) {
 				throw new DAOException("Échec de la modification de l'ordinateur.");
 			}
-		} catch (DataAccessException e) {
+		} catch (HibernateException e) {
 			LoggerCdb.logError(this.getClass(), e);
 		} catch (DAOException e) {
 			LoggerCdb.logError(this.getClass(), e);
@@ -101,32 +89,29 @@ public class ComputerDAOImpl {
 	}
 
 	public void delete(Long id) throws DAOException {
-
 		try {
-
-			MapSqlParameterSource params = new MapSqlParameterSource();
-			params.addValue("id", id);
-			int statut = namedParameterJdbcTemplate.update(SQL_DELETE, params);
+			Session session = sessionFactory.getCurrentSession();
+			Query<?> query = session.createQuery(SQL_DELETE);
+			query.setParameter("id", id);
+			int statut = query.executeUpdate();
 			if (statut == 0) {
 				throw new DAOException("Échec de la suppression de l'ordinateur, aucune ligne ajoutée dans la table.");
 			}
-		} catch (DataAccessException e) {
+		} catch (HibernateException e) {
 			LoggerCdb.logError(this.getClass(), e);
 		}
-
 	}
 
 	public Optional<Computer> search(Long id) throws DAOException {
 		Optional<Computer> computer = Optional.empty();
 
 		try {
-
-			MapSqlParameterSource params = new MapSqlParameterSource();
-			params.addValue("id", id);
-			computer = Optional
-					.ofNullable(namedParameterJdbcTemplate.queryForObject(SQL_SELECT, params, rowMapperComputer));
-
-		} catch (DataAccessException e) {
+			Session session = sessionFactory.getCurrentSession();
+			Query<ComputerDTOPersistance> query = session.createQuery(SQL_SELECT, ComputerDTOPersistance.class);
+			query.setParameter("id", id);
+			query.setMaxResults(1);
+			computer = Optional.ofNullable(mapperComputer.mapFromDTOPersistanceToModel(query.getSingleResult()));
+		} catch (HibernateException e) {
 			LoggerCdb.logError(this.getClass(), e);
 		}
 
@@ -135,10 +120,13 @@ public class ComputerDAOImpl {
 
 	public List<Computer> searchAll() {
 		List<Computer> computers = new ArrayList<>();
+		List<ComputerDTOPersistance> computersDTO = new ArrayList<>();
 		try {
-
-			computers = jdbcTemplate.query(SQL_ALL_COMPUTER, rowMapperComputer);
-		} catch (DataAccessException e) {
+			Session session = sessionFactory.getCurrentSession();
+			computersDTO = session.createQuery(SQL_ALL_COMPUTER, ComputerDTOPersistance.class).list();
+			computers = mapperComputer.mapFromListDTOPersistanceToListModel(computersDTO);
+			return computers;
+		} catch (HibernateException e) {
 			LoggerCdb.logError(this.getClass(), e);
 		}
 		return computers;
@@ -146,16 +134,18 @@ public class ComputerDAOImpl {
 
 	public List<Computer> searchAllPagination(Page<Computer> page) {
 		List<Computer> computers = new ArrayList<>();
+		List<ComputerDTOPersistance> computersDTO = new ArrayList<>();
 		try {
-
-			MapSqlParameterSource params = new MapSqlParameterSource();
-			params.addValue("limit", page.getObjetPerPage());
-			params.addValue("offset", page.getObjetPerPage() * page.getPageInt());
-
-			computers = namedParameterJdbcTemplate.query(SQL_ALL_COMPUTER_PAGINATION
+			Session session = sessionFactory.getCurrentSession();
+			Query<ComputerDTOPersistance> query = session.createQuery(SQL_ALL_COMPUTER_PAGINATION
 					.replace("ORDERATTRIBUTE", page.getOrderAttribute()).replace("ORDERSORT", page.getOrderSort()),
-					params, rowMapperComputer);
-		} catch (DataAccessException e) {
+					ComputerDTOPersistance.class);
+			query.setFirstResult(page.getObjetPerPage() * page.getPageInt());
+			query.setMaxResults(page.getObjetPerPage());
+			computersDTO = query.list();
+			computers = mapperComputer.mapFromListDTOPersistanceToListModel(computersDTO);
+			return computers;
+		} catch (HibernateException e) {
 			LoggerCdb.logError(this.getClass(), e);
 		}
 		return computers;
@@ -165,23 +155,23 @@ public class ComputerDAOImpl {
 	public int searchAllCount() {
 		int nbComputer = 0;
 		try {
-
-			nbComputer = jdbcTemplate.queryForObject(SQL_COUNT_ALL_COMPUTER, Integer.class);
-		} catch (DataAccessException e) {
+			Session session = sessionFactory.getCurrentSession();
+			nbComputer = session.createQuery(SQL_COUNT_ALL_COMPUTER, Long.class).uniqueResult().intValue();
+		} catch (HibernateException e) {
 			LoggerCdb.logError(this.getClass(), e);
 		}
 		return nbComputer;
 	}
 
-	public int searchNameCount(String name) throws DAOException {
+	public int searchNameCount(String name) {
 		int nbComputer = 0;
 		try {
-
-			MapSqlParameterSource params = new MapSqlParameterSource();
-			params.addValue("nameComputer", "%" + name + "%");
-			params.addValue("nameCompany", "%" + name + "%");
-			nbComputer = namedParameterJdbcTemplate.queryForObject(SQL_SEARCH_BY_NAME_COUNT, params, Integer.class);
-		} catch (DataAccessException e) {
+			Session session = sessionFactory.getCurrentSession();
+			Query<Long> query = session.createQuery(SQL_SEARCH_BY_NAME_COUNT, Long.class);
+			query.setParameter("nameComputer", "%" + name + "%");
+			query.setParameter("nameCompany", "%" + name + "%");
+			nbComputer = query.uniqueResult().intValue();
+		} catch (HibernateException e) {
 			LoggerCdb.logError(this.getClass(), e);
 		}
 		return nbComputer;
@@ -189,19 +179,22 @@ public class ComputerDAOImpl {
 
 	public List<Computer> searchNamePagination(Page<Computer> page, String name) throws DAOException {
 		List<Computer> computers = new ArrayList<>();
+		List<ComputerDTOPersistance> computersDTO = new ArrayList<>();
 		try {
-
-			MapSqlParameterSource params = new MapSqlParameterSource();
-			params.addValue("limit", page.getObjetPerPage());
-			params.addValue("offset", page.getObjetPerPage() * page.getPageInt());
-			params.addValue("nameComputer", "%" + name + "%");
-			params.addValue("nameCompany", "%" + name + "%");
-
-			computers = namedParameterJdbcTemplate.query(SQL_SEARCH_BY_NAME_COMPA_COMPU
+			Session session = sessionFactory.getCurrentSession();
+			Query<ComputerDTOPersistance> query = session.createQuery(SQL_SEARCH_BY_NAME_COMPA_COMPU
 					.replace("ORDERATTRIBUTE", page.getOrderAttribute()).replace("ORDERSORT", page.getOrderSort()),
-					params, rowMapperComputer);
+					ComputerDTOPersistance.class);
 
-		} catch (DataAccessException e) {
+			query.setFirstResult(page.getObjetPerPage() * page.getPageInt());
+			query.setMaxResults(page.getObjetPerPage());
+			query.setParameter("nameComputer", "%" + name.toLowerCase() + "%");
+			query.setParameter("nameCompany", "%" + name.toLowerCase() + "%");
+
+			computersDTO = query.list();
+			computers = mapperComputer.mapFromListDTOPersistanceToListModel(computersDTO);
+			return computers;
+		} catch (HibernateException e) {
 			LoggerCdb.logError(this.getClass(), e);
 		}
 		return computers;

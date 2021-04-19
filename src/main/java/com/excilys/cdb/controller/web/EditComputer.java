@@ -1,4 +1,4 @@
-package com.excilys.cdb.servlet;
+package com.excilys.cdb.controller.web;
 
 import java.util.List;
 import java.util.Map;

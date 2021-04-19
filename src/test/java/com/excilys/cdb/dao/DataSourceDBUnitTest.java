@@ -24,13 +24,15 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 import org.springframework.test.context.web.AnnotationConfigWebContextLoader;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import com.excilys.cdb.config.HibernateConfig;
 import com.excilys.cdb.configTest.MyWebConfigTest;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(loader = AnnotationConfigWebContextLoader.class, classes = { MyWebConfigTest.class })
+@ContextConfiguration(loader = AnnotationConfigWebContextLoader.class, classes = { MyWebConfigTest.class,
+		HibernateConfig.class })
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
 		TransactionalTestExecutionListener.class, DbUnitTestExecutionListener.class })
 public class DataSourceDBUnitTest extends DataSourceBasedDBTestCase {

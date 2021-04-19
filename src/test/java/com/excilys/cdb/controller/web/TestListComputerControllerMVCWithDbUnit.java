@@ -1,17 +1,14 @@
-package com.excilys.cdb.servlet;
+package com.excilys.cdb.controller.web;
 
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
-import java.util.HashMap;
-
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.Matchers.equalTo;
+import static org.springframework.test.web.servlet.setup.SharedHttpSessionConfigurer.sharedHttpSession;
 
 import javax.servlet.ServletContext;
 
@@ -20,7 +17,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mock.web.MockHttpSession;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -30,7 +26,6 @@ import org.springframework.test.context.web.AnnotationConfigWebContextLoader;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import static org.springframework.test.web.servlet.setup.SharedHttpSessionConfigurer.sharedHttpSession;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.excilys.cdb.config.MyWebConfig;
@@ -71,7 +66,7 @@ public class TestListComputerControllerMVCWithDbUnit extends DataSourceDBUnitTes
 
 	@Test
 	public void testReturnViewName() throws Exception {
-		this.mockMvc.perform(get("/ListComputer")).andDo(print()).andExpect(view().name("dashboard"));
+		this.mockMvc.perform(get("/ListComputer")).andExpect(view().name("dashboard"));
 	}
 
 	@Test
@@ -101,7 +96,8 @@ public class TestListComputerControllerMVCWithDbUnit extends DataSourceDBUnitTes
 //		sessionattr.put("test", "test");
 
 		this.mockMvc.perform(post("/ListComputer").param("nbObject", "50")).andDo(print())
-				.andExpect(status().is3xxRedirection()).andExpect(request().sessionAttribute("nbObject", equalTo(50)));
+				.andExpect(status().is3xxRedirection())
+				.andExpect(request().sessionAttribute("sessionAttributes.nbObject", 50));
 //				.andExpect(model().attribute("numeroPage", 1)).andExpect(model().attribute("indexDebut", 1))
 //				.andExpect(model().attribute("indexFin", 1)).andExpect(model().attribute("lang", "en"))
 //				.andExpect(model().attribute("countComputer", 13)).andExpect(model().attribute("pageMax", 1))

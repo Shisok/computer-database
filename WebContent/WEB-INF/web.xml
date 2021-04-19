@@ -10,10 +10,10 @@
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
   
-  <error-page>
+ <!--  <error-page>
 		<error-code>500</error-code>
 		<location>/views/500.html</location>
-	</error-page>
+	</error-page> -->
 	<error-page>
 		<error-code>403</error-code>
 		<location>/views/403.html</location>

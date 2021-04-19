@@ -9,8 +9,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -30,7 +28,6 @@ import com.zaxxer.hikari.HikariDataSource;
 @ComponentScan({ "com.excilys.cdb.service", "com.excilys.cdb.controller", "com.excilys.cdb.dao",
 		"com.excilys.cdb.mapper", "com.excilys.cdb.servlet", "com.excilys.cdb.validator", "com.excilys.cdb.view",
 		"com.excilys.cdb.model" })
-
 public class MyWebConfig implements WebMvcConfigurer {
 //, WebApplicationInitializer {
 
@@ -83,10 +80,10 @@ public class MyWebConfig implements WebMvcConfigurer {
 		return new NamedParameterJdbcTemplate(dataSource);
 	}
 
-	@Bean
-	public PlatformTransactionManager txManager() {
-		return new DataSourceTransactionManager(getDataSource());
-	}
+//	@Bean
+//	public PlatformTransactionManager txManager() {
+//		return new DataSourceTransactionManager(getDataSource());
+//	}
 
 	@Bean
 	public MessageSource messageSource() {

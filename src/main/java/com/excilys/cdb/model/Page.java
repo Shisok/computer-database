@@ -45,7 +45,7 @@ public class Page<E> {
 		this.objetPerPage = 10;
 		this.indexDebut = 0;
 		this.indexFin = 0;
-		this.orderAttribute = "id";
+		this.orderAttribute = "computer.id";
 		this.orderSort = "asc";
 	}
 

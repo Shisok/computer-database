@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.cdb.dao.CompanyDAOImpl;
 import com.excilys.cdb.dao.ComputerDAOImpl;
@@ -32,6 +33,7 @@ public class PageService {
 	 * @param page the page searched
 	 * @return List<Computer> a list of computer
 	 */
+	@Transactional
 	public List<Computer> searchAllComputerPagination(Page<Computer> page) {
 		try {
 
@@ -46,6 +48,7 @@ public class PageService {
 		return new ArrayList<Computer>();
 	}
 
+	@Transactional
 	public List<Computer> searchNamePagination(Page<Computer> page, String name) {
 		try {
 			List<Computer> computers = computerDAOImpl.searchNamePagination(page, name);
@@ -61,6 +64,7 @@ public class PageService {
 		return new ArrayList<Computer>();
 	}
 
+	@Transactional
 	public List<Company> searchAllCompanyPage(int pageInt) {
 		try {
 

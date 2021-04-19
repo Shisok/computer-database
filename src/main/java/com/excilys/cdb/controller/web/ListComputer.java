@@ -1,4 +1,4 @@
-package com.excilys.cdb.servlet;
+package com.excilys.cdb.controller.web;
 
 import java.util.Arrays;
 import java.util.List;
@@ -81,7 +81,7 @@ public class ListComputer {
 		if (sessionAttributes.getOrderAttribute() != null) {
 			page.setOrderAttribute(sessionAttributes.getOrderAttribute());
 		} else {
-			sessionAttributes.setOrderAttribute("id");
+			sessionAttributes.setOrderAttribute("computer.id");
 		}
 		if (sessionAttributes.getOrderSort() != null) {
 			page.setOrderSort(sessionAttributes.getOrderSort());

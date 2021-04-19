@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.cdb.dao.CompanyDAOImpl;
 import com.excilys.cdb.exception.DAOConfigurationException;
@@ -21,6 +22,7 @@ public class CompanyService {
 		this.companyDAOImpl = companyDAOImpl;
 	}
 
+	@Transactional
 	public List<Company> searchAllCompany() {
 		try {
 
@@ -35,6 +37,7 @@ public class CompanyService {
 
 	}
 
+	@Transactional
 	public boolean deleteCompany(Long compToDeleteID) {
 		boolean success = false;
 		try {

@@ -1,4 +1,4 @@
-package com.excilys.cdb.servlet;
+package com.excilys.cdb.controller.web;
 
 import java.time.LocalDateTime;
 
@@ -41,4 +41,5 @@ public class ControllerAdvisor {
 		mav.setViewName("error");
 		return mav;
 	}
+
 }

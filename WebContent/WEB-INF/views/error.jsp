@@ -21,12 +21,18 @@
 				Computer Database </a>
 		</div>
 	</header>
-	<div class="alert alert-danger" role="alert" id="nameError">
-	${timestamp} :
-		<fmt:message key="${errorOccured}" >
-			<fmt:param value="${value}"/>
-		</fmt:message>
-	</div>
+
+	<section id="main">
+		<div class="container">
+			<div class="alert alert-danger" id="nameError">
+				${timestamp} :
+				<fmt:message key="${errorOccured}">
+					<fmt:param value="${value}" />
+				</fmt:message>
+			</div>
+		</div>
+	</section>
+
 
 </body>
 </html>

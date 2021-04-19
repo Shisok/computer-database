@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 import com.excilys.cdb.dto.CompanyDTO;
+import com.excilys.cdb.dto.CompanyDTOPersistance;
 import com.excilys.cdb.model.Company;
 
 @Component
@@ -36,4 +37,30 @@ public class MapperCompany {
 		return listCompaniesDTO;
 	}
 
+	public Company mapFromDTOPersistanceToModel(CompanyDTOPersistance companyDTOPersistance) {
+
+		Company company = new Company.CompanyBuilder(companyDTOPersistance.getIdCompany())
+				.name(companyDTOPersistance.getName()).build();
+
+		return company;
+	}
+
+	public List<Company> mapFromListDTOPersistanceToListModel(List<CompanyDTOPersistance> listCompanies) {
+
+		List<Company> listCompaniesDTO = listCompanies.stream().map(c -> mapFromDTOPersistanceToModel(c))
+				.collect(Collectors.toList());
+
+		return listCompaniesDTO;
+	}
+
+	public CompanyDTOPersistance mapFromModelToDTOPersistance(Company company) {
+
+		if (company == null || (company.getId() == null && company.getName() == null)) {
+			return null;
+		} else {
+			return new CompanyDTOPersistance.CompanyDTOPersistanceBuilder(company.getId()).name(company.getName())
+					.build();
+		}
+
+	}
 }

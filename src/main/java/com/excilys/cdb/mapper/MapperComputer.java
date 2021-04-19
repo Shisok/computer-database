@@ -1,17 +1,24 @@
 package com.excilys.cdb.mapper;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.excilys.cdb.dto.ComputerDTOAdd;
 import com.excilys.cdb.dto.ComputerDTOEdit;
 import com.excilys.cdb.dto.ComputerDTOList;
+import com.excilys.cdb.dto.ComputerDTOPersistance;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 
 @Component
 public class MapperComputer {
+
+	@Autowired
+	MapperCompany mapperCompany;
 
 	public ComputerDTOList mapFromModelToDTOList(Computer computer) {
 		ComputerDTOList computerDTO = new ComputerDTOList();
@@ -24,7 +31,7 @@ public class MapperComputer {
 		if (computer.getIntroduced() != null) {
 			computerDTO.setIntroduced(computer.getIntroduced().toString());
 		}
-		if (computer.getCompany().getName() != null) {
+		if (computer.getCompany() != null && computer.getCompany().getName() != null) {
 			computerDTO.setCompanyName(computer.getCompany().getName());
 		}
 
@@ -74,5 +81,37 @@ public class MapperComputer {
 				.name(computerDTOEdit.getComputerName()).introduced(introduced).discontinued(discontinued)
 				.company(company).build();
 		return computer;
+	}
+
+	public Computer mapFromDTOPersistanceToModel(ComputerDTOPersistance computerDTOPersistance) {
+		Computer computer = new Computer.ComputerBuilder(computerDTOPersistance.getId())
+				.name(computerDTOPersistance.getName()).discontinued(computerDTOPersistance.getDiscontinued())
+				.introduced(computerDTOPersistance.getIntroduced()).build();
+		if (computerDTOPersistance.getCompanyDTOPersistance() != null) {
+			computer.setCompany(
+					mapperCompany.mapFromDTOPersistanceToModel(computerDTOPersistance.getCompanyDTOPersistance()));
+		}
+
+		return computer;
+	}
+
+	public List<Computer> mapFromListDTOPersistanceToListModel(List<ComputerDTOPersistance> listComputers) {
+
+		List<Computer> listComputersDTO = listComputers.stream().map(c -> mapFromDTOPersistanceToModel(c))
+				.collect(Collectors.toList());
+
+		return listComputersDTO;
+	}
+
+	public ComputerDTOPersistance mapFromModelToDTOPersistance(Computer computer) {
+		ComputerDTOPersistance computerDTOPersistance = new ComputerDTOPersistance.ComputerDTOPersistanceBuilder(
+				computer.getId()).name(computer.getName()).discontinued(computer.getDiscontinued())
+						.introduced(computer.getIntroduced()).build();
+		if (computer.getCompany() != null) {
+			computerDTOPersistance
+					.setCompanyDTOPersistance(mapperCompany.mapFromModelToDTOPersistance(computer.getCompany()));
+		}
+
+		return computerDTOPersistance;
 	}
 }
