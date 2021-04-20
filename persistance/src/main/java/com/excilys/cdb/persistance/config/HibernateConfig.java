@@ -17,7 +17,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @ComponentScan({ "com.excilys.cdb.dao", "com.excilys.cdb.binding.config" })
 public class HibernateConfig {
 
-	@Bean
+	@Bean("dataSource")
 	public HikariDataSource getDataSource() {
 		return new HikariDataSource(new HikariConfig("/com/excilys/cdb/dao/datasource.properties"));
 	}

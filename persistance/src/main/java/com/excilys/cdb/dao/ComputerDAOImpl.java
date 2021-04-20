@@ -43,6 +43,7 @@ public class ComputerDAOImpl {
 	private static final String SQL_SEARCH_BY_NAME_COMPA_COMPU = "FROM ComputerDTOPersistance computer left join fetch computer.companyDTOPersistance as company WHERE lower(computer.name) LIKE :nameComputer OR lower(company.name) LIKE :nameCompany ORDER BY ORDERATTRIBUTE ORDERSORT ";
 	private static final String SQL_SEARCH_BY_NAME_COUNT = "SELECT COUNT(computer.id) FROM ComputerDTOPersistance computer left join computer.companyDTOPersistance  company WHERE lower(computer.name) LIKE :nameComputer OR lower(company.name) LIKE :nameCompany ";
 
+	@Transactional
 	public void create(Computer computer) throws DAOException {
 		try {
 			Number id = (Number) sessionFactory.getCurrentSession()
@@ -69,6 +70,7 @@ public class ComputerDAOImpl {
 
 	}
 
+	@Transactional
 	public void update(Computer computer) throws DAOException {
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -90,6 +92,7 @@ public class ComputerDAOImpl {
 
 	}
 
+	@Transactional
 	public void delete(Long id) throws DAOException {
 		try {
 			Session session = sessionFactory.getCurrentSession();
@@ -104,6 +107,7 @@ public class ComputerDAOImpl {
 		}
 	}
 
+	@Transactional
 	public Optional<Computer> search(Long id) throws DAOException {
 		Optional<Computer> computer = Optional.empty();
 
@@ -120,6 +124,7 @@ public class ComputerDAOImpl {
 		return computer;
 	}
 
+	@Transactional
 	public List<Computer> searchAll() {
 		List<Computer> computers = new ArrayList<>();
 		List<ComputerDTOPersistance> computersDTO = new ArrayList<>();
@@ -155,6 +160,7 @@ public class ComputerDAOImpl {
 
 	}
 
+	@Transactional
 	public int searchAllCount() {
 		int nbComputer = 0;
 		try {
@@ -166,6 +172,7 @@ public class ComputerDAOImpl {
 		return nbComputer;
 	}
 
+	@Transactional
 	public int searchNameCount(String name) {
 		int nbComputer = 0;
 		try {
@@ -180,6 +187,7 @@ public class ComputerDAOImpl {
 		return nbComputer;
 	}
 
+	@Transactional
 	public List<Computer> searchNamePagination(Page<Computer> page, String name) throws DAOException {
 		List<Computer> computers = new ArrayList<>();
 		List<ComputerDTOPersistance> computersDTO = new ArrayList<>();

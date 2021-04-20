@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.cdb.dao.ComputerDAOImpl;
 import com.excilys.cdb.exception.DAOConfigurationException;
@@ -34,7 +33,6 @@ public class ComputerService {
 		return new ArrayList<Computer>();
 	}
 
-	@Transactional
 	public Optional<Computer> searchByIdComputer(Long idToSearch) {
 		try {
 
@@ -48,7 +46,6 @@ public class ComputerService {
 		return Optional.empty();
 	}
 
-	@Transactional
 	public boolean createComputer(Computer compToCreate) {
 		boolean success = false;
 		try {
@@ -64,7 +61,6 @@ public class ComputerService {
 		return success;
 	}
 
-	@Transactional
 	public boolean updateComputer(Computer compToUpdate) {
 		boolean success = false;
 		try {
@@ -81,7 +77,6 @@ public class ComputerService {
 		return success;
 	}
 
-	@Transactional
 	public boolean deleteComputer(Long compToDeleteID) {
 		boolean success = false;
 		try {
@@ -97,7 +92,6 @@ public class ComputerService {
 		return success;
 	}
 
-	@Transactional
 	public int countComputer() {
 		int nbComputer = 0;
 		try {
@@ -112,7 +106,6 @@ public class ComputerService {
 		return nbComputer;
 	}
 
-	@Transactional
 	public int searchNameCount(String name) {
 		int nbComputer = 0;
 		try {

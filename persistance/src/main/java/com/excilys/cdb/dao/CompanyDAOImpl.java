@@ -8,6 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.cdb.dto.CompanyDTOPersistance;
 import com.excilys.cdb.exception.DAOException;
@@ -36,8 +37,9 @@ public class CompanyDAOImpl {
 //	private static final String SQL_DELETE = "DELETE FROM company WHERE id=:id;";
 	private static final String SQL_DELETE = "DELETE FROM CompanyDTOPersistance WHERE id=:id;";
 //	private static final String SQL_DELETE_COMPUTER = "DELETE FROM computer WHERE company_id=:id;";
-	private static final String SQL_DELETE_COMPUTER = "DELETE FROM ComputerDTOPersistance WHERE company_id=:id;";
+	private static final String SQL_DELETE_COMPUTER = "DELETE FROM ComputerDTOPersistance WHERE companyDTOPersistance.id=:id;";
 
+	@Transactional
 	public List<Company> searchAll() {
 		List<Company> companies = new ArrayList<>();
 		List<CompanyDTOPersistance> companiesDTO = new ArrayList<>();
@@ -52,6 +54,7 @@ public class CompanyDAOImpl {
 		return companies;
 	}
 
+	@Transactional
 	public List<Company> searchAllPagination(int page) throws DAOException {
 		List<Company> companies = new ArrayList<>();
 		List<CompanyDTOPersistance> companiesDTO = new ArrayList<>();
@@ -71,6 +74,7 @@ public class CompanyDAOImpl {
 
 	}
 
+	@Transactional
 	public void delete(Long id) throws DAOException {
 
 		try {
@@ -82,8 +86,6 @@ public class CompanyDAOImpl {
 			Query<?> queryCompany = session.createQuery(SQL_DELETE);
 			queryCompany.setParameter("id", id);
 			int statut = queryCompany.executeUpdate();
-//			query.setParameter("limit", OBJECT_NUMBER_PER_PAGE);
-//			query.setParameter("offset", page * OBJECT_NUMBER_PER_PAGE);
 			if (statut == 0) {
 				throw new DAOException("Échec de la suppression de la company, aucune ligne ajoutée dans la table.");
 			}
