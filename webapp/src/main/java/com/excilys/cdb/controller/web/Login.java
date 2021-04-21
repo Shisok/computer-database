@@ -3,18 +3,28 @@ package com.excilys.cdb.controller.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.excilys.cdb.model.User;
+import com.excilys.cdb.service.UserService;
 
 @Controller
 public class Login {
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	@Autowired
+	PasswordEncoder passwordEncoder;
+	@Autowired
+	UserService userService;
+
+	@PostMapping(value = "/login")
 	public String loginPage(@RequestParam(value = "error", required = false) String error,
 			@RequestParam(value = "logout", required = false) String logout, Model model) {
 		String errorMessge = null;
@@ -28,17 +38,27 @@ public class Login {
 		return "login";
 	}
 
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	@GetMapping(value = "/login")
 	public String loginPage(Model model) {
 		return "login";
 	}
 
-	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	@GetMapping(value = "/logout")
 	public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (auth != null) {
 			new SecurityContextLogoutHandler().logout(request, response, auth);
 		}
 		return "redirect:/login?logout=true";
+	}
+
+	@GetMapping("/register")
+	public void doRegister() {
+		String encodedPassword = passwordEncoder.encode("network");
+		User user = new User("ROLE_USER", "user", encodedPassword, true);
+		userService.create(user);
+		User admin = new User("ROLE_ADMIN", "admin", encodedPassword, true);
+		userService.create(admin);
+
 	}
 }
