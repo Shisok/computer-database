@@ -1,4 +1,4 @@
-package com.excilys.cdb.config;
+package com.excilys.cdb.cli.config;
 
 import java.util.Properties;
 
@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
+import com.excilys.cdb.config.MyWebConfig;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 

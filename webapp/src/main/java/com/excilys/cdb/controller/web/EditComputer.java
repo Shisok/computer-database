@@ -58,7 +58,7 @@ public class EditComputer {
 		modelAndView.addObject("introduced", computerDTO.getIntroduced());
 		modelAndView.addObject("discontinued", computerDTO.getDiscontinued());
 		modelAndView.addObject("listCompanies", mapCompanies);
-		modelAndView.addObject("companyId", computer.getCompany().getId());
+		modelAndView.addObject("companyId", computer.getCompany() != null ? computer.getCompany().getId() : null);
 		return modelAndView;
 	}
 
