@@ -10,8 +10,8 @@ import java.time.LocalDate;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import com.excilys.cdb.dto.ComputerDTOAdd;
-import com.excilys.cdb.dto.ComputerDTOList;
+import com.excilys.cdb.dto.web.ComputerDTOAdd;
+import com.excilys.cdb.dto.web.ComputerDTOList;
 import com.excilys.cdb.mapper.MapperComputer;
 import com.excilys.cdb.mapper.RowMapperComputer;
 import com.excilys.cdb.model.Company;

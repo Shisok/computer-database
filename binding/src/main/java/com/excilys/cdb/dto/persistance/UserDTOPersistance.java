@@ -1,4 +1,4 @@
-package com.excilys.cdb.dto;
+package com.excilys.cdb.dto.persistance;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

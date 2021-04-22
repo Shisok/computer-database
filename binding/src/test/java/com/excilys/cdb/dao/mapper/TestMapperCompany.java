@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import com.excilys.cdb.dto.CompanyDTO;
+import com.excilys.cdb.dto.web.CompanyDTO;
 import com.excilys.cdb.mapper.MapperCompany;
 import com.excilys.cdb.model.Company;
 

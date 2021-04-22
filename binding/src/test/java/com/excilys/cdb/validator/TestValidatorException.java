@@ -14,7 +14,7 @@ import org.springframework.test.context.web.AnnotationConfigWebContextLoader;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.excilys.cdb.binding.test.config.MyWebInitTest;
-import com.excilys.cdb.dto.ComputerDTOAdd;
+import com.excilys.cdb.dto.web.ComputerDTOAdd;
 import com.excilys.cdb.exception.ValidatorException;
 
 @RunWith(SpringJUnit4ClassRunner.class)

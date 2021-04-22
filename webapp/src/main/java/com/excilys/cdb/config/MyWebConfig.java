@@ -20,7 +20,7 @@ import org.springframework.web.servlet.view.JstlView;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan({ "com.excilys.cdb.service.config", "com.excilys.cdb.controller.web",
+@ComponentScan({ "com.excilys.cdb.service.config", "com.excilys.cdb.controller.web", "com.excilys.cdb.controller.api",
 		"com.excilys.cdb.persistance.config", "com.excilys.cdb.security.config" })
 public class MyWebConfig implements WebMvcConfigurer {
 //, WebApplicationInitializer {

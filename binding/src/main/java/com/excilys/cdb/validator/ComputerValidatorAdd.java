@@ -7,7 +7,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import com.excilys.cdb.dto.ComputerDTOAdd;
+import com.excilys.cdb.dto.web.ComputerDTOAdd;
 
 @Component
 public class ComputerValidatorAdd implements Validator {

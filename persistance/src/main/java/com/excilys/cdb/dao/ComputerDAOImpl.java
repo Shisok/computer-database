@@ -11,7 +11,7 @@ import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.excilys.cdb.dto.ComputerDTOPersistance;
+import com.excilys.cdb.dto.persistance.ComputerDTOPersistance;
 import com.excilys.cdb.exception.DAOException;
 import com.excilys.cdb.logger.LoggerCdb;
 import com.excilys.cdb.mapper.MapperComputer;
@@ -155,6 +155,8 @@ public class ComputerDAOImpl {
 			return computers;
 		} catch (HibernateException e) {
 			LoggerCdb.logError(this.getClass(), e);
+		} catch (java.lang.IllegalArgumentException e) {
+			LoggerCdb.logError(this.getClass(), e, "Page start at index 1 and not 0");
 		}
 		return computers;
 

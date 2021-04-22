@@ -4,8 +4,8 @@ import java.time.LocalDate;
 
 import org.springframework.stereotype.Component;
 
-import com.excilys.cdb.dto.ComputerDTOAdd;
-import com.excilys.cdb.dto.ComputerDTOEdit;
+import com.excilys.cdb.dto.web.ComputerDTOAdd;
+import com.excilys.cdb.dto.web.ComputerDTOEdit;
 import com.excilys.cdb.exception.ValidatorException;
 
 @Component

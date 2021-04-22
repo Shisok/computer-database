@@ -1,4 +1,4 @@
-package com.excilys.cdb.dto;
+package com.excilys.cdb.dto.persistance;
 
 import java.time.LocalDate;
 

@@ -7,10 +7,11 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.excilys.cdb.dto.ComputerDTOAdd;
-import com.excilys.cdb.dto.ComputerDTOEdit;
-import com.excilys.cdb.dto.ComputerDTOList;
-import com.excilys.cdb.dto.ComputerDTOPersistance;
+import com.excilys.cdb.dto.persistance.ComputerDTOPersistance;
+import com.excilys.cdb.dto.rest.ComputerDTORest;
+import com.excilys.cdb.dto.web.ComputerDTOAdd;
+import com.excilys.cdb.dto.web.ComputerDTOEdit;
+import com.excilys.cdb.dto.web.ComputerDTOList;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 
@@ -95,12 +96,12 @@ public class MapperComputer {
 		return computer;
 	}
 
-	public List<Computer> mapFromListDTOPersistanceToListModel(List<ComputerDTOPersistance> listComputers) {
+	public List<Computer> mapFromListDTOPersistanceToListModel(List<ComputerDTOPersistance> listComputersDTO) {
 
-		List<Computer> listComputersDTO = listComputers.stream().map(c -> mapFromDTOPersistanceToModel(c))
+		List<Computer> listComputers = listComputersDTO.stream().map(c -> mapFromDTOPersistanceToModel(c))
 				.collect(Collectors.toList());
 
-		return listComputersDTO;
+		return listComputers;
 	}
 
 	public ComputerDTOPersistance mapFromModelToDTOPersistance(Computer computer) {
@@ -114,4 +115,24 @@ public class MapperComputer {
 
 		return computerDTOPersistance;
 	}
+
+//	public List<ComputerDTOPersistance> mapFromModelListToDTORestList(List<ComputerDTOPersistance>){
+//		return null;
+//	}
+
+	public ComputerDTORest mapFromModelToDTORest(Computer computer) {
+		ComputerDTORest computerDTOPersistance = new ComputerDTORest.ComputerDTORestBuilder(computer.getId())
+				.name(computer.getName()).discontinued(computer.getDiscontinued()).introduced(computer.getIntroduced())
+				.build();
+		if (computer.getCompany() != null) {
+			computerDTOPersistance.setCompany(mapperCompany.mapFromModelToDTORest(computer.getCompany()));
+		}
+
+		return computerDTOPersistance;
+	}
+
+	public List<ComputerDTORest> mapFromListDTORestToListModel(List<Computer> listComputers) {
+		return listComputers.stream().map(c -> mapFromModelToDTORest(c)).collect(Collectors.toList());
+	}
+
 }

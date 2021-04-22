@@ -2,7 +2,7 @@ package com.excilys.cdb.mapper;
 
 import org.springframework.stereotype.Component;
 
-import com.excilys.cdb.dto.UserDTOPersistance;
+import com.excilys.cdb.dto.persistance.UserDTOPersistance;
 import com.excilys.cdb.model.User;
 
 @Component
