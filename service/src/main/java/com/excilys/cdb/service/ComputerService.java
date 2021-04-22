@@ -89,6 +89,7 @@ public class ComputerService {
 		} catch (DAOConfigurationException e) {
 			LoggerCdb.logError(getClass(), e);
 		}
+
 		return success;
 	}
 

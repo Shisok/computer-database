@@ -33,7 +33,6 @@ public class ComputerDAOImpl {
 	}
 
 	private static final String SQL_UPDATE = "UPDATE ComputerDTOPersistance SET name=:name, introduced=:introduced, discontinued=:discontinued, companyDTOPersistance.id=:companyId WHERE id=:id";
-//	private static final String SQL_UPDATE = "UPDATE computer SET name=:name, introduced=:introduced, discontinued=:discontinued, company_id=:companyId WHERE id=:id";
 	private static final String SQL_DELETE = "DELETE FROM ComputerDTOPersistance WHERE id=:id";
 	private static final String SQL_SELECT = "FROM ComputerDTOPersistance computer left join fetch computer.companyDTOPersistance as company WHERE computer.id = :id";
 	private static final String SQL_ALL_COMPUTER = "FROM ComputerDTOPersistance ORDER BY id";
@@ -79,7 +78,7 @@ public class ComputerDAOImpl {
 			query.setParameter("introduced", computer.getIntroduced());
 			query.setParameter("discontinued", computer.getDiscontinued());
 			query.setParameter("name", computer.getName());
-			query.setParameter("companyId", computer.getCompany().getId());
+			query.setParameter("companyId", computer.getCompany() != null ? computer.getCompany().getId() : null);
 			int statut = query.executeUpdate();
 			if (statut == 0) {
 				throw new DAOException("Échec de la modification de l'ordinateur.");

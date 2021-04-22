@@ -15,6 +15,10 @@ public class CompanyDTORest implements Serializable {
 
 	}
 
+	private CompanyDTORest() {
+
+	}
+
 	public static class CompanyDTORestBuilder {
 
 		Long id;

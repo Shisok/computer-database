@@ -51,11 +51,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 //				.formLogin().loginPage("/login").defaultSuccessUrl("/ListComputer").failureUrl("/login?error=true")
 //				.permitAll().and().logout().logoutSuccessUrl("/login?logout=true").invalidateHttpSession(true)
 //				.permitAll().and().rememberMe().key("uniqueAndSecret").tokenValiditySeconds(86400);
-		http.authorizeRequests().antMatchers("/login").permitAll().antMatchers("/ListComputer")
+		http.authorizeRequests().antMatchers("/login", "/api**").permitAll().antMatchers("/ListComputer")
 				.hasAnyRole("USER", "ADMIN").antMatchers("/AddComputer", "/EditComputer").hasRole("ADMIN").and()
 				.formLogin().loginPage("/login").defaultSuccessUrl("/ListComputer").failureUrl("/login?error=true")
 				.permitAll().and().logout().logoutSuccessUrl("/login?logout=true").invalidateHttpSession(true).and()
-				.httpBasic().realmName("realm").authenticationEntryPoint(authenticationEntryPoint);
+				.httpBasic().realmName("realm").authenticationEntryPoint(authenticationEntryPoint).and().csrf()
+				.disable();
 
 	}
 

@@ -74,4 +74,23 @@ public class MapperCompany {
 		}
 
 	}
+
+//	List<Company> mapFromListDTORestToListModel(List<CompanyDTORest> companiesDTO) {
+//		return companiesDTO.stream().map(c -> mapFromDTORestToModel(c)).collect(Collectors.toList());
+//	}
+
+	public List<CompanyDTORest> mapFromListModelToListDTORest(List<Company> companies) {
+		return companies.stream().map(c -> mapFromModelToDTORest(c)).collect(Collectors.toList());
+	}
+
+	public Company mapFromDTORestToModel(CompanyDTORest companyDTORest) {
+
+		if (companyDTORest == null || (companyDTORest.getId() == null && companyDTORest.getName() == null)) {
+			return null;
+		} else {
+			return new Company.CompanyBuilder(companyDTORest.getId()).name(companyDTORest.getName()).build();
+		}
+
+	}
+
 }

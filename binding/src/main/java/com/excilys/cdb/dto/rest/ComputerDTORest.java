@@ -23,6 +23,10 @@ public class ComputerDTORest implements Serializable {
 		this.companyDTORest = computerBuilder.companyDTORest;
 	}
 
+	private ComputerDTORest() {
+
+	}
+
 	public static class ComputerDTORestBuilder {
 		private Long id;
 		private String name;
@@ -97,11 +101,11 @@ public class ComputerDTORest implements Serializable {
 		this.discontinued = discontinued;
 	}
 
-	public CompanyDTORest getCompany() {
+	public CompanyDTORest getCompanyDTORest() {
 		return companyDTORest;
 	}
 
-	public void setCompany(CompanyDTORest companyDTORest) {
+	public void setCompanyDTORest(CompanyDTORest companyDTORest) {
 		this.companyDTORest = companyDTORest;
 	}
 

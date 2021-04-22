@@ -125,14 +125,23 @@ public class MapperComputer {
 				.name(computer.getName()).discontinued(computer.getDiscontinued()).introduced(computer.getIntroduced())
 				.build();
 		if (computer.getCompany() != null) {
-			computerDTOPersistance.setCompany(mapperCompany.mapFromModelToDTORest(computer.getCompany()));
+			computerDTOPersistance.setCompanyDTORest(mapperCompany.mapFromModelToDTORest(computer.getCompany()));
 		}
 
 		return computerDTOPersistance;
 	}
 
-	public List<ComputerDTORest> mapFromListDTORestToListModel(List<Computer> listComputers) {
+	public List<ComputerDTORest> mapFromListModelToListDTORest(List<Computer> listComputers) {
 		return listComputers.stream().map(c -> mapFromModelToDTORest(c)).collect(Collectors.toList());
 	}
 
+	public Computer mapFromDTORestToModel(ComputerDTORest computerDTORest) {
+		Computer computer = new Computer.ComputerBuilder(computerDTORest.getId()).name(computerDTORest.getName())
+				.discontinued(computerDTORest.getDiscontinued()).introduced(computerDTORest.getIntroduced()).build();
+		if (computerDTORest.getCompanyDTORest() != null) {
+			computer.setCompany(mapperCompany.mapFromDTORestToModel(computerDTORest.getCompanyDTORest()));
+		}
+
+		return computer;
+	}
 }
