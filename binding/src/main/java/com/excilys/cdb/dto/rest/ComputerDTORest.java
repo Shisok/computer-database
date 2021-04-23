@@ -109,13 +109,13 @@ public class ComputerDTORest implements Serializable {
 		this.companyDTORest = companyDTORest;
 	}
 
-	public Long getCompanyId() {
-
-		if (companyDTORest != null && companyDTORest.getId() != null) {
-			return companyDTORest.getId();
-		}
-		return null;
-	}
+//	public Long getCompanyId() {
+//
+//		if (companyDTORest != null && companyDTORest.getId() != null) {
+//			return companyDTORest.getId();
+//		}
+//		return null;
+//	}
 
 	@Override
 	public int hashCode() {

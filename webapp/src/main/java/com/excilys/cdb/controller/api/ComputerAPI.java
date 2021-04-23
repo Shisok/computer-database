@@ -51,12 +51,10 @@ public class ComputerAPI {
 		return new ResponseEntity<>(listDTO, HttpStatus.OK);
 	}
 
-	@GetMapping(value = { "/page/{numPage}/{nbObject}", "/page/{numPage}", "/page",
-			"/page/{numPage}/{nbObject}/{orderBy}",
-			"/page/{numPage}/{nbObject}/{orderBy}/{sort}" }, produces = "application/json")
-	public ResponseEntity<?> getComputerPage(@PathVariable(required = false) Integer numPage,
-			@PathVariable(required = false) Integer nbObject, @PathVariable(required = false) String orderBy,
-			@PathVariable(required = false) String sort) {
+	@GetMapping(value = { "/page" }, produces = "application/json")
+	public ResponseEntity<?> getComputerPage(@RequestParam(required = false) Integer numPage,
+			@RequestParam(required = false) Integer nbObject, @RequestParam(required = false) String orderBy,
+			@RequestParam(required = false) String sort, @RequestParam(required = false) String name) {
 		Page<Computer> page = new Page<Computer>();
 		setOrderBy(page, orderBy, sort);
 		setPageInt(page, numPage);
@@ -64,9 +62,16 @@ public class ComputerAPI {
 		setObjectPerPage(page, nbObject);
 		List<Computer> listComputer = null;
 		try {
-			listComputer = this.pageService.searchAllComputerPagination(page);
-			if (listComputer.size() == 0) {
-				throw new InputException("No computer found. Please, verify the page number.");
+			if (name == null) {
+				listComputer = this.pageService.searchAllComputerPagination(page);
+				if (listComputer.size() == 0) {
+					throw new InputException("No computer found. Please, verify the information.");
+				}
+			} else {
+				listComputer = this.pageService.searchNamePagination(page, name);
+				if (listComputer.size() == 0) {
+					throw new InputException("No computer found. Please, verify the information.");
+				}
 			}
 		} catch (InputException e) {
 			LoggerCdb.logError(getClass(), e);
@@ -77,30 +82,19 @@ public class ComputerAPI {
 		return new ResponseEntity<>(listDTO, HttpStatus.OK);
 	}
 
-	@GetMapping(value = { "/search/{name}/{numPage}/{nbObject}", "/search/{name}/{numPage}", "/search/{name}",
-			"/search/{name}/{numPage}/{nbObject}/{orderBy}",
-			"/search/{name}/{numPage}/{nbObject}/{orderBy}/{sort}" }, produces = "application/json")
-	public ResponseEntity<?> getComputerSearch(@PathVariable(required = false) Integer numPage,
-			@PathVariable(required = false) Integer nbObject, @PathVariable(required = false) String orderBy,
-			@PathVariable(required = false) String sort, @PathVariable(required = false) String name) {
-		Page<Computer> page = new Page<Computer>();
-		setOrderBy(page, orderBy, sort);
-		setPageInt(page, numPage);
-
-		setObjectPerPage(page, nbObject);
-		List<Computer> listComputer = null;
+	@GetMapping(value = { "/search" }, produces = "application/json")
+	public ResponseEntity<?> getComputerSearch(@RequestParam Long id) {
+		Computer computer = null;
 		try {
-			listComputer = this.pageService.searchNamePagination(page, name);
-			if (listComputer.size() == 0) {
-				throw new InputException("No computer found. Please, verify the page number.");
-			}
+			computer = this.computerService.searchByIdComputer(id)
+					.orElseThrow(() -> new InputException("No computer found. Please verify the id."));
+
 		} catch (InputException e) {
 			LoggerCdb.logError(getClass(), e);
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
-		List<ComputerDTORest> listDTO = mapperComputer.mapFromListModelToListDTORest(listComputer);
-
-		return new ResponseEntity<>(listDTO, HttpStatus.OK);
+		ComputerDTORest computerDTO = mapperComputer.mapFromModelToDTORest(computer);
+		return new ResponseEntity<>(computerDTO, HttpStatus.OK);
 	}
 
 	@GetMapping(value = { "/count" }, produces = "application/json")
