@@ -57,14 +57,27 @@
 			<artifactId>jackson-databind</artifactId>
 			<version>${jackson-core.version}</version>
 		</dependency>
-		
+
 		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310 -->
-<dependency>
-    <groupId>com.fasterxml.jackson.datatype</groupId>
-    <artifactId>jackson-datatype-jsr310</artifactId>
-    <version>${jackson-core.version}</version>
-</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+			<version>${jackson-core.version}</version>
+		</dependency>
 		
+			<dependency>
+
+			<groupId>javax.servlet</groupId>
+
+			<artifactId>javax.servlet-api</artifactId>
+
+			<version>${javax.servlet.version}</version>
+
+			<scope>provided</scope>
+
+		</dependency>
+		
+
 	</dependencies>
 
 

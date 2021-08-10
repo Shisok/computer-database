@@ -1,0 +1,4 @@
+com/excilys/cdb/dao/TestDAOCompany.class
+com/excilys/cdb/dao/DataSourceDBUnitTest.class
+com/excilys/cdb/persistance/test/config/MyWebInitTest.class
+com/excilys/cdb/dao/TestDAOComputer.class

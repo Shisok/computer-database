@@ -1,0 +1,4 @@
+com/excilys/cdb/exception/DAOException.class
+com/excilys/cdb/exception/InputException.class
+com/excilys/cdb/exception/ValidatorException.class
+com/excilys/cdb/exception/DAOConfigurationException.class

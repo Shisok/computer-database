@@ -57,9 +57,6 @@ public class TestDAOComputer extends DataSourceDBUnitTest {
 				.getResourceAsStream("com/excilys/cdb/dao/dataExpectedAddComputer.xml")) {
 			IDataSet expectedDataSet = new FlatXmlDataSetBuilder().build(is);
 			ITable expectedTable = expectedDataSet.getTable("COMPUTER");
-
-			// Connection conn = getDataSource().getConnection();
-
 			Company company = new Company.CompanyBuilder(12L).build();
 			Computer computer = new Computer.ComputerBuilder(null).name("testComputerName")
 					.introduced(LocalDate.parse("2020-08-06")).discontinued(LocalDate.parse("2020-08-07"))

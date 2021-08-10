@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.NoResultException;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -103,6 +105,8 @@ public class ComputerDAOImpl {
 			}
 		} catch (HibernateException e) {
 			LoggerCdb.logError(this.getClass(), e);
+		} catch (javax.persistence.NoResultException e) {
+			LoggerCdb.logError(this.getClass(), e);
 		}
 	}
 
@@ -117,6 +121,8 @@ public class ComputerDAOImpl {
 			query.setMaxResults(1);
 			computer = Optional.ofNullable(mapperComputer.mapFromDTOPersistanceToModel(query.getSingleResult()));
 		} catch (HibernateException e) {
+			LoggerCdb.logError(this.getClass(), e);
+		} catch (NoResultException e) {
 			LoggerCdb.logError(this.getClass(), e);
 		}
 

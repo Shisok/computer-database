@@ -1,0 +1,13 @@
+/home/excilys/workspaceTest/computer-database/webapp/src/main/java/com/excilys/cdb/controller/web/AddComputer.java
+/home/excilys/workspaceTest/computer-database/webapp/src/main/java/com/excilys/cdb/controller/web/EditComputer.java
+/home/excilys/workspaceTest/computer-database/webapp/src/main/java/com/excilys/cdb/controller/web/Login.java
+/home/excilys/workspaceTest/computer-database/webapp/src/main/java/com/excilys/cdb/security/config/SpringSecurityConfig.java
+/home/excilys/workspaceTest/computer-database/webapp/src/main/java/com/excilys/cdb/controller/api/ComputerAPI.java
+/home/excilys/workspaceTest/computer-database/webapp/src/main/java/com/excilys/cdb/controller/api/CompanyAPI.java
+/home/excilys/workspaceTest/computer-database/webapp/src/main/java/com/excilys/cdb/controller/web/SessionAttributes.java
+/home/excilys/workspaceTest/computer-database/webapp/src/main/java/com/excilys/cdb/config/MyWebConfig.java
+/home/excilys/workspaceTest/computer-database/webapp/src/main/java/com/excilys/cdb/security/config/MyBasicAuthenticationEntryPoint.java
+/home/excilys/workspaceTest/computer-database/webapp/src/main/java/com/excilys/cdb/controller/web/ListComputer.java
+/home/excilys/workspaceTest/computer-database/webapp/src/main/java/com/excilys/cdb/security/config/SpringSecurityInit.java
+/home/excilys/workspaceTest/computer-database/webapp/src/main/java/com/excilys/cdb/controller/web/ControllerAdvisor.java
+/home/excilys/workspaceTest/computer-database/webapp/src/main/java/com/excilys/cdb/config/MyWebAppInitializer.java

@@ -1,0 +1,9 @@
+com/excilys/cdb/model/Page.class
+com/excilys/cdb/model/User.class
+com/excilys/cdb/model/Authorities.class
+com/excilys/cdb/model/Company.class
+com/excilys/cdb/model/Computer.class
+com/excilys/cdb/model/Computer$1.class
+com/excilys/cdb/model/Company$CompanyBuilder.class
+com/excilys/cdb/model/Company$1.class
+com/excilys/cdb/model/Computer$ComputerBuilder.class

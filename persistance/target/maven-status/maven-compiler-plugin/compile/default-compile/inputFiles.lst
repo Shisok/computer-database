@@ -1,0 +1,4 @@
+/home/excilys/workspaceTest/computer-database/persistance/src/main/java/com/excilys/cdb/dao/CompanyDAOImpl.java
+/home/excilys/workspaceTest/computer-database/persistance/src/main/java/com/excilys/cdb/persistance/config/HibernateConfig.java
+/home/excilys/workspaceTest/computer-database/persistance/src/main/java/com/excilys/cdb/dao/ComputerDAOImpl.java
+/home/excilys/workspaceTest/computer-database/persistance/src/main/java/com/excilys/cdb/dao/UserDAO.java

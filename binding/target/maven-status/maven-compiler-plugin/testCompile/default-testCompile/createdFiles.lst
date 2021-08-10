@@ -1,0 +1,4 @@
+com/excilys/cdb/dao/mapper/TestMapperCompany.class
+com/excilys/cdb/binding/test/config/MyWebInitTest.class
+com/excilys/cdb/validator/TestValidatorException.class
+com/excilys/cdb/dao/mapper/TestMapperComputer.class

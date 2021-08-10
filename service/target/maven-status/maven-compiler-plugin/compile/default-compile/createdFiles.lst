@@ -1,0 +1,5 @@
+com/excilys/cdb/service/PageService.class
+com/excilys/cdb/service/config/serviceConfig.class
+com/excilys/cdb/service/UserService.class
+com/excilys/cdb/service/ComputerService.class
+com/excilys/cdb/service/CompanyService.class

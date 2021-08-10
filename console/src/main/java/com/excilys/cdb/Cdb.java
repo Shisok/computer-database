@@ -15,6 +15,7 @@ public class Cdb {
 		CliMenu cliMenu = context.getBean(CliMenu.class);
 		cliMenu.mainMenu();
 		((ConfigurableApplicationContext) context).close();
+
 	}
 
 }

@@ -2,10 +2,7 @@ package com.excilys.cdb.controller.web;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.springframework.test.web.servlet.setup.SharedHttpSessionConfigurer.sharedHttpSession;
@@ -89,20 +86,20 @@ public class TestListComputerControllerMVCWithDbUnit extends DataSourceDBUnitTes
 				.andExpect(model().attribute("listeComputers", hasSize(3)))
 				.andExpect(model().attributeDoesNotExist("search"));
 	}
-
-	@Test
-	public void testPost() throws Exception {
-//		HashMap<String, Object> sessionattr = new HashMap<String, Object>();
-//		sessionattr.put("test", "test");
-
-		this.mockMvc.perform(post("/ListComputer").param("nbObject", "50")).andDo(print())
-				.andExpect(status().is3xxRedirection())
-				.andExpect(request().sessionAttribute("sessionAttributes.nbObject", 50));
-//				.andExpect(model().attribute("numeroPage", 1)).andExpect(model().attribute("indexDebut", 1))
-//				.andExpect(model().attribute("indexFin", 1)).andExpect(model().attribute("lang", "en"))
-//				.andExpect(model().attribute("countComputer", 13)).andExpect(model().attribute("pageMax", 1))
-//				.andExpect(model().attribute("listeComputers", hasSize(13)))
-//				.andExpect(model().attributeDoesNotExist("search"));
-
-	}
+//
+//	@Test
+//	public void testPost() throws Exception {
+////		HashMap<String, Object> sessionattr = new HashMap<String, Object>();
+////		sessionattr.put("test", "test");
+//
+//		this.mockMvc.perform(post("/ListComputer").param("nbObject", "50")).andDo(print())
+//				.andExpect(status().is3xxRedirection())
+//				.andExpect(request().sessionAttribute("sessionAttributes.nbObject", 50));
+////				.andExpect(model().attribute("numeroPage", 1)).andExpect(model().attribute("indexDebut", 1))
+////				.andExpect(model().attribute("indexFin", 1)).andExpect(model().attribute("lang", "en"))
+////				.andExpect(model().attribute("countComputer", 13)).andExpect(model().attribute("pageMax", 1))
+////				.andExpect(model().attribute("listeComputers", hasSize(13)))
+////				.andExpect(model().attributeDoesNotExist("search"));
+//
+//	}
 }

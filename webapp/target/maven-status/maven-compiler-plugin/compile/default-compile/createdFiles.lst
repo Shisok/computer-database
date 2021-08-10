@@ -1,0 +1,10 @@
+com/excilys/cdb/controller/api/CompanyAPI.class
+com/excilys/cdb/config/MyWebAppInitializer.class
+com/excilys/cdb/security/config/MyBasicAuthenticationEntryPoint.class
+com/excilys/cdb/controller/web/AddComputer.class
+com/excilys/cdb/controller/web/SessionAttributes.class
+com/excilys/cdb/controller/web/EditComputer.class
+com/excilys/cdb/config/MyWebConfig.class
+com/excilys/cdb/controller/web/ListComputer.class
+com/excilys/cdb/controller/api/ComputerAPI.class
+com/excilys/cdb/controller/web/ControllerAdvisor.class

@@ -1,0 +1,4 @@
+com/excilys/cdb/dao/ComputerDAOImpl.class
+com/excilys/cdb/dao/UserDAO.class
+com/excilys/cdb/dao/CompanyDAOImpl.class
+com/excilys/cdb/persistance/config/HibernateConfig.class
